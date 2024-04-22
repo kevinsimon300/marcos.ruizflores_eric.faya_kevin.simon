@@ -2,18 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/poked_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
-        android:title="@string/pokedex"/>
+        android:title="@string/pokedexButton"/>
     <item
+        android:id="@+id/entrenador_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
-        android:title="@string/entrenador"/>
+        android:title="@string/entrenadorButton"/>
     <item
+        android:id="@+id/tenda_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
-        android:title="@string/tenda"/>
+        android:title="@string/tendaButton"/>
 </menu>
