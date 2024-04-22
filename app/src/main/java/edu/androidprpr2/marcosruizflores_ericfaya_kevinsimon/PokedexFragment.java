@@ -2,6 +2,7 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +62,15 @@ public class PokedexFragment extends Fragment {
     }
 
     private void updateUi() {
+        Log.d("PokedexFragment", "Actualizando UI");
+
+        Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
+
         Pokedexes movies2 = Pokedexes.getInstance(getActivity(),pokedexes);//Aqui dintre detecta si esta creada o no,si no esta creada la creem
         List<Pokedex> lpokedex = movies2.getPokedexes(); //Agafem la llista de pokemons i fem un get pokemons per obtenir els pokemons que hem creat a la clase de la pokedex
+
+        Log.d("PokedexFragment", "Tamaño de lpokedex: " + lpokedex.size());
+
 
         //Ara falta crear el adapter ,li instanciem amb la clase que hem creat nosaltres de pokemon adapter,
         adapter = new PokedexAdapter(lpokedex,getActivity());// li pasem la llista de pokemons que te que tenir aquest adapter,i la activitat
@@ -119,7 +127,8 @@ public class PokedexFragment extends Fragment {
             //Es copy paste de com obrir un fragment
 
             //Camviem un fragment per un altre
-            //fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
+
+            fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
 
             fragmentTransaction.addToBackStack(null);//La pila,cuan tenim varios fragemnts hem de fer aixo,per tornar enrere el fragment
             fragmentTransaction.commit();

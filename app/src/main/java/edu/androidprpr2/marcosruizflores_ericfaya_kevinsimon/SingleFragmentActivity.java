@@ -91,6 +91,9 @@ public class SingleFragmentActivity extends AppCompatActivity {
 
             int id = item.getItemId();
             if (id == R.id.poked_button) {
+                System.out.println("Boton 1");
+                Log.d("TAG", "Boton 1");
+
                 ArrayList<Pokedex> arrayList2 = new ArrayList<>();
                 Pokedex pokedex3 = new Pokedex("Hola", "Hola2");//TODO HARDCODED TREURE
                 Pokedex pokedex4 = new Pokedex("Hola", "Hola2");//TODO HARDCODED TREURE
@@ -104,10 +107,17 @@ public class SingleFragmentActivity extends AppCompatActivity {
 
                 replaceFragment(new PokedexFragment(arrayList2));
             } else if (id == R.id.entrenador_button) {
+                System.out.println("Boton 2");
+                Log.d("TAG", "Boton 2");
+
+
                 makeRequest();
                 replaceFragment(new EntrenadorFragment());
 
             } else if (id == R.id.tenda_button) {
+                System.out.println("Boton 3");
+                Log.d("TAG", "Boton 3");
+
                 replaceFragment(new TendaFragment());
             }
         return true;
