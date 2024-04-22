@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
+        android:title="@string/pokedex"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
+        android:title="@string/entrenador"/>
+    <item
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/pokemon_trainer_pokemon_svgrepo_com"
+        android:title="@string/tenda"/>
+</menu>
