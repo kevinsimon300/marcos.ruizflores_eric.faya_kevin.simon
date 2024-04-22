@@ -39,22 +39,14 @@ public class PokedexFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pokedex, container, false);
-        //A la view agafem el id i la fiquem a la variable recylcer view
         pokedexesRecyclerView=(RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        //Creem el fragment amb la recycler view,i instnaicem quin element es i fem un setlayoutmanager
-
-        //Aquest fragment tindra el adapter i el view holder
-
-
-
 
         updateUi();//Hem identificat el recycler view pero fa falta  pasarli la informacio,ficar quin adapter te el recycler view
 
@@ -72,7 +64,6 @@ public class PokedexFragment extends Fragment {
         Log.d("PokedexFragment", "Tamaño de lpokedex: " + lpokedex.size());
 
 
-        //Ara falta crear el adapter ,li instanciem amb la clase que hem creat nosaltres de pokemon adapter,
         adapter = new PokedexAdapter(lpokedex,getActivity());// li pasem la llista de pokemons que te que tenir aquest adapter,i la activitat
         pokedexesRecyclerView.setAdapter(adapter);//Afegim a la recycler view l'adapter que hem creat
     }
@@ -82,7 +73,6 @@ public class PokedexFragment extends Fragment {
         private ImageView ivPokedex;
 
         private TextView tvNomMovie;
-        private TextView tvReview;
 
         private Activity activity; //De on ve la activity
 
@@ -92,10 +82,7 @@ public class PokedexFragment extends Fragment {
             ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
 
             tvNomMovie = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
-            //El item view es internament al pokemon holder,no l'hem creat nosaltres
-            tvReview = (TextView) itemView.findViewById(R.id.tvReview);
 
-            //Hem d’afegir al constructor que tot l’element és el listener:
             itemView.setOnClickListener(this);
             this.activity=activity;//La activity es la que li pasem per paremetres
 
@@ -103,20 +90,8 @@ public class PokedexFragment extends Fragment {
 
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
-            //Ara afegim la informacio que tenim creada
-            // ivMovie.setVisibility(movie.isCapturat() ? View.VISIBLE : View.GONE);
-            //ImageView ivMovie = movie.transformImageView(getContext(), movie.getThumbnail());
 
-           // Picasso.get().load(movie.getThumbnail()).into(ivMovie);
-
-            //ivMovie.setImageDrawable(ivMovie.getDrawable());
             tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
-
-            String reviewValue = pokedex.getReview();
-            String reviewText = String.valueOf(reviewValue);
-            tvReview.setText(reviewText);
-
-
         }
 
         @Override
@@ -124,16 +99,11 @@ public class PokedexFragment extends Fragment {
             DetailFragment detailFragment = new DetailFragment(pokedex,pokedexes);
             FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            //Es copy paste de com obrir un fragment
-
-            //Camviem un fragment per un altre
 
             fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
 
             fragmentTransaction.addToBackStack(null);//La pila,cuan tenim varios fragemnts hem de fer aixo,per tornar enrere el fragment
             fragmentTransaction.commit();
-
-
 
         }
     }

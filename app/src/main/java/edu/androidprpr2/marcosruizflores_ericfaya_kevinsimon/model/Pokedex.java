@@ -9,7 +9,6 @@ public class Pokedex {
 
     private String name;
 
-    private double review;
     private String thumbnail;
 
     public Pokedex() {
@@ -26,32 +25,12 @@ public class Pokedex {
         return imageView;
     }
 
-    public String getLengthH(int totalMinutes) {
-        int hours = totalMinutes / 60; // Calculate hours
-        return String.valueOf(hours)+"h "; // Convert hours to string
-    }
-
-    public String getLengthM(int num){
-        int hours = num / 60; // Get the whole hours
-        int minutes = num % 60; // Get the remaining minutes
-        return String.valueOf(minutes)+"min";
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-
-    public String getReview() {
-        return String.valueOf(review)+"/10";
-    }
-
-    public void setReview(double review) {
-        this.review = review;
     }
 
     public String getThumbnail() {
