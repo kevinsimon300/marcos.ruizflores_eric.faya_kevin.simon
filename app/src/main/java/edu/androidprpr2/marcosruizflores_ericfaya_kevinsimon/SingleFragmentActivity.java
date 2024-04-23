@@ -14,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,30 +36,14 @@ public class SingleFragmentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+       // binding = ActivitySinglefragmentactivityBinding.inflate(getLayoutInflater());
+        //setContentView(binding.getRoot());
+       // setContentView(R.layout.activity_singlefragmentactivity);
+
         binding = ActivitySinglefragmentactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        //setContentView(R.layout.activity_singlefragmentactivity);
-
-        /*ArrayList<Pokedex> arrayList= new ArrayList<>();
-        Pokedex pokedex= new Pokedex("Hola","Hola2");//TODO HARDCODED TREURE
-        Pokedex pokedex1= new Pokedex("Hola","Hola2");//TODO HARDCODED TREURE
-        Pokedex pokedex2= new Pokedex("Hola","Hola2");//TODO HARDCODED TREURE
-
-        arrayList.add(pokedex);//TODO HARDCODED TREURE
-        arrayList.add(pokedex1);//TODO HARDCODED TREURE
-        arrayList.add(pokedex2); //TODO HARDCODED TREURE
-
-        makeRequest();
-
-        replaceFragment(new PokedexFragment(arrayList));*/
-        //replaceFragment(new PokedexFragment()); //TODO si volem que començi en el fragment de pokedex
-        //pokedexFragment = new PokedexFragment();
-        //replaceFragment(pokedexFragment);
-        //  makeRequest();
-        //makeRequest2();
-
-        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
+        BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
+        bottomNavigationView.setOnItemSelectedListener(item -> {
 
             /*switch (item.getItemId()) {
                 case R.id.poked_button:

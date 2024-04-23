@@ -47,23 +47,15 @@ public class PokedexFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pokedex, container, false);
         pokedexesRecyclerView=(RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         updateUi();//Hem identificat el recycler view pero fa falta  pasarli la informacio,ficar quin adapter te el recycler view
-
         return view;
     }
 
     private void updateUi() {
-        Log.d("PokedexFragment", "Actualizando UI");
-
         Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
-
         Pokedexes movies2 = Pokedexes.getInstance(getActivity(),pokedexes);//Aqui dintre detecta si esta creada o no,si no esta creada la creem
         List<Pokedex> lpokedex = movies2.getPokedexes(); //Agafem la llista de pokemons i fem un get pokemons per obtenir els pokemons que hem creat a la clase de la pokedex
-
         Log.d("PokedexFragment", "Tamaño de lpokedex: " + lpokedex.size());
-
-
         adapter = new PokedexAdapter(lpokedex,getActivity());// li pasem la llista de pokemons que te que tenir aquest adapter,i la activitat
         pokedexesRecyclerView.setAdapter(adapter);//Afegim a la recycler view l'adapter que hem creat
     }
@@ -71,11 +63,8 @@ public class PokedexFragment extends Fragment {
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
         private ImageView ivPokedex;
-
         private TextView tvNomMovie;
-
         private Activity activity; //De on ve la activity
-
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
