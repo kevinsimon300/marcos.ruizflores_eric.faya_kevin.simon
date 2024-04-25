@@ -16,9 +16,9 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 
 public class PokedexDao {
 
-    private Context context;
-    private PokedexCallback callback;
-    private RequestQueue queue;
+    private final Context context;
+    private final PokedexCallback callback;
+    private final RequestQueue queue;
 
     public interface PokedexCallback {
         void onSuccess(ArrayList<Pokedex> pokedexList);
@@ -31,7 +31,7 @@ public class PokedexDao {
         this.queue = Volley.newRequestQueue(context);
     }
 
-    public void getPokemonList() {
+    public ArrayList<Pokedex> getPokemonList() {
         String url = "https://pokeapi.co/api/v2/pokemon";
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -52,6 +52,7 @@ public class PokedexDao {
                     }
                 });
         queue.add(jsonObjectRequest);
+        return null;
     }
 
     private ArrayList<Pokedex> processPokemonData(JSONObject pokemonData) throws JSONException {
