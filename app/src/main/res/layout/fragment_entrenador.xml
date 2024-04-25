@@ -83,11 +83,11 @@
                     android:gravity="center"
                     android:layout_marginEnd="3dp">
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:src="@drawable/superball"
-                        android:layout_marginBottom="4dp" />
+                        <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@drawable/superball"
+                            android:layout_marginBottom="4dp" />
                     <TextView
                         android:id="@+id/tvSuperballs"
                         android:layout_width="wrap_content"
