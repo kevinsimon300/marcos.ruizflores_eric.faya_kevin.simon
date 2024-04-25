@@ -38,7 +38,7 @@
                 android:layout_gravity="center_vertical" />
             </LinearLayout>
             <Button
-                android:id="@+id/Button1_pokeball"
+                android:id="@+id/button_pokeball"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pokeball"
@@ -69,7 +69,7 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
             <Button
-                android:id="@+id/Button1_superball"
+                android:id="@+id/button_superball"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Superball"
@@ -106,7 +106,7 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
             <Button
-                android:id="@+id/Button1_ultraball"
+                android:id="@+id/button_ultraball"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Ultraball"
@@ -135,7 +135,7 @@
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
             <Button
-                android:id="@+id/Button1_masterball"
+                android:id="@+id/button_masterball"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Masterball"
