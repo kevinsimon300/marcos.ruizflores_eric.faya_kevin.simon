@@ -39,7 +39,8 @@ public class PokedexDao {
 
 
     public void getPokemonList() {
-        String url = "https://pokeapi.co/api/v2/pokemon/";
+
+        String url = "https://pokeapi.co/api/v2/pokemon";
         Log.d("PokedexDao", "Requesting Pokemon list from: " + url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -65,6 +66,7 @@ public class PokedexDao {
                     }
                 });
         queue.add(jsonObjectRequest);
+
     }
     private ArrayList<Pokedex> processPokemonData(JSONObject pokemonData) throws JSONException {
         ArrayList<Pokedex> pokedexList = new ArrayList<>();
@@ -72,11 +74,15 @@ public class PokedexDao {
         // Process JSON data and create Pokedex objects
         JSONArray results = pokemonData.getJSONArray("results");
         for (int i = 0; i < results.length(); i++) {
+            // mirar si cambiar en vez de pokemon a pokemonData
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
-            String url = pokemon.getString("url");
-            // Add Pokedex object to the list
-            pokedexList.add(new Pokedex(name, url));
+            // mirar si . pokemon o pokemonData
+            JSONObject sprites = pokemon.getJSONObject("sprites");
+            String frontUrl = sprites.getString("front_default");
+            String backUrl = sprites.getString("back_default");
+
+            pokedexList.add(new Pokedex(name, frontUrl, backUrl));
         }
 
         return pokedexList;

@@ -8,6 +8,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
+
+import javax.xml.transform.Source;
+
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
@@ -35,6 +38,8 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == POKEDEX_ITEM_ID) {
+                //ArrayList<Pokedex> l = pokedexDao.getPokemonList();
+                //System.out.println(l.get(0).getName() + l.get(0).getBackImage());
                 pokedexDao.getPokemonList();
 
             } else if (id == ENTRENADOR_ITEM_ID) {
