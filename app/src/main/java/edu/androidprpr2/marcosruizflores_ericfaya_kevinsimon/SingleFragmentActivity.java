@@ -12,7 +12,7 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.Activit
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
-public class SingleFragmentActivity extends AppCompatActivity {
+public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
     private PokedexFragment pokedexFragment;
     private PokedexDao pokedexDao;
 
@@ -29,24 +29,14 @@ public class SingleFragmentActivity extends AppCompatActivity {
         binding = ActivitySinglefragmentactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        pokedexDao = new PokedexDao(this, new PokedexDao.PokedexCallback() {
-            @Override
-            public void onSuccess(ArrayList<Pokedex> pokedexList) {
-                pokedexFragment = new PokedexFragment(pokedexList);
-                replaceFragment(pokedexFragment);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                Log.e("PokedexDao", errorMessage);
-            }
-        });
+        pokedexDao = new PokedexDao(this, this);
 
         BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == POKEDEX_ITEM_ID) {
                 pokedexDao.getPokemonList();
+
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());
             } else if (id == TENDA_ITEM_ID) {
@@ -61,5 +51,27 @@ public class SingleFragmentActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
+    }
+    @Override
+    public void onSuccess(ArrayList<Pokedex> pokedexList) {
+        Log.d("SingleFragmentActivity", "onSuccess method called!"); // Agregar este registro
+
+        // Manejar la lista de Pokémon obtenida
+        // Por ejemplo, puedes imprimir los nombres de los Pokémon en el log
+        for (Pokedex pokedex : pokedexList) {
+            Log.d("MainActivity", "Pokémon: " + pokedex.getName());
+        }
+        pokedexFragment = new PokedexFragment(pokedexList);
+        replaceFragment(pokedexFragment);
+    }
+
+    @Override
+    public void onError(String errorMessage) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

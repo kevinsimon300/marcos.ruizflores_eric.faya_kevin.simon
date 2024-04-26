@@ -51,21 +51,19 @@ public class PokedexFragment extends Fragment {
     }
 
     private void updateUi() {
-        // Loguear cada elemento del ArrayList pokedexes
-        Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
+        if (pokedexes != null) {
+ //           Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
 
-        for (int i = 0; i < pokedexes.size(); i++) {
-            Pokedex pokedex = pokedexes.get(i);
-            Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
-            // Loguea otros atributos de pokedex si es necesario
+            for (int i = 0; i < pokedexes.size(); i++) {
+                Pokedex pokedex = pokedexes.get(i);
+                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
+            }
+
+            adapter = new PokedexAdapter(pokedexes, getActivity());
+            pokedexesRecyclerView.setAdapter(adapter);
+        } else {
+            Log.e("PokedexFragment", "La lista de pokedexes es nula");
         }
-
-        //Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
-        //Pokedexes movies2 = Pokedexes.getInstance(getActivity(),pokedexes);//Aqui dintre detecta si esta creada o no,si no esta creada la creem
-        //List<Pokedex> lpokedex = movies2.getPokedexes(); //Agafem la llista de pokemons i fem un get pokemons per obtenir els pokemons que hem creat a la clase de la pokedex
-        //Log.d("PokedexFragment", "Tamaño de lpokedex: " + lpokedex.size());
-        adapter = new PokedexAdapter(pokedexes,getActivity());// li pasem la llista de pokemons que te que tenir aquest adapter,i la activitat
-        pokedexesRecyclerView.setAdapter(adapter);//Afegim a la recycler view l'adapter que hem creat
     }
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
