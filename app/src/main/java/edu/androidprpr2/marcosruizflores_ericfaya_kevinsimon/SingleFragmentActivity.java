@@ -57,6 +57,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
+  
     @Override
     public void onSuccess(ArrayList<Pokedex> pokedexList) {
         Log.d("SingleFragmentActivity", "onSuccess method called!"); // Agregar este registro
