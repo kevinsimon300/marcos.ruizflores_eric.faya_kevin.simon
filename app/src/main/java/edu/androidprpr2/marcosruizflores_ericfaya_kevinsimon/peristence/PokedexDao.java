@@ -70,7 +70,7 @@ public class PokedexDao {
 
         // Process JSON data and create Pokedex objects
         JSONArray results = pokemonData.getJSONArray("results");
-        for (int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < 15 && i < results.length(); i++) { // Limit the number of Pokedex objects
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
             String url = pokemon.getString("url");
