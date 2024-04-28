@@ -54,7 +54,7 @@ public class PokedexFragment extends Fragment {
 
     private void updateUi() {
         if (pokedexes != null) {
- //           Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
+            Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
 
             for (int i = 0; i < pokedexes.size(); i++) {
                 Pokedex pokedex = pokedexes.get(i);

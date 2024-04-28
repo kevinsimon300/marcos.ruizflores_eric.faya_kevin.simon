@@ -3,9 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_launcher_background"
     android:id="@+id/fragment_container"
-
     tools:context=".PokedexFragment">
 
     <LinearLayout
@@ -14,7 +12,6 @@
         android:padding="18dp"
         android:orientation="vertical"
         android:layout_marginTop="18dp">
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -23,7 +20,6 @@
                 android:layout_marginTop="18dp">
                 <EditText
                     android:id="@+id/editTextSearch"
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="@string/pokedexBuscador"
@@ -32,7 +28,6 @@
                     android:textSize="25sp"
                     android:textStyle="bold"
                     />
-
                 <ImageView
                     android:id="@+id/ivImageStar"
                     android:layout_marginLeft="10dp"
@@ -40,10 +35,7 @@
                     android:layout_height="50dp"
                     android:src="@drawable/arrow_back">
                 </ImageView>
-
                 </LinearLayout>
-
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/pokedex_recycler_view"
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -51,7 +43,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
             </androidx.recyclerview.widget.RecyclerView>
-
     </LinearLayout>
 
 </FrameLayout>
