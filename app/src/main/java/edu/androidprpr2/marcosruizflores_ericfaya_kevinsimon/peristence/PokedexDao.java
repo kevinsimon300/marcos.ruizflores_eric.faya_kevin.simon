@@ -28,17 +28,20 @@ public class PokedexDao {
         void onSuccess(ArrayList<Pokedex> pokedexList);
         void onError(String errorMessage);
     }
+    /*public PokedexDao(){
+        this.queue = Volley.newRequestQueue(context);
 
+    }*/
     public PokedexDao(Context context, PokedexCallback callback) {
         this.context = context;
         this.callback = callback;
         this.queue = Volley.newRequestQueue(context);
     }
 
+    public void getPokemonList(int page) {
+        String url = "https://pokeapi.co/api/v2/pokemon/?limit=15&page=" + page;
 
-
-    public void getPokemonList() {
-        String url = "https://pokeapi.co/api/v2/pokemon/";
+        //String url = "https://pokeapi.co/api/v2/pokemon/";
         Log.d("PokedexDao", "Requesting Pokemon list from: " + url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
