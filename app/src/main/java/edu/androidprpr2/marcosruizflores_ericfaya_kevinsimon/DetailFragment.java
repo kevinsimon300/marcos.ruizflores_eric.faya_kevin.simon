@@ -41,7 +41,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                              Bundle savedInstanceState) {
 
         View itemView= inflater.inflate(R.layout.fragment_detail, container, false);
-        ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
+        //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
 
         tvNomPokedex = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
 

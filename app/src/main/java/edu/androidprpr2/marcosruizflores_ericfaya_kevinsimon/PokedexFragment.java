@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,8 +14,6 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,16 +67,16 @@ public class PokedexFragment extends Fragment {
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
-        private final ImageView ivPokedex;
-        private final ImageView ivBack;
+        //private final ImageView ivPokedex;
+        //private final ImageView ivBack;
         private final TextView tvNomMovie;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
 
-            ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
-            ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
+            //ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
+            //ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
             tvNomMovie = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
@@ -89,9 +86,9 @@ public class PokedexFragment extends Fragment {
 
         public PokedexHolder(View itemView) {//new
             super(itemView);
-            ivPokedex = itemView.findViewById(R.id.ivImageFilm);
+            //ivPokedex = itemView.findViewById(R.id.ivImageFilm);
             tvNomMovie = itemView.findViewById(R.id.tvFilmName);
-            ivBack = itemView.findViewById(R.id.ivBack);
+            //ivBack = itemView.findViewById(R.id.ivBack);
 
             itemView.setOnClickListener(this);
         }
@@ -99,8 +96,8 @@ public class PokedexFragment extends Fragment {
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
             tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
-            Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
-            Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+           // Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
+            //Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
         }
 
         @Override
