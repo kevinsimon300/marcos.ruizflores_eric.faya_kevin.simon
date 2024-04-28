@@ -16,11 +16,12 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedexes;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,24 +53,33 @@ public class PokedexFragment extends Fragment {
     }
 
     private void updateUi() {
-        Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
-        Pokedexes movies2 = Pokedexes.getInstance(getActivity(),pokedexes);//Aqui dintre detecta si esta creada o no,si no esta creada la creem
-        List<Pokedex> lpokedex = movies2.getPokedexes(); //Agafem la llista de pokemons i fem un get pokemons per obtenir els pokemons que hem creat a la clase de la pokedex
-        Log.d("PokedexFragment", "Tamaño de lpokedex: " + lpokedex.size());
-        adapter = new PokedexAdapter(lpokedex,getActivity());// li pasem la llista de pokemons que te que tenir aquest adapter,i la activitat
-        pokedexesRecyclerView.setAdapter(adapter);//Afegim a la recycler view l'adapter que hem creat
+        if (pokedexes != null) {
+            Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
+
+            for (int i = 0; i < pokedexes.size(); i++) {
+                Pokedex pokedex = pokedexes.get(i);
+                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
+            }
+
+            adapter = new PokedexAdapter(pokedexes, getActivity());
+            pokedexesRecyclerView.setAdapter(adapter);
+        } else {
+            Log.e("PokedexFragment", "La lista de pokedexes es nula");
+        }
     }
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
-        private ImageView ivPokedex;
-        private TextView tvNomMovie;
+        private final ImageView ivPokedex;
+        private final ImageView ivBack;
+        private final TextView tvNomMovie;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
-            ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
 
+            ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
+            ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
             tvNomMovie = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
@@ -77,10 +87,20 @@ public class PokedexFragment extends Fragment {
 
         }
 
+        public PokedexHolder(View itemView) {//new
+            super(itemView);
+            ivPokedex = itemView.findViewById(R.id.ivImageFilm);
+            tvNomMovie = itemView.findViewById(R.id.tvFilmName);
+            ivBack = itemView.findViewById(R.id.ivBack);
+
+            itemView.setOnClickListener(this);
+        }
+
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
-
             tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
+            Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
+            Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
         }
 
         @Override
@@ -109,8 +129,14 @@ public class PokedexFragment extends Fragment {
         @NonNull
         @Override
         public PokedexHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            LayoutInflater layoutInflater = LayoutInflater.from(activity);
-            return new PokedexHolder(layoutInflater,parent,activity);
+          // LayoutInflater layoutInflater = LayoutInflater.from(activity);
+          //  return new PokedexHolder(layoutInflater,parent,activity);
+            //OLD
+
+            //NEW
+            View view = LayoutInflater.from(activity).inflate(R.layout.list_item_pokemon, parent, false);
+            return new PokedexHolder(view);
+
         }
 
         @Override

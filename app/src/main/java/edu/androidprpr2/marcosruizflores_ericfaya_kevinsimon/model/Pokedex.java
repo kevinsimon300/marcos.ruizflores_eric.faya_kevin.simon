@@ -3,15 +3,22 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.squareup.picasso.Picasso;
+
 public class Pokedex {
-    private ImageView imageViewFront;
-    private ImageView imageViewPokeball;
 
     private String name;
-
     private String thumbnail;
+    private String backImage;
+    private String frontImage;
 
     public Pokedex() {
+    }
+
+    public Pokedex(String name, String frontImage, String backImage) {
+        this.name = name;
+        this.frontImage = frontImage;
+        this.backImage = backImage;
     }
 
     public Pokedex(String name, String thumbnail) {
@@ -21,7 +28,7 @@ public class Pokedex {
 
     public ImageView transformImageView(Context context, String imageUrl) {
         ImageView imageView = new ImageView(context);
-        //Picasso.get().load(imageUrl).into(imageView);
+        Picasso.get().load(imageUrl).into(imageView);
         return imageView;
     }
 
@@ -39,5 +46,21 @@ public class Pokedex {
 
     public void setThumbnail(String thumbnail) {
         this.thumbnail = thumbnail;
+    }
+
+    public String getBackImage() {
+        return backImage;
+    }
+
+    public String getFrontImage() {
+        return frontImage;
+    }
+
+    public void setBackImage(String backImage) {
+        this.backImage = backImage;
+    }
+
+    public void setFrontImage(String frontImage) {
+        this.frontImage = frontImage;
     }
 }
