@@ -182,7 +182,6 @@
                     android:layout_marginBottom="8dp">
                 </Button>
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 </FrameLayout>
