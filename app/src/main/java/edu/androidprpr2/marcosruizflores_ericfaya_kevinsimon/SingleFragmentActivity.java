@@ -184,5 +184,4 @@ public class SingleFragmentActivity extends AppCompatActivity {
         }
         return pokedexArrayList;
     }
-
 }
