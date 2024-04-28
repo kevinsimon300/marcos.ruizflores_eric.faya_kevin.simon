@@ -40,7 +40,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
             if (id == POKEDEX_ITEM_ID) {
                 //ArrayList<Pokedex> l = pokedexDao.getPokemonList();
                 //System.out.println(l.get(0).getName() + l.get(0).getBackImage());
-                pokedexDao.getPokemonList();
+                ArrayList<Pokedex> pokedexList = pokedexDao.getPokemonList();
 
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());

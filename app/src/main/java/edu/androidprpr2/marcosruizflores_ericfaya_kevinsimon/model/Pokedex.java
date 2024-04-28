@@ -8,9 +8,7 @@ import com.squareup.picasso.Picasso;
 public class Pokedex {
 
     private String name;
-
     private String thumbnail;
-
     private String backImage;
     private String frontImage;
 
@@ -21,6 +19,11 @@ public class Pokedex {
         this.name = name;
         this.frontImage = frontImage;
         this.backImage = backImage;
+    }
+
+    public Pokedex(String name, String thumbnail) {
+        this.name = name;
+        this.thumbnail = thumbnail;
     }
 
     public ImageView transformImageView(Context context, String imageUrl) {
