@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,13 +15,17 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.bussines.GetDataService;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.bussines.RetrofitClientInstance;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Result;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -118,16 +121,14 @@ public class PokedexFragment extends Fragment {
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
-        private final ImageView ivPokedex;
-        private final ImageView ivBack;
         private final TextView tvNomMovie;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
 
-            ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
-            ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
+            //ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
+            //ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
             tvNomMovie = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
@@ -137,19 +138,18 @@ public class PokedexFragment extends Fragment {
 
         public PokedexHolder(View itemView) {//new
             super(itemView);
-            ivPokedex = itemView.findViewById(R.id.ivImageFilm);
+
             tvNomMovie = itemView.findViewById(R.id.tvFilmName);
-            ivBack = itemView.findViewById(R.id.ivBack);
+
 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Pokedex pokedex) {
-            this.pokedex = pokedex;//Instanciem el pokemon
-            tvNomMovie.setText(pokedex.getName());
-            Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
-            Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+        public void bind(Pokedex result) {
+            // Aquí vincula los datos del objeto Result a las vistas de tu ViewHolder
+            tvNomMovie.setText(result.getResults().get(0).getName());
         }
+
 
         @Override
         public void onClick(View view) {
@@ -196,8 +196,8 @@ public class PokedexFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PokedexHolder holder, int position) {
-            Pokedex pokedex = lPokedexes.get(position);//Creem un pokemon que l'agafem de la llista
-            holder.bind(pokedex);
+            Pokedex result = pokedexes.get(position);
+            holder.bind(result);
         }
 
 
@@ -211,5 +211,28 @@ public class PokedexFragment extends Fragment {
             // Update the adapter with the new list of Pokémon
             notifyDataSetChanged();*/
         }
+
+        private void fetchDataFromApi() {
+            GetDataService service = RetrofitClientInstance.getAllPokemonNames().create(GetDataService.class);
+            Call<List<Result>> call = service.getAllPokemonNames();
+            call.enqueue(new Callback<List<Result>>() {
+                @Override
+                public void onResponse(Call<List<Result>> call, Response<List<Result>> response) {
+                    if (response.isSuccessful()) {
+                        List<Result> pokemonResults = response.body();
+                        // Ahora puedes hacer lo que quieras con los resultados
+                        // Por ejemplo, mostrarlos en tu RecyclerView
+                    } else {
+                        // Si la respuesta no fue exitosa, maneja el error aquí
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<List<Result>> call, Throwable t) {
+                    // Maneja el error en caso de fallo de la llamada
+                }
+            });
+        }
+
     }
 }
