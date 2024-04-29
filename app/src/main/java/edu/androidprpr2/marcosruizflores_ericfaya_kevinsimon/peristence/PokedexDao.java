@@ -77,11 +77,14 @@ public class PokedexDao {
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
             //String url = pokemon.getString("url");
-            JSONArray sprites = pokemonData.getJSONArray("sprites");
-            String frontUrl = sprites.getString(Integer.parseInt("front_default"));
-            String backUrl = sprites.getString(Integer.parseInt("back_default"));
+            JSONObject sprites = pokemonData.getJSONObject("sprites");
+            sprites.get("back_default");
+            for (int j = 0; j < sprites.length(); j++) {
+                String backUrl = sprites.getString("back_default");
+            }
+            String frontUrl = sprites.getString("front_default");
+            String backUrl = sprites.getString("back_default");
 
-            // Add Pokedex object to the list
             pokedexList.add(new Pokedex(name, frontUrl, backUrl));
         }
 
