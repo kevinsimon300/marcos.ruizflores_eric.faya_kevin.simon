@@ -3,59 +3,25 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 import android.content.Context;
 import android.widget.ImageView;
 
+import com.google.gson.annotations.SerializedName;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Pokedex {
+    @SerializedName("results")
+    ArrayList<Result> results;
 
-    private String name;
-    private String thumbnail;
-    private String backImage;
-    private String frontImage;
-
-    public Pokedex() {
+    public Pokedex(ArrayList<Result> results) {
+        this.results = results;
     }
 
-    public Pokedex(String name, String frontImage, String backImage) {
-        this.name = name;
-        this.frontImage = frontImage;
-        this.backImage = backImage;
+    public ArrayList<Result> getResults() {
+        return results;
     }
 
-    public Pokedex(String name, String thumbnail) {
-        this.name = name;
-        this.thumbnail = thumbnail;
-    }
-
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public String getBackImage() {
-        return backImage;
-    }
-
-    public String getFrontImage() {
-        return frontImage;
-    }
-
-    public void setBackImage(String backImage) {
-        this.backImage = backImage;
-    }
-
-    public void setFrontImage(String frontImage) {
-        this.frontImage = frontImage;
+    public void setResults(ArrayList<Result> results) {
+        this.results = results;
     }
 }

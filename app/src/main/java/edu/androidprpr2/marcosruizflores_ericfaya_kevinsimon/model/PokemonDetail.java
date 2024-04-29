@@ -2,25 +2,25 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 
 import android.widget.ImageView;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class PokemonDetail {
+    @SerializedName("name")
     private String namePokemon;
-    private ImageView imageViewFront;
-    private ImageView imageViewPokeball;
-    private List<String> tipusPokemon;
-    private String descripcioPokemon;
-    private List<Ability> abilities; // Lista de habilidades del Pokémon
-    private Stats stats; // Estadísticas del
+    @SerializedName("sprites")
+    private ArrayList<Sprites> sprites;
+    private ArrayList<Types> types;
 
-    public PokemonDetail(String namePokemon, ImageView imageViewFront, ImageView imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stats stats) {
+    // faltan añadir los demas
+
+
+    public PokemonDetail(String namePokemon, ArrayList<Sprites> sprites, ArrayList<Types> types) {
         this.namePokemon = namePokemon;
-        this.imageViewFront = imageViewFront;
-        this.imageViewPokeball = imageViewPokeball;
-        this.tipusPokemon = tipusPokemon;
-        this.descripcioPokemon = descripcioPokemon;
-        this.abilities = abilities;
-        this.stats = stats;
+        this.sprites = sprites;
+        this.types = types;
     }
 
     public String getNamePokemon() {
@@ -31,51 +31,19 @@ public class PokemonDetail {
         this.namePokemon = namePokemon;
     }
 
-    public ImageView getImageViewFront() {
-        return imageViewFront;
+    public ArrayList<Sprites> getSprites() {
+        return sprites;
     }
 
-    public void setImageViewFront(ImageView imageViewFront) {
-        this.imageViewFront = imageViewFront;
+    public void setSprites(ArrayList<Sprites> sprites) {
+        this.sprites = sprites;
     }
 
-    public ImageView getImageViewPokeball() {
-        return imageViewPokeball;
+    public ArrayList<Types> getTypes() {
+        return types;
     }
 
-    public void setImageViewPokeball(ImageView imageViewPokeball) {
-        this.imageViewPokeball = imageViewPokeball;
-    }
-
-    public List<String> getTipusPokemon() {
-        return tipusPokemon;
-    }
-
-    public void setTipusPokemon(List<String> tipusPokemon) {
-        this.tipusPokemon = tipusPokemon;
-    }
-
-    public String getDescripcioPokemon() {
-        return descripcioPokemon;
-    }
-
-    public void setDescripcioPokemon(String descripcioPokemon) {
-        this.descripcioPokemon = descripcioPokemon;
-    }
-
-    public List<Ability> getAbilities() {
-        return abilities;
-    }
-
-    public void setAbilities(List<Ability> abilities) {
-        this.abilities = abilities;
-    }
-
-    public Stats getStats() {
-        return stats;
-    }
-
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public void setTypes(ArrayList<Types> types) {
+        this.types = types;
     }
 }
