@@ -28,17 +28,20 @@ public class PokedexDao {
         void onSuccess(ArrayList<Pokedex> pokedexList);
         void onError(String errorMessage);
     }
+    /*public PokedexDao(){
+        this.queue = Volley.newRequestQueue(context);
 
+    }*/
     public PokedexDao(Context context, PokedexCallback callback) {
         this.context = context;
         this.callback = callback;
         this.queue = Volley.newRequestQueue(context);
     }
 
+    public void getPokemonList(int page) {
+        String url = "https://pokeapi.co/api/v2/pokemon/?limit=15&page=" + page;
 
-
-    public void getPokemonList() {
-        String url = "https://pokeapi.co/api/v2/pokemon/";
+        //String url = "https://pokeapi.co/api/v2/pokemon/";
         Log.d("PokedexDao", "Requesting Pokemon list from: " + url);
 
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -70,12 +73,16 @@ public class PokedexDao {
 
         // Process JSON data and create Pokedex objects
         JSONArray results = pokemonData.getJSONArray("results");
-        for (int i = 0; i < results.length(); i++) {
+        for (int i = 0; i < 15 && i < results.length(); i++) { // Limit the number of Pokedex objects
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
-            String url = pokemon.getString("url");
+            //String url = pokemon.getString("url");
+            JSONArray sprites = pokemonData.getJSONArray("sprites");
+            String frontUrl = sprites.getString(Integer.parseInt("front_default"));
+            String backUrl = sprites.getString(Integer.parseInt("back_default"));
+
             // Add Pokedex object to the list
-            pokedexList.add(new Pokedex(name, url));
+            pokedexList.add(new Pokedex(name, frontUrl, backUrl));
         }
 
         return pokedexList;

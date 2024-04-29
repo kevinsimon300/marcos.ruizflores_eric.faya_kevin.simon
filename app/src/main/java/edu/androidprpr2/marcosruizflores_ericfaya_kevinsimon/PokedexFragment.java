@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +33,10 @@ public class PokedexFragment extends Fragment {
     private RecyclerView pokedexesRecyclerView;//A la clase del fragment tenim recycler view
     private  PokedexAdapter adapter;//A la clase del fragment tenim adapter
     private ArrayList<Pokedex> pokedexes;
-
+    private boolean isLoading = false; // Declara isLoading y establece su valor inicial
+    private int visibleThreshold = 5;
+    private PokedexDao pokedexDao; // Define una instancia de PokedexDao
+    private int currentPage = 1; // D
     public PokedexFragment(ArrayList<Pokedex> pokedexes) {
         this.pokedexes=pokedexes;
     }
@@ -48,20 +52,64 @@ public class PokedexFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_pokedex, container, false);
         pokedexesRecyclerView=(RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        pokedexesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                int totalItemCount = layoutManager.getItemCount();
+                int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    // Aquí estamos cerca del final de la lista
+                    // Cargar más datos
+                    isLoading = true;
+                    loadMoreItems();
+                }
+            }
+        });
+
+        pokedexDao = new PokedexDao(getActivity(), new PokedexDao.PokedexCallback() {
+            @Override
+            public void onSuccess(ArrayList<Pokedex> pokedexList) {
+                // Aquí puedes manejar la lista de Pokedex obtenida
+                // Por ejemplo, puedes actualizar el RecyclerView con la nueva lista
+                pokedexes.addAll(pokedexList);
+                adapter.notifyDataSetChanged();
+                isLoading = false; // Establece isLoading en falso después de cargar los nuevos elementos
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                // Maneja cualquier error que ocurra durante la obtención de datos
+                Log.e("PokedexFragment", "Error obteniendo la lista de Pokedex: " + errorMessage);
+                isLoading = false; // Asegúrate de establecer isLoading en falso en caso de error
+            }
+        });
+
         updateUi();//Hem identificat el recycler view pero fa falta  pasarli la informacio,ficar quin adapter te el recycler view
         return view;
+    }
+
+    private void loadMoreItems() {
+        pokedexDao.getPokemonList(++currentPage);
+
+          /*   PokedexDao dao = new PokedexDao();
+            ArrayList<Pokedex> moreItems = dao.getPokemonListContination(currentPage);
+            // Update the adapter with the new list of Pokémon
+            notifyDataSetChanged();*/
     }
 
     private void updateUi() {
         if (pokedexes != null) {
             Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
 
-            for (int i = 0; i < pokedexes.size(); i++) {
-                Pokedex pokedex = pokedexes.get(i);
-                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
-            }
 
-            adapter = new PokedexAdapter(pokedexes, getActivity());
+
+
+            adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
             pokedexesRecyclerView.setAdapter(adapter);
         } else {
             Log.e("PokedexFragment", "La lista de pokedexes es nula");
@@ -98,7 +146,7 @@ public class PokedexFragment extends Fragment {
 
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
-            tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
+            tvNomMovie.setText(pokedex.getName());
             Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
         }
@@ -120,10 +168,17 @@ public class PokedexFragment extends Fragment {
     public class PokedexAdapter extends RecyclerView.Adapter<PokedexHolder>{
         private List<Pokedex> lPokedexes;//Te la llista de la informacio que pasem
         private Activity activity; //La activity
+        private boolean isLoading = false; // Declara isLoading y establece su valor inicial
+        private int visibleThreshold = 5; // Declara visibleThreshold y establece su valor
+        private int currentPage = 1;
+        private int pageSize = 15;
 
-        public PokedexAdapter(List<Pokedex> lPokedexes, Activity activity) {
+
+        public PokedexAdapter(List<Pokedex> lPokedexes, Activity activity, boolean isLoading, int visibleThreshold) {
             this.lPokedexes = lPokedexes;
             this.activity = activity;
+            this.isLoading = isLoading;
+            this.visibleThreshold = visibleThreshold;
         }
 
         @NonNull
@@ -145,9 +200,16 @@ public class PokedexFragment extends Fragment {
             holder.bind(pokedex);
         }
 
+
         @Override
         public int getItemCount() {
             return lPokedexes.size();
+        }
+       private void loadMoreItems() {
+          /*   PokedexDao dao = new PokedexDao();
+            ArrayList<Pokedex> moreItems = dao.getPokemonListContination(currentPage);
+            // Update the adapter with the new list of Pokémon
+            notifyDataSetChanged();*/
         }
     }
 }

@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:padding="2dp"
     > <!-- Añadir esta línea -->
     >
 
@@ -13,29 +13,11 @@
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:orientation="horizontal"
-        android:padding="5dp">
-
-        <ImageView
-            android:id="@+id/ivImageFilm"
-            android:layout_width="150dp"
-            android:layout_height="150dp">
-
-        </ImageView>
-
-        <ImageView
-            android:id="@+id/ivBack"
-            android:layout_width="150dp"
-            android:layout_height="150dp">
-        </ImageView>
+        android:padding="2dp">
 
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
 
 
             <TextView
@@ -52,70 +34,24 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
                 <ImageView
-                    android:id="@+id/ivImageStar"
+                    android:id="@+id/ivImageFilm"
 
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/star_yellow">
+                    >
                 </ImageView>
-
-                <TextView
-                    android:id="@+id/tvReview"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:paddingLeft="15dp"
-
-                    android:textSize="16sp"
-                    android:text="6.6/10"/>
-            </LinearLayout>
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-                <TextView
-                    android:id="@+id/tvGenresMovie"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:background="@drawable/round_text_genre"
-                    android:textSize="16sp"
-                    android:textColor="@color/darkBlue"
-                    android:text="HORROR"/>
-            </LinearLayout>
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
                 <ImageView
-                    android:id="@+id/ivImageClock"
+                    android:id="@+id/ivBack"
 
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/clock">
+                    >
                 </ImageView>
-                <TextView
-                    android:id="@+id/tvLengthMovieHours"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:paddingLeft="15dp"
-                    android:textSize="16sp"
-                    android:text="1h"/>
-                <TextView
-                    android:id="@+id/tvLengthMovieMinuts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="16sp"
-                    android:text="30min"/>
+
             </LinearLayout>
 
 
 
-        </LinearLayout>
 
         <!--Es la llista de items
          Es un linear layout un horitzontal que tindra un altre linear layout vertical-->
