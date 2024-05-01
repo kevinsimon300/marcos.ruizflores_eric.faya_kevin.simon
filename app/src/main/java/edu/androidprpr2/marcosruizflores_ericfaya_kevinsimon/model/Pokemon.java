@@ -2,10 +2,12 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 
 import android.content.Context;
 import android.content.Intent;
-import android.widget.ArrayAdapter;
+
 
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.DetailFragment;
 
 public class Pokemon {
     private String name;
@@ -20,7 +22,7 @@ public class Pokemon {
 
     private String description;
 
-    // constrains
+
     public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, ArrayList<Stat> stats) {
         this.name = name;
         this.id = id;
@@ -34,7 +36,7 @@ public class Pokemon {
 
     }
 
-    // getters
+
 
     public String getBackImage() {
         return backImage;
@@ -71,16 +73,35 @@ public class Pokemon {
         return types;
     }
 
-//    public List<String> getStats() {
-//        return stats;
-//    }
+
 
     public String getDescription() {
         return description;
-    } // Description is not going to be showed, because apparently the url i use does not have it,
-    // but this "https://pokeapi.co/api/v2/pokemon-species/<pokemon_number>/ url contains some cool info about each pokemon and their description in different languages
-    // Unfortunately, i did not use it, as i am running out of time, but i am planning on doing that anyway, even after submitting the project in its current state."
+    }
 
+    public Intent getIntent(Context context) {
+        Intent intent = new Intent(context, DetailFragment.class);
+        intent.putExtra("name", name);
+        intent.putExtra("id", id);
+        intent.putExtra("imageUrl", imageUrl);
+        intent.putStringArrayListExtra("types", new ArrayList<>(types));
+        intent.putExtra("description", description);
+        intent.putExtra("weight", weight);
+        intent.putExtra("height", height);
+
+        intent.putParcelableArrayListExtra("stats", stats);
+
+        return intent;
+    }
+
+
+    public Intent getPokedex (Context context) {
+        Intent intent = new Intent(context, PokemonDetail.class);
+        intent.putExtra("name", name);
+        intent.putExtra("imageUrl", imageUrl);
+        intent.putExtra("backImage", backImage);
+        return intent;
+    }
 
 
 }
