@@ -18,14 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.bussines.GetDataService;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.bussines.RetrofitClientInstance;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Result;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -109,8 +103,10 @@ public class PokedexFragment extends Fragment {
         if (pokedexes != null) {
             Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
 
-
-
+            for (int i = 0; i < pokedexes.size(); i++) {
+                Pokedex pokedex = pokedexes.get(i);
+                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
+            }
 
             adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
             pokedexesRecyclerView.setAdapter(adapter);
@@ -121,6 +117,8 @@ public class PokedexFragment extends Fragment {
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
+        //private final ImageView ivPokedex;
+        //private final ImageView ivBack;
         private final TextView tvNomMovie;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
@@ -138,18 +136,19 @@ public class PokedexFragment extends Fragment {
 
         public PokedexHolder(View itemView) {//new
             super(itemView);
-
+            //ivPokedex = itemView.findViewById(R.id.ivImageFilm);
             tvNomMovie = itemView.findViewById(R.id.tvFilmName);
-
+            //ivBack = itemView.findViewById(R.id.ivBack);
 
             itemView.setOnClickListener(this);
         }
 
-        public void bind(Pokedex result) {
-            // Aquí vincula los datos del objeto Result a las vistas de tu ViewHolder
-            tvNomMovie.setText(result.getResults().get(0).getName());
+        public void bind(Pokedex pokedex) {
+            this.pokedex = pokedex;//Instanciem el pokemon
+            tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
+           // Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
+            //Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
         }
-
 
         @Override
         public void onClick(View view) {
@@ -196,8 +195,8 @@ public class PokedexFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull PokedexHolder holder, int position) {
-            Pokedex result = pokedexes.get(position);
-            holder.bind(result);
+            Pokedex pokedex = lPokedexes.get(position);//Creem un pokemon que l'agafem de la llista
+            holder.bind(pokedex);
         }
 
 
@@ -211,28 +210,5 @@ public class PokedexFragment extends Fragment {
             // Update the adapter with the new list of Pokémon
             notifyDataSetChanged();*/
         }
-
-        private void fetchDataFromApi() {
-            GetDataService service = RetrofitClientInstance.getAllPokemonNames().create(GetDataService.class);
-            Call<List<Result>> call = service.getAllPokemonNames();
-            call.enqueue(new Callback<List<Result>>() {
-                @Override
-                public void onResponse(Call<List<Result>> call, Response<List<Result>> response) {
-                    if (response.isSuccessful()) {
-                        List<Result> pokemonResults = response.body();
-                        // Ahora puedes hacer lo que quieras con los resultados
-                        // Por ejemplo, mostrarlos en tu RecyclerView
-                    } else {
-                        // Si la respuesta no fue exitosa, maneja el error aquí
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<List<Result>> call, Throwable t) {
-                    // Maneja el error en caso de fallo de la llamada
-                }
-            });
-        }
-
     }
 }

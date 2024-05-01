@@ -76,16 +76,13 @@ public class PokedexDao {
         for (int i = 0; i < 15 && i < results.length(); i++) { // Limit the number of Pokedex objects
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
-            //String url = pokemon.getString("url");
+            String url = pokemon.getString("url");
             JSONObject sprites = pokemonData.getJSONObject("sprites");
-            sprites.get("back_default");
-            for (int j = 0; j < sprites.length(); j++) {
-                String backUrl = sprites.getString("back_default");
-            }
+
             String frontUrl = sprites.getString("front_default");
             String backUrl = sprites.getString("back_default");
 
-            pokedexList.add(new Pokedex(name, frontUrl, backUrl));
+
         }
 
         return pokedexList;
