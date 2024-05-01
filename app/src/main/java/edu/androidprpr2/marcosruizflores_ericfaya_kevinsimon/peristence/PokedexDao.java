@@ -16,6 +16,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 
@@ -77,10 +78,43 @@ public class PokedexDao {
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
             String url = pokemon.getString("url");
-            JSONObject sprites = pokemonData.getJSONObject("sprites");
+            JsonObjectRequest requestDetail = new JsonObjectRequest(Request.Method.GET, url, null,
+                    detailResponse -> {
+                        try {
+                            int id = detailResponse.getInt("id");
+                            String weight = String.valueOf(detailResponse.getDouble("weight")) + " KG";
+                            String height = String.valueOf(detailResponse.getDouble("height")) + " M";
 
-            String frontUrl = sprites.getString("front_default");
-            String backUrl = sprites.getString("back_default");
+                            String stat0 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(0).getInt("base_stat"));
+                            String stat1 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(1).getInt("base_stat"));
+                            String stat2 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(2).getInt("base_stat"));
+                            String stat3 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(3).getInt("base_stat"));
+                            String stat4 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(4).getInt("base_stat"));
+                            String stat5 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(5).getInt("base_stat"));
+
+                            String front = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("front_default");
+                            String back = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("back_default"); // getting the pictures
+                            List<String> types = new ArrayList<>();
+                            JSONArray typesArray = detailResponse.getJSONArray("types");
+                            for (int j = 0; j < typesArray.length(); j++) {
+                                types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
+                            }
+
+                            //Pokemon pokemon = new Pokemon(name, id, imageUrl, types, weight, height, stat0, stat1, stat2, stat3, stat4, stat5);
+                            //pokemonList.add(pokemon); // adding a pokemon to the arraylist
+                            //adapter.notifyDataSetChanged();
+                            pokedexList.add(new Pokedex(name, front, back));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    },
+                    error -> {
+                        error.printStackTrace();
+                    }
+            );
+
+
+
 
 
         }

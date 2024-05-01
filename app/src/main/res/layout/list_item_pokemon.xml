@@ -34,18 +34,18 @@
                 android:orientation="horizontal"
                 android:padding="5dp">
                 <ImageView
-                    android:id="@+id/ivImageFront"
+                    android:id="@+id/ivImageFilm"
 
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/clock">
+                    >
                 </ImageView>
                 <ImageView
-                    android:id="@+id/ivImageBack"
+                    android:id="@+id/ivBack"
 
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:src="@drawable/clock">
+                    >
                 </ImageView>
 
             </LinearLayout>
