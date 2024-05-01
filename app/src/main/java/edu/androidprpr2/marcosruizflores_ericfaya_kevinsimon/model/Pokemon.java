@@ -14,16 +14,18 @@ public class Pokemon {
     private String height;
     private ArrayList<Stat> stats;
     private String imageUrl;
+    private String backImage;
     private List<String> types;
 
 
     private String description;
 
     // constrains
-    public Pokemon(String name, int id, String imageUrl, List<String> types, String weight, String height, ArrayList<Stat> stats) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, ArrayList<Stat> stats) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
+        this.backImage = backImage;
         this.types = types;
         this.description = description;
         this.weight = weight;
@@ -33,6 +35,10 @@ public class Pokemon {
     }
 
     // getters
+
+    public String getBackImage() {
+        return backImage;
+    }
 
     public String getName() {
         return name;

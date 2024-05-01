@@ -18,7 +18,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Stat;
 
 public class PokedexDao {
     private final Context context;
@@ -26,7 +27,7 @@ public class PokedexDao {
     private final RequestQueue queue;
 
     public interface PokedexCallback {
-        void onSuccess(ArrayList<Pokedex> pokedexList);
+        void onSuccess(ArrayList<Pokemon> pokedexList);
         void onError(String errorMessage);
     }
     /*public PokedexDao(){
@@ -53,8 +54,8 @@ public class PokedexDao {
                         try {
                             Log.d("PokedexDao", "SUCCESS JODER: ");
 
-                            ArrayList<Pokedex> pokedexList = processPokemonData(response);
-                            callback.onSuccess(pokedexList);
+                            ArrayList<Pokemon> pokemonList = processPokemonData(response);
+                            callback.onSuccess(pokemonList);
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -69,8 +70,8 @@ public class PokedexDao {
                 });
         queue.add(jsonObjectRequest);
     }
-    private ArrayList<Pokedex> processPokemonData(JSONObject pokemonData) throws JSONException {
-        ArrayList<Pokedex> pokedexList = new ArrayList<>();
+    private ArrayList<Pokemon> processPokemonData(JSONObject pokemonData) throws JSONException {
+        ArrayList<Pokemon> pokemonList = new ArrayList<>();
 
         // Process JSON data and create Pokedex objects
         JSONArray results = pokemonData.getJSONArray("results");
@@ -91,6 +92,20 @@ public class PokedexDao {
                             String stat3 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(3).getInt("base_stat"));
                             String stat4 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(4).getInt("base_stat"));
                             String stat5 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(5).getInt("base_stat"));
+                            ArrayList<Stat> stats = new ArrayList<>();
+                            Stat stat00 = new Stat(stat0);
+                            Stat stat01 = new Stat(stat1);
+                            Stat stat02 = new Stat(stat2);
+                            Stat stat03 = new Stat(stat3);
+                            Stat stat04 = new Stat(stat4);
+                            Stat stat05 = new Stat(stat5);
+
+                            stats.add(stat00);
+                            stats.add(stat01);
+                            stats.add(stat02);
+                            stats.add(stat03);
+                            stats.add(stat04);
+                            stats.add(stat05);
 
                             String front = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("front_default");
                             String back = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("back_default"); // getting the pictures
@@ -99,10 +114,8 @@ public class PokedexDao {
                             for (int j = 0; j < typesArray.length(); j++) {
                                 types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
                             }
-                            //Pokemon pokemon = new Pokemon(name, id, imageUrl, types, weight, height, stat0, stat1, stat2, stat3, stat4, stat5);
-                            //pokemonList.add(pokemon); // adding a pokemon to the arraylist
-                            //adapter.notifyDataSetChanged();
-                            pokedexList.add(new Pokedex(name, front, back));
+                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height,stats));
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -112,6 +125,6 @@ public class PokedexDao {
                     }
             );
         }
-        return pokedexList;
+        return pokemonList;
     }
 }

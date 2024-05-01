@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
@@ -60,15 +61,13 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
     }
   
     @Override
-    public void onSuccess(ArrayList<Pokedex> pokedexList) {
+    public void onSuccess(ArrayList<Pokemon> pokedexList) {
         Log.d("SingleFragmentActivity", "onSuccess method called!"); // Agregar este registro
 
         // Manejar la lista de Pokémon obtenida
         // Por ejemplo, puedes imprimir los nombres de los Pokémon en el log
-        for (Pokedex pokedex : pokedexList) {
-            Log.d("MainActivity", "Pokémon: " + pokedex.getName());
-        }
-        pokedexFragment = new PokedexFragment(pokedexList);
+
+       // pokedexFragment = new PokedexFragment(pokedexList);
         replaceFragment(pokedexFragment);
     }
 

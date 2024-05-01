@@ -5,15 +5,17 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Pokedex {
 
     private String name;
     private String thumbnail;
     private String backImage;
     private String frontImage;
+    private ArrayList<Pokemon> pokemonsList;
 
-    public Pokedex() {
-    }
 
     public Pokedex(String name, String frontImage, String backImage) {
         this.name = name;
@@ -21,10 +23,13 @@ public class Pokedex {
         this.backImage = backImage;
     }
 
+    /*
     public Pokedex(String name, String thumbnail) {
         this.name = name;
         this.thumbnail = thumbnail;
     }
+
+     */
 
     public ImageView transformImageView(Context context, String imageUrl) {
         ImageView imageView = new ImageView(context);

@@ -23,6 +23,7 @@ import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 /**
@@ -74,10 +75,15 @@ public class PokedexFragment extends Fragment {
 
         pokedexDao = new PokedexDao(getActivity(), new PokedexDao.PokedexCallback() {
             @Override
-            public void onSuccess(ArrayList<Pokedex> pokedexList) {
+            public void onSuccess(ArrayList<Pokemon> pokedexList) {
                 // Aquí puedes manejar la lista de Pokedex obtenida
                 // Por ejemplo, puedes actualizar el RecyclerView con la nueva lista
-                pokedexes.addAll(pokedexList);
+               // pokedexes.addAll(pokedexList);
+                ArrayList<Pokemon> pokemons = new ArrayList<>();
+                // aqui en vez del new ira la funcion del dao que devuelve la lista de pokemons
+
+                Pokedex firstPokemonToShow = new Pokedex(pokemons.get(0).getName(), pokemons.get(0).getImageUrl(), pokemons.get(0).getBackImage());
+
                 adapter.notifyDataSetChanged();
                 isLoading = false; // Establece isLoading en falso después de cargar los nuevos elementos
             }
