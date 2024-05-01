@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 /**
@@ -96,10 +97,10 @@ public class PokedexFragment extends Fragment {
     private void loadMoreItems() {
         pokedexDao.getPokemonList(++currentPage);
 
-             //PokedexDao dao = new PokedexDao();
-            //ArrayList<Pokedex> moreItems = dao.getPokemonList(currentPage);
-            // Update the adapter with the new list of Pokémon
-           // adapter.notifyDataSetChanged();
+        //PokedexDao dao = new PokedexDao();
+        //ArrayList<Pokedex> moreItems = dao.getPokemonList(currentPage);
+        // Update the adapter with the new list of Pokémon
+        // adapter.notifyDataSetChanged();
     }
 
     private void updateUi() {
@@ -120,17 +121,17 @@ public class PokedexFragment extends Fragment {
 
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private Pokedex pokedex;
-        private final ImageView ivPokedex;
         private final ImageView ivBack;
-        private final TextView tvNomMovie;
+        private final ImageView ivFront;
+        private final TextView tvPokemonName;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
 
-            ivPokedex = (ImageView) itemView.findViewById(R.id.ivImageFilm);
-            ivBack = (ImageView) itemView.findViewById(R.id.ivBack);
-            tvNomMovie = (TextView) itemView.findViewById(R.id.tvFilmName); //El item view es internament el view holder,no es un objecte creat per nosaltres
+            ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
+            ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
+            tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
             this.activity=activity;//La activity es la que li pasem per paremetres
@@ -139,17 +140,17 @@ public class PokedexFragment extends Fragment {
 
         public PokedexHolder(View itemView) {//new
             super(itemView);
-            ivPokedex = itemView.findViewById(R.id.ivImageFilm);
-            tvNomMovie = itemView.findViewById(R.id.tvFilmName);
-            ivBack = itemView.findViewById(R.id.ivBack);
+            ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
+            ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
+            tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
         }
 
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
-            tvNomMovie.setText(pokedex.getName()); //Li pasem el nom
-            Picasso.get().load(pokedex.getFrontImage()).into(this.ivPokedex);
+            tvPokemonName.setText(pokedex.getName()); //Li pasem el nom
+            Picasso.get().load(pokedex.getFrontImage()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
         }
 
@@ -160,7 +161,7 @@ public class PokedexFragment extends Fragment {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout,detailFragment);
 
-           // fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
+            // fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
 
             //fragmentTransaction.addToBackStack(null);//La pila,cuan tenim varios fragemnts hem de fer aixo,per tornar enrere el fragment
             fragmentTransaction.commit();
@@ -186,8 +187,8 @@ public class PokedexFragment extends Fragment {
         @NonNull
         @Override
         public PokedexHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-          // LayoutInflater layoutInflater = LayoutInflater.from(activity);
-          //  return new PokedexHolder(layoutInflater,parent,activity);
+            // LayoutInflater layoutInflater = LayoutInflater.from(activity);
+            //  return new PokedexHolder(layoutInflater,parent,activity);
             //OLD
 
             //NEW
@@ -207,7 +208,7 @@ public class PokedexFragment extends Fragment {
         public int getItemCount() {
             return lPokedexes.size();
         }
-       private void loadMoreItems() {
+        private void loadMoreItems() {
           /*   PokedexDao dao = new PokedexDao();
             ArrayList<Pokedex> moreItems = dao.getPokemonListContination(currentPage);
             // Update the adapter with the new list of Pokémon

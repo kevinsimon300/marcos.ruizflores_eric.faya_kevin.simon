@@ -99,7 +99,6 @@ public class PokedexDao {
                             for (int j = 0; j < typesArray.length(); j++) {
                                 types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
                             }
-
                             //Pokemon pokemon = new Pokemon(name, id, imageUrl, types, weight, height, stat0, stat1, stat2, stat3, stat4, stat5);
                             //pokemonList.add(pokemon); // adding a pokemon to the arraylist
                             //adapter.notifyDataSetChanged();
@@ -112,14 +111,7 @@ public class PokedexDao {
                         error.printStackTrace();
                     }
             );
-
-
-
-
-
         }
-
         return pokedexList;
     }
-
 }

@@ -6,14 +6,14 @@ import java.util.List;
 
 public class PokemonDetail {
     private String namePokemon;
-    private ImageView imageViewFront;
-    private ImageView imageViewPokeball;
+    private String imageViewFront;
+    private String imageViewPokeball;
     private List<String> tipusPokemon;
     private String descripcioPokemon;
-    private List<Ability> abilities; // Lista de habilidades del Pokémon
-    private Stats stats; // Estadísticas del
+    private List<Ability> abilities;
+    private Stats stats;
 
-    public PokemonDetail(String namePokemon, ImageView imageViewFront, ImageView imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stats stats) {
+    public PokemonDetail(String namePokemon, String imageViewFront, String imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stats stats) {
         this.namePokemon = namePokemon;
         this.imageViewFront = imageViewFront;
         this.imageViewPokeball = imageViewPokeball;
@@ -31,19 +31,19 @@ public class PokemonDetail {
         this.namePokemon = namePokemon;
     }
 
-    public ImageView getImageViewFront() {
+    public String getImageViewFront() {
         return imageViewFront;
     }
 
-    public void setImageViewFront(ImageView imageViewFront) {
+    public void setImageViewFront(String imageViewFront) {
         this.imageViewFront = imageViewFront;
     }
 
-    public ImageView getImageViewPokeball() {
+    public String getImageViewPokeball() {
         return imageViewPokeball;
     }
 
-    public void setImageViewPokeball(ImageView imageViewPokeball) {
+    public void setImageViewPokeball(String imageViewPokeball) {
         this.imageViewPokeball = imageViewPokeball;
     }
 
