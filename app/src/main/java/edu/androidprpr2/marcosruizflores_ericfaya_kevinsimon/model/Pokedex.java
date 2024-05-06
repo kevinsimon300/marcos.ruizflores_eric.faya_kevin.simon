@@ -9,18 +9,18 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Pokedex {
-
-    private String name;
-    private String thumbnail;
-    private String backImage;
-    private String frontImage;
+    private static  Pokedex sPokedexes;
     private ArrayList<Pokemon> pokemonsList;
 
+    public static Pokedex getInstance(Context context, ArrayList<Pokemon> pokemonsList) {
+        if (pokemonsList == null) {
+            sPokedexes = new Pokedex(context, pokemonsList);
+        }
+        return sPokedexes;
+    }
 
-    public Pokedex(String name, String frontImage, String backImage) {
-        this.name = name;
-        this.frontImage = frontImage;
-        this.backImage = backImage;
+    private Pokedex(Context context, ArrayList<Pokemon> pokemonsList) {
+        this.pokemonsList = pokemonsList;
     }
 
     /*
@@ -28,44 +28,9 @@ public class Pokedex {
         this.name = name;
         this.thumbnail = thumbnail;
     }
-
      */
 
-    public ImageView transformImageView(Context context, String imageUrl) {
-        ImageView imageView = new ImageView(context);
-        Picasso.get().load(imageUrl).into(imageView);
-        return imageView;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public String getBackImage() {
-        return backImage;
-    }
-
-    public String getFrontImage() {
-        return frontImage;
-    }
-
-    public void setBackImage(String backImage) {
-        this.backImage = backImage;
-    }
-
-    public void setFrontImage(String frontImage) {
-        this.frontImage = frontImage;
+    public ArrayList<Pokemon> getPokemonsList() {
+        return pokemonsList;
     }
 }

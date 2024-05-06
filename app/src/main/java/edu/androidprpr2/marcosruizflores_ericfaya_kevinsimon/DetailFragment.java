@@ -52,11 +52,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
         ivPokedex = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
         imageViewFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
-        Picasso.get().load(pokedex.getBackImage()).into(this.ivPokedex);
-        Picasso.get().load(pokedex.getFrontImage()).into(this.imageViewFront);
+        Picasso.get().load(pokedex.getPokemonsList().get(0).getBackImage()).into(this.ivPokedex);
+        Picasso.get().load(pokedex.getPokemonsList().get(0).getImageUrl()).into(this.imageViewFront);
 
 
-        tvNomPokedex.setText(pokedex.getName());
+        tvNomPokedex.setText(pokedex.getPokemonsList().get(0).getName());
 
         return itemView;
     }

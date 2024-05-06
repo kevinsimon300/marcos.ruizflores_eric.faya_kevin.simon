@@ -76,13 +76,9 @@ public class PokedexFragment extends Fragment {
         pokedexDao = new PokedexDao(getActivity(), new PokedexDao.PokedexCallback() {
             @Override
             public void onSuccess(ArrayList<Pokemon> pokedexList) {
-                // Aquí puedes manejar la lista de Pokedex obtenida
-                // Por ejemplo, puedes actualizar el RecyclerView con la nueva lista
-               // pokedexes.addAll(pokedexList);
-                ArrayList<Pokemon> pokemons = new ArrayList<>();
-                // aqui en vez del new ira la funcion del dao que devuelve la lista de pokemons
 
-                Pokedex firstPokemonToShow = new Pokedex(pokemons.get(0).getName(), pokemons.get(0).getImageUrl(), pokemons.get(0).getBackImage());
+                Pokedex firstPokemonToShow = Pokedex.getInstance(getActivity(), pokedexList);
+
 
                 adapter.notifyDataSetChanged();
                 isLoading = false; // Establece isLoading en falso después de cargar los nuevos elementos
@@ -115,7 +111,7 @@ public class PokedexFragment extends Fragment {
 
             for (int i = 0; i < pokedexes.size(); i++) {
                 Pokedex pokedex = pokedexes.get(i);
-                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
+                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getPokemonsList().get(0).getName());
             }
 
             adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
@@ -155,9 +151,9 @@ public class PokedexFragment extends Fragment {
 
         public void bind(Pokedex pokedex) {
             this.pokedex = pokedex;//Instanciem el pokemon
-            tvPokemonName.setText(pokedex.getName()); //Li pasem el nom
-            Picasso.get().load(pokedex.getFrontImage()).into(this.ivFront);
-            Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+            tvPokemonName.setText(pokedex.getPokemonsList().get(0).getName()); //Li pasem el nom
+            Picasso.get().load(pokedex.getPokemonsList().get(0).getImageUrl()).into(this.ivFront);
+            Picasso.get().load(pokedex.getPokemonsList().get(0).getBackImage()).into(this.ivBack);
         }
 
         @Override

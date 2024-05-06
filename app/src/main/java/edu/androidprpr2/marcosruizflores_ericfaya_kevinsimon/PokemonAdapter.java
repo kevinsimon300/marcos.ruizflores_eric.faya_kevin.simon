@@ -31,8 +31,8 @@ public class PokemonAdapter extends RecyclerView.Adapter<PokemonAdapter.PokemonV
 
     @Override
     public void onBindViewHolder(@NonNull PokemonViewHolder holder, int position) {
-        Pokedex pokemon = pokemonList.get(position);
-        holder.textViewName.setText(pokemon.getName());
+        Pokedex pokemon = Pokedex.getInstance(context, pokemonList.get(0).getPokemonsList());
+        holder.textViewName.setText(pokemon.getPokemonsList().get(0).getName());
 
         // Picasso.get().load(pokemon.getPokemonImageUrl()).into(holder.imageViewFront);
         // Picasso.get().load(pokemon.getPokeballImageUrl()).into(holder.imageViewBack);
