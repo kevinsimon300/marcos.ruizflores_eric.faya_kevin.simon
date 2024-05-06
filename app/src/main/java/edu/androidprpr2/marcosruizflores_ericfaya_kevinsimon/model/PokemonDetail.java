@@ -11,16 +11,16 @@ public class PokemonDetail {
     private List<String> tipusPokemon;
     private String descripcioPokemon;
     private List<Ability> abilities;
-    private Stats stats;
+    private Stat stat;
 
-    public PokemonDetail(String namePokemon, String imageViewFront, String imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stats stats) {
+    public PokemonDetail(String namePokemon, String imageViewFront, String imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stat stat) {
         this.namePokemon = namePokemon;
         this.imageViewFront = imageViewFront;
         this.imageViewPokeball = imageViewPokeball;
         this.tipusPokemon = tipusPokemon;
         this.descripcioPokemon = descripcioPokemon;
         this.abilities = abilities;
-        this.stats = stats;
+        this.stat = stat;
     }
 
     public String getNamePokemon() {
@@ -71,11 +71,11 @@ public class PokemonDetail {
         this.abilities = abilities;
     }
 
-    public Stats getStats() {
-        return stats;
+    public Stat getStats() {
+        return stat;
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public void setStats(Stat stat) {
+        this.stat = stat;
     }
 }

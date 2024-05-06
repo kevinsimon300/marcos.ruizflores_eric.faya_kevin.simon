@@ -14,16 +14,19 @@ public class Pokemon {
     private int id;
     private String weight;
     private String height;
-    private ArrayList<Stat> stats;
+    private String stat0;
+    private String stat1;
+    private String stat2;
+    private String stat3;
+    private String stat4;
+    private String stat5;
     private String imageUrl;
     private String backImage;
     private List<String> types;
-
-
     private String description;
 
 
-    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, ArrayList<Stat> stats) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -32,8 +35,12 @@ public class Pokemon {
         this.description = description;
         this.weight = weight;
         this.height = height;
-        this.stats = stats;
-
+        this.stat0 = stat0;
+        this.stat1 = stat1;
+        this.stat2 = stat2;
+        this.stat3 = stat3;
+        this.stat4 = stat4;
+        this.stat5 = stat5;
     }
 
 
@@ -56,15 +63,6 @@ public class Pokemon {
     public String getHeight() {
         return height;
     }
-
-    public ArrayList<Stat> getStats() {
-        return stats;
-    }
-
-    public void setStats(ArrayList<Stat> stats) {
-        this.stats = stats;
-    }
-
     public String getImageUrl() {
         return imageUrl;
     }
@@ -89,8 +87,12 @@ public class Pokemon {
         intent.putExtra("weight", weight);
         intent.putExtra("height", height);
 
-        intent.putParcelableArrayListExtra("stats", stats);
-
+        intent.putExtra("Stat0", stat0);
+        intent.putExtra("Stat1", stat1);
+        intent.putExtra("Stat2", stat2);
+        intent.putExtra("Stat3", stat3);
+        intent.putExtra("Stat4", stat4);
+        intent.putExtra("Stat5", stat5);
         return intent;
     }
 
