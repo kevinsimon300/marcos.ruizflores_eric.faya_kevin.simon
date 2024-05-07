@@ -13,7 +13,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 
 
@@ -23,8 +23,8 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail
  */
 public class DetailFragment extends Fragment {//Que es creei el on create,el fragment,i que es crei la vista,tot lo altre fora
 
-    private ArrayList<Pokedex> pokedexes;
-    private Pokedex pokedex;//El pokemon que hem cliquen
+    private ArrayList<Pokemon> pokedexes;
+    private Pokemon pokedex;//El pokemon que hem cliquen
     private PokemonDetail pokemon;
     private TextView tvDescription;
     private ImageView ivPokedex;
@@ -32,7 +32,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private ImageView imageViewPokeball;//TODO
     private TextView tvNomPokedex;
 
-    public DetailFragment(Pokedex pokedex, ArrayList<Pokedex> pokedexes) {
+    public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
         this.pokedex = pokedex;
         this.pokedexes = pokedexes;
     }
@@ -52,11 +52,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
         ivPokedex = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
         imageViewFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
-        Picasso.get().load(pokedex.getPokemonsList().get(0).getBackImage()).into(this.ivPokedex);
-        Picasso.get().load(pokedex.getPokemonsList().get(0).getImageUrl()).into(this.imageViewFront);
+        Picasso.get().load(pokedex.getBackImage()).into(this.ivPokedex);
+        Picasso.get().load(pokedex.getImageUrl()).into(this.imageViewFront);
 
 
-        tvNomPokedex.setText(pokedex.getPokemonsList().get(0).getName());
+        tvNomPokedex.setText(pokedex.getName());
 
         return itemView;
     }

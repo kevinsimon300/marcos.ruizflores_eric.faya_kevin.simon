@@ -66,8 +66,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
 
         // Manejar la lista de Pokémon obtenida
         // Por ejemplo, puedes imprimir los nombres de los Pokémon en el log
-
-       // pokedexFragment = new PokedexFragment(pokedexList);
+        pokedexFragment = new PokedexFragment(pokedexList);
         replaceFragment(pokedexFragment);
     }
 
