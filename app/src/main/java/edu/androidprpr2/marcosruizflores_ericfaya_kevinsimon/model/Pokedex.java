@@ -5,57 +5,32 @@ import android.widget.ImageView;
 
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
 public class Pokedex {
+    private static  Pokedex sPokedexes;
+    private ArrayList<Pokemon> pokemonsList;
 
-    private String name;
-    private String thumbnail;
-    private String backImage;
-    private String frontImage;
-
-    public Pokedex() {
+    public static Pokedex getInstance(Context context, ArrayList<Pokemon> pokemonsList) {
+        if (pokemonsList == null) {
+            sPokedexes = new Pokedex(context, pokemonsList);
+        }
+        return sPokedexes;
     }
 
-    public Pokedex(String name, String frontImage, String backImage) {
-        this.name = name;
-        this.frontImage = frontImage;
-        this.backImage = backImage;
+    private Pokedex(Context context, ArrayList<Pokemon> pokemonsList) {
+        this.pokemonsList = pokemonsList;
     }
 
+    /*
     public Pokedex(String name, String thumbnail) {
         this.name = name;
         this.thumbnail = thumbnail;
     }
+     */
 
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getThumbnail() {
-        return thumbnail;
-    }
-
-    public void setThumbnail(String thumbnail) {
-        this.thumbnail = thumbnail;
-    }
-
-    public String getBackImage() {
-        return backImage;
-    }
-
-    public String getFrontImage() {
-        return frontImage;
-    }
-
-    public void setBackImage(String backImage) {
-        this.backImage = backImage;
-    }
-
-    public void setFrontImage(String frontImage) {
-        this.frontImage = frontImage;
+    public ArrayList<Pokemon> getPokemonsList() {
+        return pokemonsList;
     }
 }

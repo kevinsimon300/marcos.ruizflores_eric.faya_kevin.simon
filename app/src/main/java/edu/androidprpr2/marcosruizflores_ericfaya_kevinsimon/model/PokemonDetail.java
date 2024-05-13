@@ -6,21 +6,21 @@ import java.util.List;
 
 public class PokemonDetail {
     private String namePokemon;
-    private ImageView imageViewFront;
-    private ImageView imageViewPokeball;
+    private String imageViewFront;
+    private String imageViewPokeball;
     private List<String> tipusPokemon;
     private String descripcioPokemon;
-    private List<Ability> abilities; // Lista de habilidades del Pokémon
-    private Stats stats; // Estadísticas del
+    private List<Ability> abilities;
+    private Stat stat;
 
-    public PokemonDetail(String namePokemon, ImageView imageViewFront, ImageView imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stats stats) {
+    public PokemonDetail(String namePokemon, String imageViewFront, String imageViewPokeball, List<String> tipusPokemon, String descripcioPokemon, List<Ability> abilities, Stat stat) {
         this.namePokemon = namePokemon;
         this.imageViewFront = imageViewFront;
         this.imageViewPokeball = imageViewPokeball;
         this.tipusPokemon = tipusPokemon;
         this.descripcioPokemon = descripcioPokemon;
         this.abilities = abilities;
-        this.stats = stats;
+        this.stat = stat;
     }
 
     public String getNamePokemon() {
@@ -31,19 +31,19 @@ public class PokemonDetail {
         this.namePokemon = namePokemon;
     }
 
-    public ImageView getImageViewFront() {
+    public String getImageViewFront() {
         return imageViewFront;
     }
 
-    public void setImageViewFront(ImageView imageViewFront) {
+    public void setImageViewFront(String imageViewFront) {
         this.imageViewFront = imageViewFront;
     }
 
-    public ImageView getImageViewPokeball() {
+    public String getImageViewPokeball() {
         return imageViewPokeball;
     }
 
-    public void setImageViewPokeball(ImageView imageViewPokeball) {
+    public void setImageViewPokeball(String imageViewPokeball) {
         this.imageViewPokeball = imageViewPokeball;
     }
 
@@ -71,11 +71,11 @@ public class PokemonDetail {
         this.abilities = abilities;
     }
 
-    public Stats getStats() {
-        return stats;
+    public Stat getStats() {
+        return stat;
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public void setStats(Stat stat) {
+        this.stat = stat;
     }
 }

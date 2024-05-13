@@ -1,6 +1,8 @@
-package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
+/*package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 
 import android.content.Context;
+
+import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +24,9 @@ public class Pokedexes {
             lPokedex.add(pokedexes.get(i));
         }
     }
-
     public List<Pokedex> getPokedexes() {
         return lPokedex;
     }
 
-
 }
+*/

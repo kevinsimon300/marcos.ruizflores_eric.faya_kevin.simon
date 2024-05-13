@@ -1,12 +1,11 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 
-public class Item {
-    private String name;
-    private int price;
+public class Types {
 
-    public Item(String name, int price) {
+    private String name;
+
+    public Types(String name) {
         this.name = name;
-        this.price = price;
     }
 
     public String getName() {
@@ -15,13 +14,5 @@ public class Item {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
     }
 }
