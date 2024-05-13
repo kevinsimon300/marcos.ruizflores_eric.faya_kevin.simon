@@ -14,6 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,13 +81,17 @@ public class PokedexDao {
             JSONObject pokemon = results.getJSONObject(i);
             String name = pokemon.getString("name");
             String url = pokemon.getString("url");
+            Log.d("Pokemon Processing", "Processing " + name + " at URL: " + url);
+
             JsonObjectRequest requestDetail = new JsonObjectRequest(Request.Method.GET, url, null,
                     detailResponse -> {
                         try {
                             int id = detailResponse.getInt("id");
+                            Log.d("Id", "Id: "+String.valueOf(id));
                             String weight = String.valueOf(detailResponse.getDouble("weight")) + " KG";
+                            Log.d("Weight", "Weight: "+String.valueOf(weight));
                             String height = String.valueOf(detailResponse.getDouble("height")) + " M";
-
+                            Log.d("Height", "Height: "+String.valueOf(height));
                             String stat0 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(0).getInt("base_stat"));
                             String stat1 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(1).getInt("base_stat"));
                             String stat2 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(2).getInt("base_stat"));
@@ -94,12 +99,18 @@ public class PokedexDao {
                             String stat4 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(4).getInt("base_stat"));
                             String stat5 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(5).getInt("base_stat"));
 
-                            String front = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("front_default");
-                            String back = detailResponse.getJSONObject("sprites").getJSONObject("other").getJSONObject("home").getString("back_default"); // getting the pictures
+                            String back = detailResponse.getJSONObject("sprites").getString("back_default"); // getting the pictures
+
+                            String front = detailResponse.getJSONObject("sprites").getString("front_default");
+
                             List<String> types = new ArrayList<>();
                             JSONArray typesArray = detailResponse.getJSONArray("types");
                             for (int j = 0; j < typesArray.length(); j++) {
                                 types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
+                            }
+
+                            for (String type: types) {
+                                Log.d("Type", "Type: "+String.valueOf(type));
                             }
                             pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "Description", stat0, stat1, stat2, stat3, stat4, stat5));
 
