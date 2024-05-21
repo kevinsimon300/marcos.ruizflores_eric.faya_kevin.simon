@@ -13,18 +13,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
     private PokedexFragment pokedexFragment;
     private PokedexDao pokedexDao;
-
     private static final int POKEDEX_ITEM_ID = R.id.poked_button;
     private static final int ENTRENADOR_ITEM_ID = R.id.entrenador_button;
     private static final int TENDA_ITEM_ID = R.id.tenda_button;
-
     ActivitySinglefragmentactivityBinding binding;
 
     @Override
@@ -43,7 +40,6 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
                 //ArrayList<Pokedex> l = pokedexDao.getPokemonList();
                 //System.out.println(l.get(0).getName() + l.get(0).getBackImage());
                 pokedexDao.getPokemonList(1);
-
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());
             } else if (id == TENDA_ITEM_ID) {
@@ -66,7 +62,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
 
         // Manejar la lista de Pokémon obtenida
         // Por ejemplo, puedes imprimir los nombres de los Pokémon en el log
-        pokedexFragment = new PokedexFragment(pokedexList);
+        pokedexFragment = new PokedexFragment(pokedexList,pokedexDao);
         replaceFragment(pokedexFragment);
     }
 

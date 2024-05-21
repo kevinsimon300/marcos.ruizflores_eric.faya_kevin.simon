@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,7 +129,7 @@ public class PokedexDao {
             );
             queue.add(requestDetail);
         }
-        pokemonList.add(new Pokemon("marcos", 12, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png", null, "weight", "height", "Description", "stat0", "stat1", "stat2", "stat3", "stat4", "stat5"));
+        //pokemonList.add(new Pokemon("marcos", 12, "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/132.png", null, "weight", "height", "Description", "stat0", "stat1", "stat2", "stat3", "stat4", "stat5"));
         return pokemonList;
     }
 }

@@ -71,10 +71,32 @@ public class Pokemon {
         return types;
     }
 
-
-
     public String getDescription() {
         return description;
+    }
+
+    public String getStat0() {
+        return stat0;
+    }
+
+    public String getStat1() {
+        return stat1;
+    }
+
+    public String getStat2() {
+        return stat2;
+    }
+
+    public String getStat3() {
+        return stat3;
+    }
+
+    public String getStat4() {
+        return stat4;
+    }
+
+    public String getStat5() {
+        return stat5;
     }
 
     public Intent getIntent(Context context) {

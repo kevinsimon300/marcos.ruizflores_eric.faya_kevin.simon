@@ -20,7 +20,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
@@ -39,8 +38,9 @@ public class PokedexFragment extends Fragment {
     private int visibleThreshold = 5;
     private PokedexDao pokedexDao; // Define una instancia de PokedexDao
     private int currentPage = 1; // D
-    public PokedexFragment(ArrayList<Pokemon> pokedexes) {
-        this.pokedexes= pokedexes;
+    public PokedexFragment(ArrayList<Pokemon> pokedexes,PokedexDao pokedexDao) {
+        this.pokedexes = pokedexes;
+        this.pokedexDao = pokedexDao;
     }
 
     @Override
@@ -52,7 +52,7 @@ public class PokedexFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pokedex, container, false);
-        pokedexesRecyclerView=(RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
+        pokedexesRecyclerView = (RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         pokedexesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -63,7 +63,10 @@ public class PokedexFragment extends Fragment {
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
+                Log.e("PokedexFragment", "Scroll 1: " + totalItemCount);
+                Log.e("PokedexFragment", "Scroll 2: " + lastVisibleItem);
 
+                //                if(lastVisibleItem==14){
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     // Aquí estamos cerca del final de la lista
                     // Cargar más datos
@@ -76,10 +79,9 @@ public class PokedexFragment extends Fragment {
         pokedexDao = new PokedexDao(getActivity(), new PokedexDao.PokedexCallback() {
             @Override
             public void onSuccess(ArrayList<Pokemon> pokedexList) {
+                Log.e("PokedexFragment", "Succes con nuevos items: " );
 
                 Pokedex firstPokemonToShow = Pokedex.getInstance(getActivity(), pokedexList);
-
-
                 adapter.notifyDataSetChanged();
                 isLoading = false; // Establece isLoading en falso después de cargar los nuevos elementos
             }
@@ -97,7 +99,8 @@ public class PokedexFragment extends Fragment {
     }
 
     private void loadMoreItems() {
-        pokedexDao.getPokemonList(++currentPage);
+        pokedexDao.getPokemonList(currentPage++);
+        Log.d("PokedexFragment", "More items: " + currentPage);
 
         //PokedexDao dao = new PokedexDao();
         //ArrayList<Pokedex> moreItems = dao.getPokemonList(currentPage);
