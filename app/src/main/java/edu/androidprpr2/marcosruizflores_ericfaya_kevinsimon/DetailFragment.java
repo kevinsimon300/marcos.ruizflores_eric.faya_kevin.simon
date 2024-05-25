@@ -14,7 +14,9 @@ import androidx.fragment.app.Fragment;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 
@@ -61,8 +63,39 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
 
         ivPokedex = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
         imageViewFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
-        Picasso.get().load(pokedex.getBackImage()).into(this.ivPokedex);
-        Picasso.get().load(pokedex.getImageUrl()).into(this.imageViewFront);
+
+
+        Random random = new Random();
+        int randomAbility = random.nextInt(4) + 1;
+        String ability = "";
+        if (randomAbility == 1){
+            // aqui poner la habilidad oculta
+            ArrayList<Ability> abilities = pokedex.getAbilities();
+            for (int i = 0; i < abilities.size(); i++){
+                if (abilities.get(i).getIs_hidden()){
+                    ability = abilities.get(i).getName();
+                }
+            }
+        } else {
+            ArrayList<Ability> abilities = pokedex.getAbilities();
+            for (int i = 0; i < abilities.size(); i++){
+                if (!abilities.get(i).getIs_hidden()){
+                    ability = abilities.get(i).getName();
+                }
+            }
+        }
+
+        int randomNumber = random.nextInt(500) + 1; // Esto generará un número entre 1 y 500 inclusive
+
+        if (randomNumber == 1) {
+            // Mostrar imágenes "shiny"
+            Picasso.get().load(pokedex.getBack_shiny()).into(ivPokedex);
+            Picasso.get().load(pokedex.getFront_shiny()).into(imageViewFront);
+        } else {
+            // Mostrar imágenes normales
+            Picasso.get().load(pokedex.getBackSprite()).into(ivPokedex);
+            Picasso.get().load(pokedex.getFrontSprite()).into(imageViewFront);
+        }
 
         tvType = (TextView) itemView.findViewById(R.id.tvType); //El item view es internament el view holder,no es un objecte creat per nosaltres
         tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
@@ -111,9 +144,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             }
         });
 
-
-        //tvSkills.setText(pokedex.get());
-        //tvStats.setText(pokedex.getStat0());
         tvStats.setText("hp: "+pokedex.getStat0() + " \nattack: " + pokedex.getStat1() + " \ndefense: " + pokedex.getStat2()+ " \nspecial-attack: " + pokedex.getStat3() + " \nspecial-defense: " + pokedex.getStat4() + " \nspeed: " + pokedex.getStat5());
         return itemView;
     }

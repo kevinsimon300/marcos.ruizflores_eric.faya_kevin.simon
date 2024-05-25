@@ -83,6 +83,8 @@ public class PokedexDao {
             String url = pokemon.getString("url");
             Log.d("Pokemon Processing", "Processing " + name + " at URL: " + url);
 
+            String url2 = "https://pokeapi.co/api/v2/pokemon-species/"+name;
+
             JsonObjectRequest requestDetail = new JsonObjectRequest(Request.Method.GET, url, null,
                     detailResponse -> {
                         try {
@@ -101,9 +103,11 @@ public class PokedexDao {
                             String stat4 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(4).getInt("base_stat"));
                             String stat5 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(5).getInt("base_stat"));
 
-                            String back = detailResponse.getJSONObject("sprites").getString("back_default"); // getting the pictures
-
+                            String back = detailResponse.getJSONObject("sprites").getString("back_default");
                             String front = detailResponse.getJSONObject("sprites").getString("front_default");
+                            String back_shiny = detailResponse.getJSONObject("sprites").getString("back_shiny");
+                            String front_shiny = detailResponse.getJSONObject("sprites").getString("front_shiny");
+
 
                             List<String> types = new ArrayList<>();
                             JSONArray typesArray = detailResponse.getJSONArray("types");
@@ -124,10 +128,11 @@ public class PokedexDao {
                             }
 
 
+
                             for (String type: types) {
                                 Log.d("Type", "Type: "+String.valueOf(type));
                             }
-                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5, abilities));
+                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5, abilities, back_shiny, front_shiny));
 
                             // Llamar al método onSuccess cuando se haya procesado todos los detalles de los Pokemon
                             if (pokemonList.size() == results.length()) {

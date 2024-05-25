@@ -18,7 +18,7 @@ public class Ability {
     public void setName(String name) {
         this.name = name;
     }
-    public void setIs_hidden(boolean is_hidden){this.is_hidden = is_hidden;}
+    public Boolean getIs_hidden(){ return is_hidden;}
 
     public double getProbability() {
         return probability;

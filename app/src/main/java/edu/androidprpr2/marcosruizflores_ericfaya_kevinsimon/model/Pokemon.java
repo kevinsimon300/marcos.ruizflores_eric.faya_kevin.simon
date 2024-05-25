@@ -25,9 +25,11 @@ public class Pokemon {
     private List<String> types;
     private String description;
     private ArrayList<Ability> abilities;
+    private String back_shiny;
+    private String front_shiny;
 
 
-    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities, String back_shiny, String front_shiny) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -43,6 +45,24 @@ public class Pokemon {
         this.stat4 = stat4;
         this.stat5 = stat5;
         this.abilities = abilities;
+        this.back_shiny = back_shiny;
+        this.front_shiny = front_shiny;
+    }
+
+    public String getBack_shiny() {
+        return back_shiny;
+    }
+
+    public void setBack_shiny(String back_shiny) {
+        this.back_shiny = back_shiny;
+    }
+
+    public String getFront_shiny() {
+        return front_shiny;
+    }
+
+    public void setFront_shiny(String front_shiny) {
+        this.front_shiny = front_shiny;
     }
 
     public ArrayList<Ability> getAbilities() {
