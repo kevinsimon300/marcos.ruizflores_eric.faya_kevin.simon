@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 
 public class PokedexDao {
@@ -110,10 +111,23 @@ public class PokedexDao {
                                 types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
                             }
 
+                            ArrayList<Ability> abilities = new ArrayList<>();
+                            JSONArray abilitiesArray = detailResponse.getJSONArray("abilities");
+                            for (int j = 0; j < abilitiesArray.length(); j++) {
+                                JSONObject abilityObject = abilitiesArray.getJSONObject(j).getJSONObject("ability");
+                                String ability_name = abilityObject.getString("name");
+                                boolean isHidden = abilitiesArray.getJSONObject(j).getBoolean("is_hidden");
+                                double probability = 0.25;
+                                if (!isHidden) probability = 0.50;
+                                Ability ability = new Ability(ability_name, isHidden, probability);
+                                abilities.add(ability);
+                            }
+
+
                             for (String type: types) {
                                 Log.d("Type", "Type: "+String.valueOf(type));
                             }
-                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5));
+                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5, abilities));
 
                             // Llamar al método onSuccess cuando se haya procesado todos los detalles de los Pokemon
                             if (pokemonList.size() == results.length()) {

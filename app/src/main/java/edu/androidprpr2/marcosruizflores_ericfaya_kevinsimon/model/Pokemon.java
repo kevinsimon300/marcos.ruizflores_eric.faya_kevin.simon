@@ -24,9 +24,10 @@ public class Pokemon {
     private String backImage;
     private List<String> types;
     private String description;
+    private ArrayList<Ability> abilities;
 
 
-    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -41,9 +42,16 @@ public class Pokemon {
         this.stat3 = stat3;
         this.stat4 = stat4;
         this.stat5 = stat5;
+        this.abilities = abilities;
     }
 
+    public ArrayList<Ability> getAbilities() {
+        return abilities;
+    }
 
+    public void setAbilities(ArrayList<Ability> abilities) {
+        this.abilities = abilities;
+    }
 
     public String getBackImage() {
         return backImage;
