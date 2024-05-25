@@ -70,7 +70,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         tvDescription.setText(pokedex.getDescription());
         //tvSkills.setText(pokedex.get());
         //tvStats.setText(pokedex.getStat0());
-        tvStats.setText("Stat1: "+pokedex.getStat0() + " Stat2: " + pokedex.getStat1() + " Stat3: " + pokedex.getStat2()+ " Stat4: " + pokedex.getStat3() + " Stat5: " + pokedex.getStat4() + " Stat6: " + pokedex.getStat5());
+        tvStats.setText("Ataque: "+pokedex.getStat0() + " Stat2: " + pokedex.getStat1() + " Stat3: " + pokedex.getStat2()+ " Stat4: " + pokedex.getStat3() + " Stat5: " + pokedex.getStat4() + " Stat6: " + pokedex.getStat5());
         return itemView;
     }
 }
