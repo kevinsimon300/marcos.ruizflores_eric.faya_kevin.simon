@@ -175,6 +175,7 @@
             android:layout_marginTop="8dp">
         </LinearLayout>
         <LinearLayout
+            android:id="@+id/llCapturaBall"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -254,5 +255,15 @@
                 </Button>
             </LinearLayout>
         </LinearLayout>
+        <TextView
+            android:id="@+id/tvError"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            />
     </LinearLayout>
 </ScrollView>
