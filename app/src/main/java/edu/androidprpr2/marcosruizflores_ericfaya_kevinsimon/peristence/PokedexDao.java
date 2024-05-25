@@ -91,6 +91,8 @@ public class PokedexDao {
                             Log.d("Weight", "Weight: "+String.valueOf(weight));
                             String height = String.valueOf(detailResponse.getDouble("height")) + " M";
                             Log.d("Height", "Height: "+String.valueOf(height));
+                            //String description = String.valueOf(detailResponse.getString("description"));
+
                             String stat0 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(0).getInt("base_stat"));
                             String stat1 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(1).getInt("base_stat"));
                             String stat2 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(2).getInt("base_stat"));
@@ -111,7 +113,7 @@ public class PokedexDao {
                             for (String type: types) {
                                 Log.d("Type", "Type: "+String.valueOf(type));
                             }
-                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "Description", stat0, stat1, stat2, stat3, stat4, stat5));
+                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5));
 
                             // Llamar al método onSuccess cuando se haya procesado todos los detalles de los Pokemon
                             if (pokemonList.size() == results.length()) {
@@ -125,7 +127,6 @@ public class PokedexDao {
                     error -> {
                         error.printStackTrace();
                     }
-
             );
             queue.add(requestDetail);
         }

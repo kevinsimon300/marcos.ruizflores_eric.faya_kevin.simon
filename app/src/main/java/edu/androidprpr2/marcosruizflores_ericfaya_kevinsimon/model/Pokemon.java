@@ -126,6 +126,4 @@ public class Pokemon {
         intent.putExtra("backImage", backImage);
         return intent;
     }
-
-
 }
