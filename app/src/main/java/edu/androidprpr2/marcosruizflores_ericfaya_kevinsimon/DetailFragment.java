@@ -4,8 +4,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -30,7 +32,10 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvDescription;
     private TextView tvSkills;
     private TextView tvStats;
-
+    private Button btnPokeball;
+    private Button btnSuperball;
+    private Button btnUltraball;
+    private Button btnMasterball;
     private ImageView ivPokedex;
     private ImageView imageViewFront;
     private ImageView imageViewPokeball;//TODO
@@ -68,6 +73,45 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         tvNomPokedex.setText(pokedex.getName());
         tvType.setText(pokedex.getTypes().toString());
         tvDescription.setText(pokedex.getDescription());
+        //--- Importación de los botones
+        btnPokeball = (Button) itemView.findViewById(R.id.Button1_pokeball);
+        btnSuperball = (Button) itemView.findViewById(R.id.Button1_superball);
+        btnUltraball = (Button) itemView.findViewById(R.id.Button1_ultraball);
+        btnMasterball = (Button) itemView.findViewById(R.id.Button1_masterball);
+
+        btnPokeball.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Aquí va el resto del código de la captura
+                Toast.makeText(getContext(), "Pokeball", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnSuperball.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Aquí va el resto del código de la captura
+                Toast.makeText(getContext(), "Superball", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnUltraball.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Aquí va el resto del código de la captura
+                Toast.makeText(getContext(), "Ultraball", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnMasterball.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Aquí va el resto del código de la captura
+                Toast.makeText(getContext(), "Masterball", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
         //tvSkills.setText(pokedex.get());
         //tvStats.setText(pokedex.getStat0());
         tvStats.setText("Ataque: "+pokedex.getStat0() + " Stat2: " + pokedex.getStat1() + " Stat3: " + pokedex.getStat2()+ " Stat4: " + pokedex.getStat3() + " Stat5: " + pokedex.getStat4() + " Stat6: " + pokedex.getStat5());
