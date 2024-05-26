@@ -28,7 +28,6 @@ import java.util.Random;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Item;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 
@@ -57,14 +56,12 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvNomPokedex;
     private LinearLayout llBalls;
     private LinearLayout llBalls2;
-    private final Entrenador entrenador;
 
     private static final String TAG = "DetailFragment";
 
-    public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes, Entrenador entrenador) {
+    public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
         this.pokedex = pokedex;
         this.pokedexes = pokedexes;
-        this.entrenador = entrenador;
     }
 
     @Override
@@ -78,7 +75,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         View itemView= inflater.inflate(R.layout.fragment_detail, container, false);
         //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
 
-        boolean[] checks = checkIfPokemonIsCaptured(entrenador);
+        //boolean[] checks = checkIfPokemonIsCaptured(entrenador);
 
 
         tvNomPokedex = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
@@ -111,13 +108,13 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         Log.d(TAG, "Lectura desde detail fragment: " + readFile(file));
 
 
-        if (checks[0]){
+      /*  if (checks[0]){
             tvError.setText("You have already captured 6 pokemons");
             llBalls.setVisibility(View.GONE);
         } else if (checks[1]){
             tvError.setText("You have already captured this pokemon");
             llBalls.setVisibility(View.GONE);
-        }
+        }*/
 
         Random random = new Random();
         int randomAbility = random.nextInt(4) + 1;
@@ -171,14 +168,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         //updateMoneyDisplay();
 
                     }
-
-
+                    Log.d(TAG, "Pokeballs captura " + readFile(file)) ;
 
                 }
-
-
-
-
+                Log.d(TAG, "Pokeballs no captura" + readFile(file)) ;
+                deletePokemonCapturado("Pikachu");
             }
         });
 
