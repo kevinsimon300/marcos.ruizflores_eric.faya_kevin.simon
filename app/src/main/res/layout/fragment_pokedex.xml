@@ -15,24 +15,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:layout_marginTop="1dp">
             <EditText
                 android:id="@+id/editTextSearch"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:hint="@string/pokedexBuscador"
                 android:imeOptions="actionSearch"
                 android:inputType="text"
                 android:textSize="25sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
             <ImageView
                 android:id="@+id/ivImageStar"
                 android:layout_marginLeft="10dp"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/arrow_back">
-            </ImageView>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/arrow_back"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter" />
         </LinearLayout>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/pokedex_recycler_view"

@@ -59,6 +59,8 @@ public class Pokemon {
         this.index_evolution = index_evolution;
     }
 
+<<<<<<< HEAD
+=======
     public String getBack_shiny() {
         return back_shiny;
     }
@@ -83,6 +85,7 @@ public class Pokemon {
         this.abilities = abilities;
     }
 
+>>>>>>> 6fe25f0ff86673afef1adcf402bef77710c8f82e
     public String getBackImage() {
         return backImage;
     }
