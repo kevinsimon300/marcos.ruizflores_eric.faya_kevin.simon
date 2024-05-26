@@ -26,8 +26,6 @@
     <string name="buy_ultraball">Buy Ultraball</string>
     <string name="buy_masterball">Buy Masterball</string>
     <string name="stats">stats</string>
-
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="delete_pokemon">Delete Pokemon</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

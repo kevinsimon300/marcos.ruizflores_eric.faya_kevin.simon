@@ -179,7 +179,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             @Override
             public void onClick(View v) {
                 int quantityPokebals = getFieldValue("Pokeballs");
-                if (quantityPokebals > 0 ){
+                if (quantityPokebals > 0 && checks.length() < 6){
                     int index_evolution = pokedex.getIndex_evolution();
                     index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600);
@@ -201,7 +201,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             @Override
             public void onClick(View v) {
                 int quantityPokebals = getFieldValue("Superballs");
-                if (quantityPokebals > 0 ){
+                if (quantityPokebals > 0 && checks.length() < 6){
                     int index_evolution = pokedex.getIndex_evolution();
                     index_evolution = getIndexValue(index_evolution);
                     float accuracy_pokeball = (float) ((600 - index_evolution) / (600 * 1.5));
@@ -223,7 +223,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             @Override
             public void onClick(View v) {
                 int quantityPokeballs = getFieldValue("Ultraballs");
-                if (quantityPokeballs > 0 ){
+                if (quantityPokeballs > 0 && checks.length() < 6){
                     int index_evolution = pokedex.getIndex_evolution();
                     index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600 * 2);
@@ -248,7 +248,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             @Override
             public void onClick(View v) {
                 int quantityPokeballs = getFieldValue("Masterballs");
-                if (quantityPokeballs > 0 ){
+                if (quantityPokeballs > 0 && checks.length() < 6){
                     Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
                     modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
                     modifyJsonFieldValue("Masterballs",-1);
