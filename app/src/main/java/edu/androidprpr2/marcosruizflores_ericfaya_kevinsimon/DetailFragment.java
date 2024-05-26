@@ -182,6 +182,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokebals = getFieldValue("Pokeballs");
                 if (quantityPokebals > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600);
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -203,6 +204,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokebals = getFieldValue("Superballs");
                 if (quantityPokebals > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     float accuracy_pokeball = (float) ((600 - index_evolution) / (600 * 1.5));
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -224,6 +226,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokeballs = getFieldValue("Ultraballs");
                 if (quantityPokeballs > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600 * 2);
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -492,6 +495,15 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         } catch (JSONException e) {
             Log.e(TAG, "Error al agregar PokemonCapturado: " + e.getMessage());
         }
+    }
+
+    private int getIndexValue(int index_value){
+        Random random = new Random();
+        if (index_value == 1) return random.nextInt(61) + 20;
+        if (index_value == 2) return random.nextInt(121) + 80;
+        if (index_value == 3) return random.nextInt(151) + 200;
+        if (index_value == 4) return random.nextInt(151) + 350;
+        return 0;
     }
 
 }
