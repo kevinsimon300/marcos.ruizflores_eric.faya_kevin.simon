@@ -37,7 +37,8 @@ public class PokedexDao {
     }
 
     public void getPokemonList(int page) {
-        String url = "https://pokeapi.co/api/v2/pokemon/?limit=15&page=" + page;
+        int offset = page * 15;
+        String url = "https://pokeapi.co/api/v2/pokemon/?offset="+offset+"&limit=15";
 
         Log.d("PokedexDao", "Requesting Pokemon list from: " + url);
 

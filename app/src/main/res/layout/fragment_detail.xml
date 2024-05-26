@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
-                android:textColor="@color/black"
+                android:textColor="@color/carrotOrange"
                 android:textSize="20sp"
                 android:layout_gravity="center_vertical" />
         </LinearLayout>
@@ -148,34 +148,18 @@
             android:gravity="center_vertical"
             android:layout_marginTop="2dp">
         </LinearLayout>
-        <TextView
-            android:id="@+id/tvStatsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:text="Stats: "
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_gravity="center_vertical" />
-        <TextView
-            android:id="@+id/tvStats"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:layout_marginStart="8dp"
-            android:layout_gravity="center_vertical" />
         <LinearLayout
             android:id="@+id/llStats"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:padding="2dp"
+            android:background="#E6935E"
             android:layout_marginTop="8dp">
         </LinearLayout>
         <LinearLayout
             android:id="@+id/llCapturaBall"
+            android:paddingTop="30dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
@@ -196,7 +180,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="Pokeball"
+                    android:text="@string/pokeball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -210,7 +194,7 @@
                     android:id="@+id/Button1_superball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Superball"
+                    android:text="@string/superball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -233,7 +217,7 @@
                     android:id="@+id/Button1_ultraball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Ultraball"
+                    android:text="@string/ultraball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -248,7 +232,7 @@
                     android:id="@+id/Button1_masterball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="MasterBall"
+                    android:text="@string/masterball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -265,14 +249,5 @@
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
             />
-        <Button
-            android:id="@+id/btnReleasePokemon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Release Pokemon"
-            android:backgroundTint="@color/orange"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp">
-        </Button>
     </LinearLayout>
 </ScrollView>

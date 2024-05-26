@@ -30,7 +30,6 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexD
  * create an instance of this fragment.
  */
 public class PokedexFragment extends Fragment {
-
     private RecyclerView pokedexesRecyclerView;//A la clase del fragment tenim recycler view
     private  PokedexAdapter adapter;//A la clase del fragment tenim adapter
     private ArrayList<Pokemon> pokedexes;
@@ -38,6 +37,7 @@ public class PokedexFragment extends Fragment {
     private int visibleThreshold = 5;
     private PokedexDao pokedexDao; // Define una instancia de PokedexDao
     private int currentPage = 1; // D
+    private int countPage = 0;
     public PokedexFragment(ArrayList<Pokemon> pokedexes,PokedexDao pokedexDao) {
         this.pokedexes = pokedexes;
         this.pokedexDao = pokedexDao;
@@ -49,54 +49,50 @@ public class PokedexFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_pokedex, container, false);
-        pokedexesRecyclerView = (RecyclerView)view.findViewById(R.id.pokedex_recycler_view);
+        pokedexesRecyclerView = view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        final PokedexAdapter adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
+        pokedexesRecyclerView.setAdapter(adapter);
 
         pokedexesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-
                 LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
-                Log.e("PokedexFragment", "Scroll 1: " + totalItemCount);
-                Log.e("PokedexFragment", "Scroll 2: " + lastVisibleItem);
 
-                //                if(lastVisibleItem==14){
+
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    // Aquí estamos cerca del final de la lista
-                    // Cargar más datos
                     isLoading = true;
-                    loadMoreItems();
+                    countPage++;
+                    //int offset = pokedexes.size();
+                    pokedexDao.getPokemonList(countPage);
                 }
             }
         });
 
         pokedexDao = new PokedexDao(getActivity(), new PokedexDao.PokedexCallback() {
             @Override
-            public void onSuccess(ArrayList<Pokemon> pokedexList) {
-                Log.e("PokedexFragment", "Succes con nuevos items: " );
-
-                Pokedex firstPokemonToShow = Pokedex.getInstance(getActivity(), pokedexList);
+            public void onSuccess(ArrayList<Pokemon> newPokemons) {
+                pokedexes.addAll(newPokemons);
                 adapter.notifyDataSetChanged();
-                isLoading = false; // Establece isLoading en falso después de cargar los nuevos elementos
+                isLoading = false;
             }
 
             @Override
             public void onError(String errorMessage) {
-                // Maneja cualquier error que ocurra durante la obtención de datos
-                Log.e("PokedexFragment", "Error obteniendo la lista de Pokedex: " + errorMessage);
-                isLoading = false; // Asegúrate de establecer isLoading en falso en caso de error
+                Log.e("PokedexFragment", "Error: " + errorMessage);
+                isLoading = false;
             }
         });
 
-        updateUi();//Hem identificat el recycler view pero fa falta  pasarli la informacio,ficar quin adapter te el recycler view
         return view;
     }
+
 
     private void loadMoreItems() {
         pokedexDao.getPokemonList(currentPage++);

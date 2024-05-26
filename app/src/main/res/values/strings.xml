@@ -16,6 +16,16 @@
     <string name="entrenador">Entrenador</string>
     <string name="tenda">Tenda</string>
     <string name="pokemon_image">Tenda</string>
+    <string name="pokeball">Pokeball</string>
+    <string name="superball">Superball</string>
+    <string name="ultraball">Ultraball</string>
+    <string name="masterball">Masterball</string>
+    <string name="pokemon_list">Pokemon List</string>
+    <string name="buy_poekball">Buy Pokeball</string>
+    <string name="buy_superball">Buy Superball</string>
+    <string name="buy_ultraball">Buy Ultraball</string>
+    <string name="buy_masterball">Buy Masterball</string>
+    <string name="stats">stats</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

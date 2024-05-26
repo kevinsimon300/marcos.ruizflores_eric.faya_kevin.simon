@@ -77,7 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/white"
-                    android:text="Buy Pokeball"
+                    android:text="@string/buy_poekball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -108,7 +108,7 @@
                     android:id="@+id/Button1_superball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Buy Superball"
+                    android:text="@string/buy_superball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -146,7 +146,7 @@
                     android:id="@+id/Button1_ultraball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Buy Ultraball"
+                    android:text="@string/buy_ultraball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">
@@ -176,7 +176,7 @@
                     android:id="@+id/Button1_masterball"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Buy Masterball"
+                    android:text="@string/buy_masterball"
                     android:backgroundTint="@color/orange"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp">

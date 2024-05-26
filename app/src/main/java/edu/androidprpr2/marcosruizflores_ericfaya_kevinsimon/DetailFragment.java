@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
@@ -47,17 +48,16 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvType;
     private TextView tvDescription;
     private TextView tvSkills;
-    private TextView tvStats;
     private TextView tvError;
     private Button btnPokeball;
     private Button btnSuperball;
     private Button btnUltraball;
     private Button btnMasterball;
-    private Button btnReleasePokemon;
     private ImageView ivPokedex;
     private ImageView imageViewFront;
     private ImageView imageViewPokeball;//TODO
     private TextView tvNomPokedex;
+    private LinearLayout llStats;
     private LinearLayout llBalls;
     private LinearLayout llBalls2;
     private PokemonCapturado pokemonCapturado;
@@ -97,7 +97,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         tvType = (TextView) itemView.findViewById(R.id.tvType); //El item view es internament el view holder,no es un objecte creat per nosaltres
         tvDescription = (TextView) itemView.findViewById(R.id.tvDescription);
 
-        tvStats = (TextView) itemView.findViewById(R.id.tvStats); //El item view es internament el view holder,no es un objecte creat per nosaltres
+        //tvStats = (TextView) itemView.findViewById(R.id.tvStats); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
         tvError = (TextView) itemView.findViewById(R.id.tvError);
         llBalls = (LinearLayout) itemView.findViewById(R.id.llCapturaBall);
@@ -110,7 +110,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnSuperball = (Button) itemView.findViewById(R.id.Button1_superball);
         btnUltraball = (Button) itemView.findViewById(R.id.Button1_ultraball);
         btnMasterball = (Button) itemView.findViewById(R.id.Button1_masterball);
-        btnReleasePokemon = (Button) itemView.findViewById(R.id.btnReleasePokemon);
+        llStats = (LinearLayout) itemView.findViewById(R.id.llStats);
 
         tvSkills = (TextView) itemView.findViewById(R.id.tvHabilidades); //El item view es internament el view holder,no es un objecte creat per nosaltres
         deletePokemonCapturado("Pikachu");
@@ -119,12 +119,9 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         if (pokemonChecks[0]) {
             tvError.setText("You have already captured 6 pokemons");
             llBalls.setVisibility(View.GONE);
-            btnReleasePokemon.setVisibility(View.GONE);
         } else if (pokemonChecks[1]) {
             tvError.setText("You have already captured this pokemon");
             llBalls.setVisibility(View.GONE);
-        } else {
-            btnReleasePokemon.setVisibility(View.GONE);
         }
 
         //readFile(file);
@@ -184,6 +181,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokebals = getFieldValue("Pokeballs");
                 if (quantityPokebals > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600);
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -205,6 +203,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokebals = getFieldValue("Superballs");
                 if (quantityPokebals > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     float accuracy_pokeball = (float) ((600 - index_evolution) / (600 * 1.5));
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -226,6 +225,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokeballs = getFieldValue("Ultraballs");
                 if (quantityPokeballs > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
+                    index_evolution = getIndexValue(index_evolution);
                     int accuracy_pokeball =  (600 - index_evolution) / (600 * 2);
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
@@ -260,14 +260,32 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             }
         });
 
-        btnReleasePokemon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Release Pokemon, elimina el pokemon del JSON
+        for (int i = 0; i < 6; i++) {
+            TextView tvStats = new TextView(getContext());
+            if(i == 0){
+                tvStats.setText("HP: " + pokedex.getStat0());
+                tvStats.setBackgroundResource(R.drawable.stats_border0);
+            } else if(i == 1){
+                tvStats.setText("Attack: " + pokedex.getStat1());
+                tvStats.setBackgroundResource(R.drawable.stats_border1);
+            } else if(i == 2){
+                tvStats.setText("Defense: " + pokedex.getStat2());
+                tvStats.setBackgroundResource(R.drawable.stats_border2);
+            } else if(i == 3){
+                tvStats.setText("Special Attack: " + pokedex.getStat3());
+                tvStats.setBackgroundResource(R.drawable.stats_border3);
+            } else if(i == 4){
+                tvStats.setText("Special Defense: " + pokedex.getStat4());
+                tvStats.setBackgroundResource(R.drawable.stats_border4);
+            } else if(i == 5){
+                tvStats.setText("Speed: " + pokedex.getStat5());
+                tvStats.setBackgroundResource(R.drawable.stats_border5);
             }
-        });
-
-        tvStats.setText("hp: "+pokedex.getStat0() + " \nattack: " + pokedex.getStat1() + " \ndefense: " + pokedex.getStat2()+ " \nspecial-attack: " + pokedex.getStat3() + " \nspecial-defense: " + pokedex.getStat4() + " \nspeed: " + pokedex.getStat5());
+            tvStats.setPadding(8, 8, 8, 8);
+            tvStats.setTextColor(getResources().getColor(android.R.color.black));
+            tvStats.setTextSize(16);
+            llStats.addView(tvStats);
+        }
         return itemView;
     }
 
@@ -494,6 +512,15 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         } catch (JSONException e) {
             Log.e(TAG, "Error al agregar PokemonCapturado: " + e.getMessage());
         }
+    }
+
+    private int getIndexValue(int index_value){
+        Random random = new Random();
+        if (index_value == 1) return random.nextInt(61) + 20;
+        if (index_value == 2) return random.nextInt(121) + 80;
+        if (index_value == 3) return random.nextInt(151) + 200;
+        if (index_value == 4) return random.nextInt(151) + 350;
+        return 0;
     }
 
 }
