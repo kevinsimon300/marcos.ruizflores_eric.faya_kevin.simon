@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
  */
 public class EntrenadorFragment extends Fragment {
 
-
     public EntrenadorFragment() {
 
     }
@@ -30,13 +29,10 @@ public class EntrenadorFragment extends Fragment {
 
     }
 
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         return inflater.inflate(R.layout.fragment_entrenador, container, false);
     }
-
 }

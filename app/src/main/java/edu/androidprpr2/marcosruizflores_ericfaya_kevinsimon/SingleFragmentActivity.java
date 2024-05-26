@@ -76,6 +76,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
 
             PokemonCapturado pokemon1 = new PokemonCapturado("Pikachu", "pikachu_front_image.png", "pikachu_pokeball_image.png");
             PokemonCapturado pokemon2 = new PokemonCapturado("Charmander", "charmander_front_image.png", "charmander_pokeball_image.png");
+
             try {
                 pokemonCapturadosArray.put(new JSONObject()
                         .put("name", pokemon1.getName())

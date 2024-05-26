@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,6 +109,12 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnMasterball = (Button) itemView.findViewById(R.id.Button1_masterball);
 
         tvSkills = (TextView) itemView.findViewById(R.id.tvHabilidades); //El item view es internament el view holder,no es un objecte creat per nosaltres
+        deletePokemonCapturado("Pikachu");
+        File file = new File(requireContext().getFilesDir(), "Files/entrenador.json");
+
+        //readFile(file);
+        Log.d(TAG, "Lectura desde detail fragment: " + readFile(file));
+
 
         if (checks[0]){
             tvError.setText("You have already captured 6 pokemons");
@@ -287,5 +294,69 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             Log.e(TAG, "Error al leer el archivo JSON", e);
             return -1;
         }
+    }
+
+    private void deletePokemonCapturado(String pokemonName) {
+        JSONObject datosEntrenador = new JSONObject();
+
+        try {
+            JSONArray pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
+
+            for (int i = 0; i < pokemonCapturadosArray.length(); i++) {
+                JSONObject pokemonCapturado = pokemonCapturadosArray.getJSONObject(i);
+                String name = pokemonCapturado.getString("name");
+
+                if (name.equals(pokemonName)) {
+                    pokemonCapturadosArray.remove(i);
+                    break;
+                }
+            }
+
+            datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
+
+            saveJsonToFile(datosEntrenador);
+            Log.d(TAG, "PokemonCapturado '" + pokemonName + "' eliminado exitosamente.");
+
+        } catch (JSONException e) {
+            Log.e(TAG, "Error al eliminar PokemonCapturado: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Guardem l'objecte JSON actualitzat en l'arxiu JSON
+     * @param datosEntrenador
+     */
+    private void saveJsonToFile(JSONObject datosEntrenador) {
+        try {
+            File dir = new File(getContext().getFilesDir(), "Files");
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            File file = new File(dir, "entrenador.json");
+            try (FileOutputStream fos = new FileOutputStream(file)) {
+                String jsonString = datosEntrenador.toString(2);
+                fos.write(jsonString.getBytes());
+                Log.d(TAG, "JSON guardado en " + file.getAbsolutePath());
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Error al guardar el archivo JSON: " + e.getMessage());
+        }
+    }
+    public String readFile(File filename) {
+        StringBuilder stringBuilder = new StringBuilder();
+        //try (FileInputStream fis = openFileInput(filename)) {
+        try (FileInputStream fis = new FileInputStream(filename)) {
+
+            int ch;
+            while ((ch = fis.read()) != -1) {
+                stringBuilder.append((char) ch);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
     }
 }

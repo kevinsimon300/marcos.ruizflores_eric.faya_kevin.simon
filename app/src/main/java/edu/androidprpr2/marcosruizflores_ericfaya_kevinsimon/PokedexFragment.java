@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
@@ -166,8 +165,8 @@ public class PokedexFragment extends Fragment {
         @Override
         public void onClick(View view) {
             // coger entrenador del json
-            int  entrenador_pokeballs = getJSONObjetc(); // leer del json
-            DetailFragment detailFragment = new DetailFragment(pokedex,pokedexes, entrenador);
+            //int  entrenador_pokeballs = getJSONObject(); // leer del json
+            DetailFragment detailFragment = new DetailFragment(pokedex,pokedexes);
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout,detailFragment);

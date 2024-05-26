@@ -85,7 +85,7 @@ public class PokedexDao {
             JsonObjectRequest requestDetail2 = new JsonObjectRequest(Request.Method.GET, url2, null,
                     detailResponse -> {
                         try {
-                            String description = detailResponse.getJSONArray("flavor_text_entries").getJSONObjetc(0).getString("flavor_text");
+                            String description = detailResponse.getJSONArray("flavor_text_entries").getJSONObject(0).getString("flavor_text");
 
                             int indexEvolution = 1;
                             if (!detailResponse.isNull("evolves_from_species")) {
@@ -102,6 +102,7 @@ public class PokedexDao {
                             }
 
                             int finalIndexEvolution = indexEvolution;
+                            int finalIndexEvolution1 = indexEvolution;
                             JsonObjectRequest requestDetail = new JsonObjectRequest(Request.Method.GET, url, null,
                                     response -> {
                                         try {
@@ -139,7 +140,7 @@ public class PokedexDao {
                                                 abilities.add(ability);
                                             }
 
-                                            Pokemon newPokemon = new Pokemon(name, id, front, back, types, weight, height, description, stat0, stat1, stat2, stat3, stat4, stat5, abilities, backShiny, frontShiny, indexEvolution);
+                                            Pokemon newPokemon = new Pokemon(name, id, front, back, types, weight, height, description, stat0, stat1, stat2, stat3, stat4, stat5, abilities, backShiny, frontShiny, finalIndexEvolution1);
                                             pokemonList.add(newPokemon);
 
                                             if (pokemonList.size() == results.length()) {
