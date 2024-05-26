@@ -31,7 +31,7 @@
                 android:src="@drawable/cash_icon"
                 android:layout_gravity="center_vertical" />
             <TextView
-                android:id="@+id/tvCredit"
+                android:id="@+id/tvMoney"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="200"

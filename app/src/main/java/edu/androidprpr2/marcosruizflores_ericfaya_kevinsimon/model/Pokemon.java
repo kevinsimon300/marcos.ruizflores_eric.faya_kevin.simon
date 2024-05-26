@@ -43,8 +43,6 @@ public class Pokemon {
         this.stat5 = stat5;
     }
 
-
-
     public String getBackImage() {
         return backImage;
     }
