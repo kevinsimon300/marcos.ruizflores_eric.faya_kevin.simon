@@ -179,7 +179,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
 
     private boolean[] checkIfPokemonIsCaptured(Entrenador entrenador) {
         boolean[] captured = new boolean[2];
-        if (entrenador.getlPokedex().size() < 6) {
+        if (entrenador.getlPokedex().size() > 6) {
             captured[0] = true;
         } else {
             for (PokemonDetail pokemonDetail : entrenador.getlPokedex()) {
