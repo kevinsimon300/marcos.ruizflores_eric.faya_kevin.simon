@@ -27,6 +27,7 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexD
 public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
     private PokedexFragment pokedexFragment;
     private PokedexDao pokedexDao;
+    private int page = 0;
     private static final String TAG = "SingleFragmentActivity";
 
     private static final int POKEDEX_ITEM_ID = R.id.poked_button;
@@ -51,7 +52,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
             if (id == POKEDEX_ITEM_ID) {
                 //ArrayList<Pokedex> l = pokedexDao.getPokemonList();
                 //System.out.println(l.get(0).getName() + l.get(0).getBackImage());
-                pokedexDao.getPokemonList(1);
+                pokedexDao.getPokemonList(page++);
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());
             } else if (id == TENDA_ITEM_ID) {
