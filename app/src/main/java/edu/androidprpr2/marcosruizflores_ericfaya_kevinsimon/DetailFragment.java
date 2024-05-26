@@ -53,6 +53,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private Button btnSuperball;
     private Button btnUltraball;
     private Button btnMasterball;
+    private Button btnReleasePokemon;
     private ImageView ivPokedex;
     private ImageView imageViewFront;
     private ImageView imageViewPokeball;//TODO
@@ -84,6 +85,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         checkIfPokemonIsCaptured(checks);
         Log.d(TAG, "Contenido del JSONArray checks: " + checks.toString());
 
+        boolean[] pokemonChecks = checkIfPokemonIsCaptured(checks);
 
         tvNomPokedex = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
@@ -106,16 +108,28 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnSuperball = (Button) itemView.findViewById(R.id.Button1_superball);
         btnUltraball = (Button) itemView.findViewById(R.id.Button1_ultraball);
         btnMasterball = (Button) itemView.findViewById(R.id.Button1_masterball);
+        btnReleasePokemon = (Button) itemView.findViewById(R.id.btnReleasePokemon);
 
         tvSkills = (TextView) itemView.findViewById(R.id.tvHabilidades); //El item view es internament el view holder,no es un objecte creat per nosaltres
         deletePokemonCapturado("Pikachu");
         File file = new File(requireContext().getFilesDir(), "Files/entrenador.json");
 
+        if (pokemonChecks[0]) {
+            tvError.setText("You have already captured 6 pokemons");
+            llBalls.setVisibility(View.GONE);
+            btnReleasePokemon.setVisibility(View.GONE);
+        } else if (pokemonChecks[1]) {
+            tvError.setText("You have already captured this pokemon");
+            llBalls.setVisibility(View.GONE);
+        } else {
+            btnReleasePokemon.setVisibility(View.GONE);
+        }
+
         //readFile(file);
         Log.d(TAG, "Lectura desde detail fragment: " + readFile(file));
 
 
-        try {
+        /*try {
             if (checks.get(5) != null){
                 tvError.setText("You have already captured 6 pokemons");
                 llBalls.setVisibility(View.GONE);
@@ -125,7 +139,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             }
         } catch (JSONException e) {
             throw new RuntimeException(e);
-        }
+        }*/
 
         Random random = new Random();
         int randomAbility = random.nextInt(4) + 1;
@@ -244,25 +258,33 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             }
         });
 
+        btnReleasePokemon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO: Release Pokemon, elimina el pokemon del JSON
+            }
+        });
+
         tvStats.setText("hp: "+pokedex.getStat0() + " \nattack: " + pokedex.getStat1() + " \ndefense: " + pokedex.getStat2()+ " \nspecial-attack: " + pokedex.getStat3() + " \nspecial-defense: " + pokedex.getStat4() + " \nspeed: " + pokedex.getStat5());
         return itemView;
     }
 
-    private boolean[] checkIfPokemonIsCaptured(JSONArray entrenador) {
+    private boolean[] checkIfPokemonIsCaptured(JSONArray pokemonList) {
         boolean[] captured = new boolean[2];
-        if (entrenador.length() > 6) {
+        if (pokemonList.length() > 6) {
             captured[0] = true;
-        } else {
-            for (int i = 0; i < entrenador.length(); i++){
-                try {
-                    if ( entrenador.get(i).getClass().getName().equals(pokedex.getName());
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                } {
+        }
+        try {
+            for (int i = 0; i < pokemonList.length(); i++) {
+                JSONObject pokemon = pokemonList.getJSONObject(i);
+                String name = pokemon.getString("name");
+                if (name.equals(pokedex.getName())) {
                     captured[1] = true;
+                    break;
                 }
             }
-
+        } catch (JSONException e) {
+            throw new RuntimeException("Error parsing JSON", e);
         }
         return captured;
     }
