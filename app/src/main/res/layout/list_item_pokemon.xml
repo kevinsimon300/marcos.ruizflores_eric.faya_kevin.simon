@@ -4,42 +4,45 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="2dp"
-    > <!-- Añadir esta línea -->
-    >
-    <!--No li fiquem mida,pero li fiquem pesos al linear layout,i ocupa tant com pugui-->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#6C9091">
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:background="#E6935E">
+
+        <TextView
+            android:id="@+id/tvNamePokemon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="2dp">
-            <TextView
-                android:id="@+id/tvNamePokemon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textSize="30sp"
-                />
+        android:padding="5dp"
+        android:gravity="center_horizontal">
 
-            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="5dp">
-                <ImageView
-                    android:id="@+id/ivPokemonFront"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
+        <ImageView
+            android:id="@+id/ivPokemonFront"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"/>
 
-                <ImageView
-                    android:id="@+id/ivPokemonBack"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:adjustViewBounds="true"
-                    android:scaleType="fitCenter" />
-                </LinearLayout>
-        <!--Es la llista de items
-         Es un linear layout un horitzontal que tindra un altre linear layout vertical-->
+        <ImageView
+            android:id="@+id/ivPokemonBack"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitCenter"
+            android:layout_gravity="center"/>
     </LinearLayout>
 </LinearLayout>
+    </LinearLayout>

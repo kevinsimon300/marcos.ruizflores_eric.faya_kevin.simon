@@ -17,6 +17,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 
 public class PokedexDao {
@@ -82,6 +83,8 @@ public class PokedexDao {
             String url = pokemon.getString("url");
             Log.d("Pokemon Processing", "Processing " + name + " at URL: " + url);
 
+            String url2 = "https://pokeapi.co/api/v2/pokemon-species/"+name;
+
             JsonObjectRequest requestDetail = new JsonObjectRequest(Request.Method.GET, url, null,
                     detailResponse -> {
                         try {
@@ -100,9 +103,11 @@ public class PokedexDao {
                             String stat4 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(4).getInt("base_stat"));
                             String stat5 = String.valueOf(detailResponse.getJSONArray("stats").getJSONObject(5).getInt("base_stat"));
 
-                            String back = detailResponse.getJSONObject("sprites").getString("back_default"); // getting the pictures
-
+                            String back = detailResponse.getJSONObject("sprites").getString("back_default");
                             String front = detailResponse.getJSONObject("sprites").getString("front_default");
+                            String back_shiny = detailResponse.getJSONObject("sprites").getString("back_shiny");
+                            String front_shiny = detailResponse.getJSONObject("sprites").getString("front_shiny");
+
 
                             List<String> types = new ArrayList<>();
                             JSONArray typesArray = detailResponse.getJSONArray("types");
@@ -110,10 +115,24 @@ public class PokedexDao {
                                 types.add(typesArray.getJSONObject(j).getJSONObject("type").getString("name"));
                             }
 
+                            ArrayList<Ability> abilities = new ArrayList<>();
+                            JSONArray abilitiesArray = detailResponse.getJSONArray("abilities");
+                            for (int j = 0; j < abilitiesArray.length(); j++) {
+                                JSONObject abilityObject = abilitiesArray.getJSONObject(j).getJSONObject("ability");
+                                String ability_name = abilityObject.getString("name");
+                                boolean isHidden = abilitiesArray.getJSONObject(j).getBoolean("is_hidden");
+                                double probability = 0.25;
+                                if (!isHidden) probability = 0.50;
+                                Ability ability = new Ability(ability_name, isHidden, probability);
+                                abilities.add(ability);
+                            }
+
+
+
                             for (String type: types) {
                                 Log.d("Type", "Type: "+String.valueOf(type));
                             }
-                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5));
+                            pokemonList.add(new Pokemon(name, id, front, back, types, weight, height, "description", stat0, stat1, stat2, stat3, stat4, stat5, abilities, back_shiny, front_shiny));
 
                             // Llamar al método onSuccess cuando se haya procesado todos los detalles de los Pokemon
                             if (pokemonList.size() == results.length()) {
