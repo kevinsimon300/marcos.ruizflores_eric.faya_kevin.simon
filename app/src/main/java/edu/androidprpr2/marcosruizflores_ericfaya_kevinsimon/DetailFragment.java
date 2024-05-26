@@ -1,6 +1,7 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,13 @@ import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -48,6 +56,8 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvNomPokedex;
     private LinearLayout llBalls;
     private LinearLayout llBalls2;
+
+    private static final String TAG = "DetailFragment";
 
     public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
         this.pokedex = pokedex;
@@ -146,6 +156,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Pokeball", Toast.LENGTH_SHORT).show();
+                int quantityPokebals = getFieldValue("Pokeballs");
+                //TODO codigo
+
+
+                modifyJsonFieldValue("Pokeballs",-1);
             }
         });
 
@@ -154,6 +169,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             public void onClick(View v) {
                 //TODO: Aquí va el resto del código de la captura
                 Toast.makeText(getContext(), "Superball", Toast.LENGTH_SHORT).show();
+                int quantityPokebals = getFieldValue("Superballs");
+                //TODO codigo
+
+
+                modifyJsonFieldValue("Superballs",-1);
             }
         });
 
@@ -162,6 +182,12 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             public void onClick(View v) {
                 //TODO: Aquí va el resto del código de la captura
                 Toast.makeText(getContext(), "Ultraball", Toast.LENGTH_SHORT).show();
+                int quantityPokebals = getFieldValue("Ultraballs");
+                //TODO codigo
+
+
+                modifyJsonFieldValue("Ultraballs",-1);
+
             }
         });
 
@@ -170,6 +196,12 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             public void onClick(View v) {
                 //TODO: Aquí va el resto del código de la captura
                 Toast.makeText(getContext(), "Masterball", Toast.LENGTH_SHORT).show();
+                int quantityPokebals = getFieldValue("Masterballs");
+                //TODO codigo
+
+
+                modifyJsonFieldValue("Masterballs",-1);
+
             }
         });
 
@@ -189,5 +221,71 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             }
         }
         return captured;
+    }
+
+    private void modifyJsonFieldValue(String fieldName, int incrementValue) {
+        File file = new File(requireContext().getFilesDir(), "Files/entrenador.json");
+
+        try {
+            // Leer el archivo JSON existente
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+
+            String jsonString = new String(data, "UTF-8");
+            JSONObject datosEntrenador = new JSONObject(jsonString);
+
+            int currentValue = datosEntrenador.getInt(fieldName); // Incrementem el valor del camp
+
+            datosEntrenador.put(fieldName, currentValue + incrementValue);
+
+
+            try (FileOutputStream fos = new FileOutputStream(file)) { // Ho guardem de nou al arxiu JSON
+                fos.write(datosEntrenador.toString(2).getBytes());
+                Log.d(TAG, "Valor de " + fieldName + " incrementado y JSON guardado en " + file.getAbsolutePath());
+            }
+
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Error al modificar el archivo JSON", e);
+        }
+        //Log.d(TAG, "Lectura desde tenda: " + readFile(file));
+
+    }
+    /*private String readFile(File file) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try (FileInputStream fis = new FileInputStream(file)) {
+            int ch;
+            while ((ch = fis.read()) != -1) {
+                stringBuilder.append((char) ch);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }*/
+
+    private int getFieldValue(String fieldName) {
+        File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+        try {
+            FileInputStream fis = new FileInputStream(file);// Llegim l'arxiu JSON existent
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+
+            String jsonString = new String(data, "UTF-8");
+            JSONObject datosEntrenador = new JSONObject(jsonString);
+
+            if (datosEntrenador.has(fieldName)) {// Obtenir el valor del camp
+                return datosEntrenador.getInt(fieldName);
+            } else {
+                Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
+                return -1;  // O qualsevol valor que consideres apropiat per indicar un error
+            }
+
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Error al leer el archivo JSON", e);
+            return -1;
+        }
     }
 }
