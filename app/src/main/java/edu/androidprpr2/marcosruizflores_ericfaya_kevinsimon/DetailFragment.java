@@ -57,12 +57,14 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvNomPokedex;
     private LinearLayout llBalls;
     private LinearLayout llBalls2;
+    private final Entrenador entrenador;
 
     private static final String TAG = "DetailFragment";
 
-    public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
+    public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes, Entrenador entrenador) {
         this.pokedex = pokedex;
         this.pokedexes = pokedexes;
+        this.entrenador = entrenador;
     }
 
     @Override
@@ -75,16 +77,9 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
 
         View itemView= inflater.inflate(R.layout.fragment_detail, container, false);
         //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
-        ArrayList<Item> items = new ArrayList<>(); //Harcoded items
-        items.add(new Item("Pokeball", 200));
-        items.add(new Item("Superball", 600));
-        items.add(new Item("Ultraball", 1200));
-        items.add(new Item("Masterball", 5000));
-        ArrayList<PokemonDetail> pokemonsTrainer = new ArrayList<>(); //Harcoded pokemons
-        PokemonDetail pokemonDetail = new PokemonDetail("Bulbasaur", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png", new ArrayList<String>(), "A strange seed was planted on its back at birth. The plant sprouts and grows with this POKéMON.", new ArrayList<Ability>(), null);
-        pokemonsTrainer.add(pokemonDetail);
-        Entrenador entrenador = new Entrenador("Ash", 100,items, pokemonsTrainer);
+
         boolean[] checks = checkIfPokemonIsCaptured(entrenador);
+
 
         tvNomPokedex = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
@@ -164,10 +159,26 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Pokeball", Toast.LENGTH_SHORT).show();
                 int quantityPokebals = getFieldValue("Pokeballs");
-                //TODO codigo
+                if (quantityPokebals > 0 ){
+                    int index_evolution = pokedex.getIndex_evolution();
+                    int accuracy_pokeball =  (600 - index_evolution) / (600);
+                    accuracy_pokeball *= 100;
+                    int random_pokeball = random.nextInt(100) + 1;
+                    if (accuracy_pokeball < random_pokeball){
+                        modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
+                        /// modify json añadir a la lista del entrenador
+                        modifyJsonFieldValue("Pokeballs",-1);
+                        //updateMoneyDisplay();
+
+                    }
 
 
-                modifyJsonFieldValue("Pokeballs",-1);
+
+                }
+
+
+
+
             }
         });
 
