@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
@@ -74,7 +73,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
 
             JSONArray pokemonCapturadosArray = new JSONArray(); // Hardcodejem dos pokemons per veure
 
-            PokemonCapturado pokemon1 = new PokemonCapturado("Pikachu", "pikachu_front_image.png", "pikachu_pokeball_image.png");
+            /*PokemonCapturado pokemon1 = new PokemonCapturado("Pikachu", "pikachu_front_image.png", "pikachu_pokeball_image.png");
             PokemonCapturado pokemon2 = new PokemonCapturado("Charmander", "charmander_front_image.png", "charmander_pokeball_image.png");
 
             try {
@@ -89,7 +88,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
                         .put("capturedPokeballImage", pokemon2.getCapturedPokeballImage()));
             } catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             // Agregem l'array de Pokemons capturats al JSON principal
             datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);

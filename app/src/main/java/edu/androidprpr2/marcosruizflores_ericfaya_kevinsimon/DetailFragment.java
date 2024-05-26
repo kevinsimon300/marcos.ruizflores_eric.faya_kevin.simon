@@ -19,9 +19,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
@@ -29,6 +31,7 @@ import java.util.Random;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 
 
@@ -75,7 +78,9 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         View itemView= inflater.inflate(R.layout.fragment_detail, container, false);
         //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
 
-        //boolean[] checks = checkIfPokemonIsCaptured(entrenador);
+        JSONArray checks = readPokemonCapturadosArrayFromFile();
+        //checkIfPokemonIsCaptured(entrenador);
+        Log.d(TAG, "Contenido del JSONArray checks: " + checks.toString());
 
 
         tvNomPokedex = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
@@ -108,13 +113,17 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         Log.d(TAG, "Lectura desde detail fragment: " + readFile(file));
 
 
-      /*  if (checks[0]){
-            tvError.setText("You have already captured 6 pokemons");
-            llBalls.setVisibility(View.GONE);
-        } else if (checks[1]){
-            tvError.setText("You have already captured this pokemon");
-            llBalls.setVisibility(View.GONE);
-        }*/
+        try {
+            if (checks.get(5) != null){
+                tvError.setText("You have already captured 6 pokemons");
+                llBalls.setVisibility(View.GONE);
+            } else if (checks.get(1)!=null){
+                tvError.setText("You have already captured this pokemon");
+                llBalls.setVisibility(View.GONE);
+            }
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
 
         Random random = new Random();
         int randomAbility = random.nextInt(4) + 1;
@@ -165,14 +174,14 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
                         /// modify json añadir a la lista del entrenador
                         modifyJsonFieldValue("Pokeballs",-1);
-                        //updateMoneyDisplay();
+                        //addPokemonCapturado();
+                        //deletePokemonCapturado("Pikachu");
 
                     }
-                    Log.d(TAG, "Pokeballs captura " + readFile(file)) ;
+                    //Log.d(TAG, "Pokeballs captura " + readFile(file)) ;
 
                 }
-                Log.d(TAG, "Pokeballs no captura" + readFile(file)) ;
-                deletePokemonCapturado("Pikachu");
+                //Log.d(TAG, "Pokeballs no captura" + readFile(file)) ;
             }
         });
 
@@ -184,8 +193,12 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 int quantityPokebals = getFieldValue("Superballs");
                 //TODO codigo
 
+                PokemonCapturado pokemon2 = new PokemonCapturado("Charmander", "charmander_front_image.png", "charmander_pokeball_image.png");
 
                 modifyJsonFieldValue("Superballs",-1);
+
+                addPokemonCapturado(pokemon2);
+                Log.d(TAG, "Pokeballs afegit" + readFile(file)) ;
             }
         });
 
@@ -196,7 +209,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 Toast.makeText(getContext(), "Ultraball", Toast.LENGTH_SHORT).show();
                 int quantityPokebals = getFieldValue("Ultraballs");
                 //TODO codigo
-
 
                 modifyJsonFieldValue("Ultraballs",-1);
 
@@ -210,7 +222,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                 Toast.makeText(getContext(), "Masterball", Toast.LENGTH_SHORT).show();
                 int quantityPokebals = getFieldValue("Masterballs");
                 //TODO codigo
-
 
                 modifyJsonFieldValue("Masterballs",-1);
 
@@ -239,7 +250,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         File file = new File(requireContext().getFilesDir(), "Files/entrenador.json");
 
         try {
-            // Leer el archivo JSON existente
             FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
@@ -261,7 +271,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         } catch (IOException | JSONException e) {
             Log.e(TAG, "Error al modificar el archivo JSON", e);
         }
-        //Log.d(TAG, "Lectura desde tenda: " + readFile(file));
 
     }
     /*private String readFile(File file) {
@@ -302,10 +311,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     }
 
     private void deletePokemonCapturado(String pokemonName) {
-        JSONObject datosEntrenador = new JSONObject();
+        JSONObject datosEntrenador = readJsonFromFile();
 
         try {
-            JSONArray pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
+            if (datosEntrenador.has("PokemonCapturados")) {
+                JSONArray pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
 
             for (int i = 0; i < pokemonCapturadosArray.length(); i++) {
                 JSONObject pokemonCapturado = pokemonCapturadosArray.getJSONObject(i);
@@ -320,14 +330,37 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
 
             saveJsonToFile(datosEntrenador);
-            Log.d(TAG, "PokemonCapturado '" + pokemonName + "' eliminado exitosamente.");
-
+                Log.d(TAG, "PokemonCapturado '" + pokemonName + "' eliminado exitosamente.");
+            } else {
+                Log.e(TAG, "No se encontró el array PokemonCapturados en el JSON.");
+            }
         } catch (JSONException e) {
             Log.e(TAG, "Error al eliminar PokemonCapturado: " + e.getMessage());
         }
     }
 
-    /**
+    private JSONObject readJsonFromFile() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+            if (file.exists()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                bufferedReader.close();
+                jsonObject = new JSONObject(stringBuilder.toString());
+            } else {
+                Log.e(TAG, "File not found: entrenador.json");
+            }
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Error reading JSON file: " + e.getMessage());
+        }
+        return jsonObject;
+    }
+        /**
      * Guardem l'objecte JSON actualitzat en l'arxiu JSON
      * @param datosEntrenador
      */
@@ -359,9 +392,63 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
             while ((ch = fis.read()) != -1) {
                 stringBuilder.append((char) ch);
             }
-        } catch (IOException e) {
+        } catch (IOException e)     {
             e.printStackTrace();
         }
         return stringBuilder.toString();
     }
+
+    private JSONArray readPokemonCapturadosArrayFromFile() {
+        JSONArray pokemonCapturadosArray = new JSONArray();
+        try {
+            File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+            if (file.exists()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                bufferedReader.close();
+                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                if (jsonObject.has("PokemonCapturados")) {
+                    pokemonCapturadosArray = jsonObject.getJSONArray("PokemonCapturados");
+                }
+            } else {
+                Log.e(TAG, "File not found: entrenador.json");
+            }
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Error reading JSON file: " + e.getMessage());
+        }
+        return pokemonCapturadosArray;
+    }
+
+    private void addPokemonCapturado(PokemonCapturado pokemonCapturado) {
+        try {
+            JSONObject datosEntrenador = readJsonFromFile();
+
+            JSONArray pokemonCapturadosArray;
+            if (datosEntrenador.has("PokemonCapturados")) {
+                pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
+            } else {
+                pokemonCapturadosArray = new JSONArray();
+            }
+
+            JSONObject nuevoPokemonCapturado = new JSONObject();
+            nuevoPokemonCapturado.put("name", pokemonCapturado.getName());
+            nuevoPokemonCapturado.put("frontImage", pokemonCapturado.getFrontImage());
+            nuevoPokemonCapturado.put("capturedPokeballImage", pokemonCapturado.getCapturedPokeballImage());
+
+            pokemonCapturadosArray.put(nuevoPokemonCapturado);
+
+            datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
+
+            saveJsonToFile(datosEntrenador);
+
+            Log.d(TAG, "PokemonCapturado '" + pokemonCapturado.getName() + "' añadido exitosamente.");
+        } catch (JSONException e) {
+            Log.e(TAG, "Error al agregar PokemonCapturado: " + e.getMessage());
+        }
+    }
+
 }
