@@ -1,6 +1,31 @@
 <resources>
-    <string name="app_name">marcos.ruizflores-eric.faya-kevin.simon</string>
+    <string name="app_name">PokeDexLS</string>
+    <string name="pokedexButton">Pokedex</string>
+    <string name="pokedexBuscador">Search a pokemon"</string>
+
+    <string name="entrenadorButton">Entrenador</string>
+    <string name="tendaButton">Tenda</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="titleMain">Sallemovies</string>
+    <string name="description">Description</string>
+    <string name="length">Duration</string>
+    <string name="language">Language</string>
+    <string name="year">Year</string>
+    <string name="cast">Cast</string>
     <string name="pokedex">Pokedex</string>
     <string name="entrenador">Entrenador</string>
     <string name="tenda">Tenda</string>
+    <string name="pokemon_image">Tenda</string>
+    <string name="pokeball">Pokeball</string>
+    <string name="superball">Superball</string>
+    <string name="ultraball">Ultraball</string>
+    <string name="masterball">Masterball</string>
+    <string name="pokemon_list">Pokemon List</string>
+    <string name="buy_poekball">Buy Pokeball</string>
+    <string name="buy_superball">Buy Superball</string>
+    <string name="buy_ultraball">Buy Ultraball</string>
+    <string name="buy_masterball">Buy Masterball</string>
+    <string name="stats">stats</string>
+    <string name="delete_pokemon">Delete Pokemon</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
