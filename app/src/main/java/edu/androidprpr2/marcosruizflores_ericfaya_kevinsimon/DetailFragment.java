@@ -373,7 +373,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         }
     }
 
-    private void deletePokemonCapturado(String pokemonName) {
+    public void deletePokemonCapturado(String pokemonName) {
         JSONObject datosEntrenador = readJsonFromFile();
 
         try {

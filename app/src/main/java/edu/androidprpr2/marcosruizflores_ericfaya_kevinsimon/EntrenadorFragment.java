@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
@@ -31,6 +32,7 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCaptur
  * create an instance of this fragment.
  */
 public class EntrenadorFragment extends Fragment {
+
     private TextView tvNameEntrenador;
     private TextView tvMoney;
     private TextView tvPokeball;
@@ -38,8 +40,10 @@ public class EntrenadorFragment extends Fragment {
     private TextView tvUltraball;
     private TextView tvMaterball;
     private TextView tvPokemonList;
+    private Button btnDeletePokemon;
     private RecyclerView pokemonRecyclerView;
     private CapturatedPokemonAdapter pokemonAdapter;
+    private DetailFragment detailFragment;
     private List<PokemonCapturado> pokemonList = new ArrayList<>();
 
     private static final String TAG = "EntrenadorFragment";
@@ -69,6 +73,8 @@ public class EntrenadorFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        detailFragment = new DetailFragment(null, null);
+        btnDeletePokemon = (Button) view.findViewById(R.id.buttonDeletePokemon);
         tvMoney = (TextView) view.findViewById(R.id.tvTrainerName);
         tvMoney.setText(String.valueOf(getFieldValueName("Name")));
         tvNameEntrenador = (TextView) view.findViewById(R.id.tvTrainerCash);
@@ -102,6 +108,16 @@ public class EntrenadorFragment extends Fragment {
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing JSON array: " + e.getMessage());
         }
+
+        btnDeletePokemon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                JSONArray checks = readPokemonCapturadosArrayFromFile();
+                pokemonList = new ArrayList<>();
+                detailFragment.deletePokemonCapturado(pokemonList.get(pokemonList.size()-1).getName());
+            }
+        });
+
         //pokemonList = (List<PokemonCapturado>) checks;
         pokemonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         pokemonAdapter = new CapturatedPokemonAdapter(pokemonList,getContext());
