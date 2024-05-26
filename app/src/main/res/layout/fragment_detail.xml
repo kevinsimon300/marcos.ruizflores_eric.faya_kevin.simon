@@ -86,7 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
-                android:textColor="@color/grayText"
+                android:textColor="@color/carrotOrange"
                 android:layout_gravity="center"
                 android:layout_marginTop="2dp" />
         </LinearLayout>
@@ -111,7 +111,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textSize="20sp"
-                android:textColor="@color/grayText"
+                android:textColor="@color/carrotOrange"
                 android:layout_gravity="center"
                 android:layout_marginTop="2dp"/>
         </LinearLayout>
