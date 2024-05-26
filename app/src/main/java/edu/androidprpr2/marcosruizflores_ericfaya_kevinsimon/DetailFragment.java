@@ -1,5 +1,6 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
@@ -59,6 +59,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private TextView tvNomPokedex;
     private LinearLayout llBalls;
     private LinearLayout llBalls2;
+    private PokemonCapturado pokemonCapturado;
 
     private static final String TAG = "DetailFragment";
 
@@ -71,6 +72,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
+    @SuppressLint("SetTextI18n")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
 
         JSONArray checks = readPokemonCapturadosArrayFromFile();
-        //checkIfPokemonIsCaptured(entrenador);
+        checkIfPokemonIsCaptured(checks);
         Log.d(TAG, "Contenido del JSONArray checks: " + checks.toString());
 
 
@@ -163,7 +165,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnPokeball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Pokeball", Toast.LENGTH_SHORT).show();
                 int quantityPokebals = getFieldValue("Pokeballs");
                 if (quantityPokebals > 0 ){
                     int index_evolution = pokedex.getIndex_evolution();
@@ -171,46 +172,58 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                     accuracy_pokeball *= 100;
                     int random_pokeball = random.nextInt(100) + 1;
                     if (accuracy_pokeball < random_pokeball){
+                        Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
                         modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
-                        /// modify json añadir a la lista del entrenador
                         modifyJsonFieldValue("Pokeballs",-1);
-                        //addPokemonCapturado();
+                        PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/pokeball_pokemon_svgrepo_com");
+                        addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
-
-                    }
-                    //Log.d(TAG, "Pokeballs captura " + readFile(file)) ;
-
-                }
-                //Log.d(TAG, "Pokeballs no captura" + readFile(file)) ;
+                    } else Toast.makeText(getContext(), "Pokeball failed", Toast.LENGTH_SHORT).show();
+                } // poner mensaje de que tiene que comprar mas pokeballs
             }
         });
 
         btnSuperball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Aquí va el resto del código de la captura
-                Toast.makeText(getContext(), "Superball", Toast.LENGTH_SHORT).show();
                 int quantityPokebals = getFieldValue("Superballs");
-                //TODO codigo
-
-                PokemonCapturado pokemon2 = new PokemonCapturado("Charmander", "charmander_front_image.png", "charmander_pokeball_image.png");
-
-                modifyJsonFieldValue("Superballs",-1);
-
-                addPokemonCapturado(pokemon2);
-                Log.d(TAG, "Pokeballs afegit" + readFile(file)) ;
+                if (quantityPokebals > 0 ){
+                    int index_evolution = pokedex.getIndex_evolution();
+                    float accuracy_pokeball = (float) ((600 - index_evolution) / (600 * 1.5));
+                    accuracy_pokeball *= 100;
+                    int random_pokeball = random.nextInt(100) + 1;
+                    if (accuracy_pokeball < random_pokeball){
+                        Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
+                        modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
+                        modifyJsonFieldValue("Superballs",-1);
+                        PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/superball");
+                        addPokemonCapturado(pokemonCapturado);
+                        //deletePokemonCapturado("Pikachu");
+                    } else Toast.makeText(getContext(), "Superball failed", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
         btnUltraball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Aquí va el resto del código de la captura
-                Toast.makeText(getContext(), "Ultraball", Toast.LENGTH_SHORT).show();
-                int quantityPokebals = getFieldValue("Ultraballs");
-                //TODO codigo
+                int quantityPokeballs = getFieldValue("Ultraballs");
+                if (quantityPokeballs > 0 ){
+                    int index_evolution = pokedex.getIndex_evolution();
+                    int accuracy_pokeball =  (600 - index_evolution) / (600 * 2);
+                    accuracy_pokeball *= 100;
+                    int random_pokeball = random.nextInt(100) + 1;
+                    if (accuracy_pokeball < random_pokeball){
+                        Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
+                        modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
+                        modifyJsonFieldValue("Ultraballs",-1);
+                        PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/wikiball");
+                        addPokemonCapturado(pokemonCapturado);
+                        //deletePokemonCapturado("Pikachu");
+                    } else Toast.makeText(getContext(), "Ultraball failed", Toast.LENGTH_SHORT).show();
+                }
 
-                modifyJsonFieldValue("Ultraballs",-1);
+
 
             }
         });
@@ -218,12 +231,15 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnMasterball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO: Aquí va el resto del código de la captura
-                Toast.makeText(getContext(), "Masterball", Toast.LENGTH_SHORT).show();
-                int quantityPokebals = getFieldValue("Masterballs");
-                //TODO codigo
-
-                modifyJsonFieldValue("Masterballs",-1);
+                int quantityPokeballs = getFieldValue("Masterballs");
+                if (quantityPokeballs > 0 ){
+                    Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
+                    modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
+                    modifyJsonFieldValue("Masterballs",-1);
+                    PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/wikiball");
+                    addPokemonCapturado(pokemonCapturado);
+                    //deletePokemonCapturado("Pikachu");
+                }
 
             }
         });
@@ -232,16 +248,21 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         return itemView;
     }
 
-    private boolean[] checkIfPokemonIsCaptured(Entrenador entrenador) {
+    private boolean[] checkIfPokemonIsCaptured(JSONArray entrenador) {
         boolean[] captured = new boolean[2];
-        if (entrenador.getlPokedex().size() > 6) {
+        if (entrenador.length() > 6) {
             captured[0] = true;
         } else {
-            for (PokemonDetail pokemonDetail : entrenador.getlPokedex()) {
-                if (pokemonDetail.getNamePokemon().equals(pokedex.getName())){
+            for (int i = 0; i < entrenador.length(); i++){
+                try {
+                    if ( entrenador.get(i).getClass().getName().equals(pokedex.getName());
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                } {
                     captured[1] = true;
                 }
             }
+
         }
         return captured;
     }
