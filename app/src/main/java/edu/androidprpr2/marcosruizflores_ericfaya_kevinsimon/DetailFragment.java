@@ -82,8 +82,10 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         //ivPokedex = itemView.findViewById(R.id.ivImageFilm); // Initialize ivMovie here
 
         JSONArray checks = readPokemonCapturadosArrayFromFile();
+        Log.d(TAG, "Contenido del JSONArray checks: " + String.valueOf(checks.toString()));
+
         checkIfPokemonIsCaptured(checks);
-        Log.d(TAG, "Contenido del JSONArray checks: " + checks.toString());
+        //Log.d(TAG, "Contenido del JSONArray checks: " + String.valueOf(checks.toString()));
 
         boolean[] pokemonChecks = checkIfPokemonIsCaptured(checks);
 

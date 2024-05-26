@@ -31,13 +31,11 @@ public class TendaFragment extends Fragment {
     private Button bUltraball;
     private Button bMasterball;
 
-    private static final String TAG = "EntrenadorFragment";
+    private static final String TAG = "TendaFragment";
 
     public TendaFragment() {
         // Required empty public constructor
     }
-
-
     public static TendaFragment newInstance(String param1, String param2) {
         TendaFragment fragment = new TendaFragment();
 

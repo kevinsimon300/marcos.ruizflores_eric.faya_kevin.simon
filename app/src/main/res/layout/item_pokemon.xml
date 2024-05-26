@@ -5,17 +5,12 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <ImageView
-        android:id="@+id/imageViewFront"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:src="@drawable/pokeball_pokemon_svgrepo_com"
-        android:contentDescription="@string/pokemon_image" />
+
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:orientation="horizontal"
         android:layout_marginStart="16dp">
 
         <TextView
@@ -25,11 +20,16 @@
             android:textSize="30sp"
             android:textStyle="bold"
             android:text="pokemon name: " />
-
+        <ImageView
+            android:id="@+id/imageViewFront"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/pokeball_pokemon_svgrepo_com"
+            android:contentDescription="@string/pokemon_image" />
         <ImageView
             android:id="@+id/imageViewBack"
-            android:layout_width="200dp"
-            android:layout_height="2000dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@drawable/pokeball_pokemon_svgrepo_com"
             android:contentDescription="@string/pokemon_image" />
 
