@@ -53,7 +53,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
     private Button btnSuperball;
     private Button btnUltraball;
     private Button btnMasterball;
-    private Button btnReleasePokemon;
     private ImageView ivPokedex;
     private ImageView imageViewFront;
     private ImageView imageViewPokeball;//TODO
@@ -109,7 +108,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         btnSuperball = (Button) itemView.findViewById(R.id.Button1_superball);
         btnUltraball = (Button) itemView.findViewById(R.id.Button1_ultraball);
         btnMasterball = (Button) itemView.findViewById(R.id.Button1_masterball);
-        btnReleasePokemon = (Button) itemView.findViewById(R.id.btnReleasePokemon);
         llStats = (LinearLayout) itemView.findViewById(R.id.llStats);
 
         tvSkills = (TextView) itemView.findViewById(R.id.tvHabilidades); //El item view es internament el view holder,no es un objecte creat per nosaltres
@@ -119,12 +117,9 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         if (pokemonChecks[0]) {
             tvError.setText("You have already captured 6 pokemons");
             llBalls.setVisibility(View.GONE);
-            btnReleasePokemon.setVisibility(View.GONE);
         } else if (pokemonChecks[1]) {
             tvError.setText("You have already captured this pokemon");
             llBalls.setVisibility(View.GONE);
-        } else {
-            btnReleasePokemon.setVisibility(View.GONE);
         }
 
         //readFile(file);
@@ -260,13 +255,6 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                     //deletePokemonCapturado("Pikachu");
                 }
 
-            }
-        });
-
-        btnReleasePokemon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO: Release Pokemon, elimina el pokemon del JSON
             }
         });
 
