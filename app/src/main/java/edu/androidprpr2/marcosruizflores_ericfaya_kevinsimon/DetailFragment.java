@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
@@ -189,11 +190,19 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
                         modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
                         modifyJsonFieldValue("Pokeballs",-1);
+                        //Hay que hacer un setter del pokemon que estamos capturando
+                        for (int i = 0; i < pokedexes.size(); i++){
+                            if (pokedexes.get(i).getName().equals(pokedex.getName())){
+                                pokedexes.get(i).setPokeballType("@drawable/pokeball_pokemon_svgrepo_com");
+                            }
+                        }
                         PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/pokeball_pokemon_svgrepo_com");
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
                     } else Toast.makeText(getContext(), "Pokeball failed", Toast.LENGTH_SHORT).show();
-                } // poner mensaje de que tiene que comprar mas pokeballs
+                } else {
+                    Toast.makeText(getContext(), "You need to buy more Pokeballs", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -215,6 +224,8 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
                     } else Toast.makeText(getContext(), "Superball failed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You need to buy more Superballs", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -237,6 +248,8 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
                     } else Toast.makeText(getContext(), "Ultraball failed", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "You need to buy more Ultraballs", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -252,9 +265,11 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                     Toast.makeText(getContext(), "Pokemon Captured", Toast.LENGTH_SHORT).show();
                     modifyJsonFieldValue("Money", 400 + 100 * pokedex.getIndex_evolution());
                     modifyJsonFieldValue("Masterballs",-1);
-                    PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/wikiball");
+                    PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/master_ball_icon_icons_com_67545");
                     addPokemonCapturado(pokemonCapturado);
                     //deletePokemonCapturado("Pikachu");
+                } else {
+                    Toast.makeText(getContext(), "You need to buy more Masterballs", Toast.LENGTH_SHORT).show();
                 }
 
             }

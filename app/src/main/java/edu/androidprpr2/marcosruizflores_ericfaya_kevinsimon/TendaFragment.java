@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -30,6 +31,13 @@ public class TendaFragment extends Fragment {
     private Button bSuperball;
     private Button bUltraball;
     private Button bMasterball;
+    private TextView tvMoneySpent;
+    private Button bShop;
+    private int countPokeball;
+    private int countSuperball;
+    private int countUltraball;
+    private int countMasterball;
+    private int moneySpent;
 
     private static final String TAG = "TendaFragment";
 
@@ -41,11 +49,9 @@ public class TendaFragment extends Fragment {
 
         return fragment;
     }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -60,49 +66,71 @@ public class TendaFragment extends Fragment {
         tvMoney = (TextView) view.findViewById(R.id.tvMoney);
         tvMoney.setText(String.valueOf(getFieldValue("Money")));
         bPokeball = (Button) view.findViewById(R.id.Button1_pokeball);
+        tvMoneySpent = (TextView) view.findViewById(R.id.tvMoneySpent);
         bPokeball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyJsonFieldValue("Money",-200);
-
-                modifyJsonFieldValue("Pokeballs",1);
-
-                updateMoneyDisplay();
+                countPokeball++;
+                moneySpent += 200;
+                tvMoneySpent.setText(String.valueOf(moneySpent));
             }
         });
         bSuperball = (Button) view.findViewById(R.id.Button1_superball);
         bSuperball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyJsonFieldValue("Money",-500);
-                modifyJsonFieldValue("Superballs",1);
-
-                updateMoneyDisplay();
+                countSuperball++;
+                moneySpent += 500;
+                tvMoneySpent.setText(String.valueOf(moneySpent));
             }
         });
         bUltraball = (Button) view.findViewById(R.id.Button1_ultraball);
         bUltraball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyJsonFieldValue("Money",-1500);
-
-                modifyJsonFieldValue("Ultraballs",1);
-
-                updateMoneyDisplay();
+                countUltraball++;
+                moneySpent += 1500;
+                tvMoneySpent.setText(String.valueOf(moneySpent));
             }
         });
         bMasterball = (Button) view.findViewById(R.id.Button1_masterball);
         bMasterball.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                modifyJsonFieldValue("Money",-100000);
+                countMasterball++;
+                moneySpent += 100000;
+                tvMoneySpent.setText(String.valueOf(moneySpent));
+            }
+        });
 
-                modifyJsonFieldValue("Masterballs",1);
-
-                updateMoneyDisplay();
+        bShop = (Button) view.findViewById(R.id.buyGeneralShop);
+        bShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int shopValue = countPokeball*200+countSuperball*500+countUltraball*1500+countMasterball*100000;
+                if (getCurrentValue() - shopValue < 0){
+                    Toast.makeText(getContext(), "No tienes suficiente dinero", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (shopValue == 0){
+                        Toast.makeText(getContext(), "No has comprado nada", Toast.LENGTH_SHORT).show();
+                    }
+                    modifyJsonFieldValue("Money",-shopValue);
+                    modifyJsonFieldValue("Masterballs",countMasterball);
+                    modifyJsonFieldValue("Ultraballs",countUltraball);
+                    modifyJsonFieldValue("Superballs",countSuperball);
+                    modifyJsonFieldValue("Pokeballs",countPokeball);
+                    countSuperball = 0;
+                    countUltraball = 0;
+                    countMasterball = 0;
+                    countPokeball = 0;
+                    moneySpent = 0;
+                    tvMoneySpent.setText(String.valueOf(moneySpent));
+                    updateMoneyDisplay();
+                }
             }
         });
     }
+
     private void modifyJsonFieldValue(String fieldName, int incrementValue) {
         File file = new File(requireContext().getFilesDir(), "Files/entrenador.json");
 
@@ -130,7 +158,10 @@ public class TendaFragment extends Fragment {
             Log.e(TAG, "Error al modificar el archivo JSON", e);
         }
         //Log.d(TAG, "Lectura desde tenda: " + readFile(file));
+    }
 
+    public int getCurrentValue(){
+        return getFieldValue("Money");
     }
     /*private String readFile(File file) {
         StringBuilder stringBuilder = new StringBuilder();

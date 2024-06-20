@@ -28,9 +28,10 @@ public class Pokemon {
     private String back_shiny;
     private String front_shiny;
     private int index_evolution;
+    private String pokeballType;
 
 
-    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities, String back_shiny, String front_shiny, int index_evolution) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities, String back_shiny, String front_shiny, int index_evolution, String pokeballType) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -49,6 +50,7 @@ public class Pokemon {
         this.back_shiny = back_shiny;
         this.front_shiny = front_shiny;
         this.index_evolution = index_evolution;
+        this.pokeballType = pokeballType;
     }
 
     public int getIndex_evolution() {
@@ -135,6 +137,14 @@ public class Pokemon {
 
     public String getStat5() {
         return stat5;
+    }
+
+    public String getPokeballType() {
+        return pokeballType;
+    }
+
+    public void setPokeballType(String pokeballType) {
+        this.pokeballType = pokeballType;
     }
 
     public Intent getIntent(Context context) {

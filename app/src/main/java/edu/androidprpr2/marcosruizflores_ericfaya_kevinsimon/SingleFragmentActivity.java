@@ -51,8 +51,6 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == POKEDEX_ITEM_ID) {
-                //ArrayList<Pokedex> l = pokedexDao.getPokemonList();
-                //System.out.println(l.get(0).getName() + l.get(0).getBackImage());
                 pokedexDao.getPokemonList(page++);
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());

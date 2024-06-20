@@ -141,7 +141,7 @@ public class PokedexDao {
                                                 abilities.add(ability);
                                             }
 
-                                            Pokemon newPokemon = new Pokemon(name, id, front, back, types, weight, height, description, stat0, stat1, stat2, stat3, stat4, stat5, abilities, backShiny, frontShiny, finalIndexEvolution1);
+                                            Pokemon newPokemon = new Pokemon(name, id, front, back, types, weight, height, description, stat0, stat1, stat2, stat3, stat4, stat5, abilities, backShiny, frontShiny, finalIndexEvolution1, "@drawable/wikiball");
                                             pokemonList.add(newPokemon);
 
                                             if (pokemonList.size() == results.length()) {

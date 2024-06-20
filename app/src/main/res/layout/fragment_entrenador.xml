@@ -109,7 +109,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/superball"
+                        android:src="@drawable/wikiball"
                         android:layout_marginBottom="4dp" />
                     <TextView
                         android:id="@+id/tvUltraballs"
@@ -130,7 +130,7 @@
                     <ImageView
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/superball"
+                        android:src="@drawable/master_ball_icon_icons_com_67545"
                         android:layout_marginBottom="4dp" />
                     <TextView
                         android:id="@+id/tvMasterballs"

@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
@@ -127,6 +126,7 @@ public class PokedexFragment extends Fragment {
         private Pokemon pokedex;
         private final ImageView ivBack;
         private final ImageView ivFront;
+        private final ImageView ivPokeball;
         private final TextView tvPokemonName;
         private Activity activity; //De on ve la activity
         public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
@@ -135,6 +135,7 @@ public class PokedexFragment extends Fragment {
 
             ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
             ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
+            ivPokeball = (ImageView) itemView.findViewById(R.id.ivPokeball);
             tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
@@ -147,6 +148,7 @@ public class PokedexFragment extends Fragment {
             ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
             ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
             tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
+            ivPokeball = (ImageView) itemView.findViewById(R.id.ivPokeball);
 
             itemView.setOnClickListener(this);
         }
@@ -156,6 +158,17 @@ public class PokedexFragment extends Fragment {
             tvPokemonName.setText(pokedex.getName()); //Li pasem el nom
             Picasso.get().load(pokedex.getImageUrl()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+            Picasso.get().load(R.drawable.pokeball_pokemon_svgrepo_com).into(this.ivPokeball);
+            Log.d("Pokemon type", pokedex.getPokeballType());
+            /*if (pokedex.getPokeballType().equals("@drawable/pokeball_pokemon_svgrepo_com")) {
+                Picasso.get().load(R.drawable.pokeball_pokemon_svgrepo_com);
+            } else if (pokedex.getPokeballType().equals("@drawable/superball")) {
+                Picasso.get().load(R.drawable.superball);
+            } else if (pokedex.getPokeballType().equals("@drawable/wikiball")) {
+                Picasso.get().load(R.drawable.wikiball);
+            } else if (pokedex.getPokeballType().equals("@drawable/master_ball_icon_icons_com_67545")) {
+                Picasso.get().load(R.drawable.master_ball_icon_icons_com_67545);
+            }*/
         }
 
         @Override
