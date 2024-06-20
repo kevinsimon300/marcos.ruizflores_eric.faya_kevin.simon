@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,21 +28,15 @@ import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EntrenadorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EntrenadorFragment extends Fragment {
-
     private TextView tvNameEntrenador;
     private TextView tvMoney;
     private TextView tvPokeball;
     private TextView tvSuperball;
     private TextView tvUltraball;
     private TextView tvMaterball;
-    private TextView tvPokemonList;
     private Button btnDeletePokemon;
+    private Button btnChangeNameTrainer;
     private RecyclerView pokemonRecyclerView;
     private CapturatedPokemonAdapter pokemonAdapter;
     private DetailFragment detailFragment;
@@ -58,51 +54,54 @@ public class EntrenadorFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_entrenador, container, false);
 
-        return inflater.inflate(R.layout.fragment_entrenador, container, false);
+        Button btnChangeName = view.findViewById(R.id.btChangeNameTrainer);
+        btnChangeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.frame_layout, new ChangeNameFragment());
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         detailFragment = new DetailFragment(null, null);
-        btnDeletePokemon = (Button) view.findViewById(R.id.buttonDeletePokemon);
-        tvMoney = (TextView) view.findViewById(R.id.tvTrainerName);
+        btnDeletePokemon = view.findViewById(R.id.buttonDeletePokemon);
+        btnChangeNameTrainer = view.findViewById(R.id.btChangeNameTrainer);
+        tvMoney = view.findViewById(R.id.tvTrainerName);
         tvMoney.setText(String.valueOf(getFieldValueName("Name")));
-        tvNameEntrenador = (TextView) view.findViewById(R.id.tvTrainerCash);
+        tvNameEntrenador = view.findViewById(R.id.tvTrainerCash);
         tvNameEntrenador.setText(String.valueOf(getFieldValue("Money")));
-        tvPokeball = (TextView) view.findViewById(R.id.tvPokeballs);
+        tvPokeball = view.findViewById(R.id.tvPokeballs);
         tvPokeball.setText(String.valueOf(getFieldValue("Pokeballs")));
-        tvSuperball = (TextView) view.findViewById(R.id.tvSuperballs);
+        tvSuperball = view.findViewById(R.id.tvSuperballs);
         tvSuperball.setText(String.valueOf(getFieldValue("Superballs")));
-        tvUltraball = (TextView) view.findViewById(R.id.tvUltraballs);
+        tvUltraball = view.findViewById(R.id.tvUltraballs);
         tvUltraball.setText(String.valueOf(getFieldValue("Ultraballs")));
-        tvMaterball = (TextView) view.findViewById(R.id.tvMasterballs);
+        tvMaterball = view.findViewById(R.id.tvMasterballs);
         tvMaterball.setText(String.valueOf(getFieldValue("Masterballs")));
 
-        //tvPokemonList = (TextView) view.findViewById(R.id.tvPokemonList);
-        //tvPokemonList.setText(String.valueOf(getFieldValue("PokemonCapturados")));
         pokemonRecyclerView = view.findViewById(R.id.pokemon_recycler_view);
         JSONArray checks = readPokemonCapturadosArrayFromFile();
-        pokemonList = new ArrayList<>(); // Initialize the list
+        pokemonList = new ArrayList<>();
         try {
             for (int i = 0; i < checks.length(); i++) {
                 JSONObject pokemonObject = checks.getJSONObject(i);
-                // Parse the PokemonCapturado object
                 PokemonCapturado pokemonCapturado = new PokemonCapturado(
                         pokemonObject.getString("name"),
                         pokemonObject.getString("frontImage"),
                         pokemonObject.getString("capturedPokeballImage")
                 );
-                // Add the PokemonCapturado object to the list
                 pokemonList.add(pokemonCapturado);
             }
         } catch (JSONException e) {
@@ -112,21 +111,26 @@ public class EntrenadorFragment extends Fragment {
         btnDeletePokemon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                JSONArray checks = readPokemonCapturadosArrayFromFile();
-                pokemonList = new ArrayList<>();
-                detailFragment.deletePokemonCapturado(pokemonList.get(pokemonList.size()-1).getName());
+                // Lógica para eliminar el último Pokémon capturado
+                if (!pokemonList.isEmpty()) {
+                    pokemonList.remove(pokemonList.size() - 1);
+                    // Lógica adicional para guardar el nuevo arreglo en el archivo JSON
+                    // detailFragment.deletePokemonCapturado(pokemonList.get(pokemonList.size()-1).getName());
+                    // actualiza el adaptador
+                    pokemonAdapter.notifyDataSetChanged();
+                }
             }
         });
 
-        //pokemonList = (List<PokemonCapturado>) checks;
         pokemonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        pokemonAdapter = new CapturatedPokemonAdapter(pokemonList,getContext());
+        pokemonAdapter = new CapturatedPokemonAdapter(pokemonList, getContext());
         pokemonRecyclerView.setAdapter(pokemonAdapter);
     }
+
     private String getFieldValueName(String fieldName) {
         File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
         try {
-            FileInputStream fis = new FileInputStream(file);// Llegim l'arxiu JSON existent
+            FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
             fis.close();
@@ -134,11 +138,11 @@ public class EntrenadorFragment extends Fragment {
             String jsonString = new String(data, "UTF-8");
             JSONObject datosEntrenador = new JSONObject(jsonString);
 
-            if (datosEntrenador.has(fieldName)) {// Obtenir el valor del camp
+            if (datosEntrenador.has(fieldName)) {
                 return datosEntrenador.getString(fieldName);
             } else {
                 Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
-                return null;  // O qualsevol valor que consideres apropiat per indicar un error
+                return null;
             }
 
         } catch (IOException | JSONException e) {
@@ -146,10 +150,11 @@ public class EntrenadorFragment extends Fragment {
             return null;
         }
     }
+
     private int getFieldValue(String fieldName) {
         File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
         try {
-            FileInputStream fis = new FileInputStream(file);// Llegim l'arxiu JSON existent
+            FileInputStream fis = new FileInputStream(file);
             byte[] data = new byte[(int) file.length()];
             fis.read(data);
             fis.close();
@@ -157,11 +162,11 @@ public class EntrenadorFragment extends Fragment {
             String jsonString = new String(data, "UTF-8");
             JSONObject datosEntrenador = new JSONObject(jsonString);
 
-            if (datosEntrenador.has(fieldName)) {// Obtenir el valor del camp
+            if (datosEntrenador.has(fieldName)) {
                 return datosEntrenador.getInt(fieldName);
             } else {
                 Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
-                return -1;  // O qualsevol valor que consideres apropiat per indicar un error
+                return -1;
             }
 
         } catch (IOException | JSONException e) {
@@ -169,6 +174,7 @@ public class EntrenadorFragment extends Fragment {
             return -1;
         }
     }
+
     private JSONArray readPokemonCapturadosArrayFromFile() {
         JSONArray pokemonCapturadosArray = new JSONArray();
         try {
