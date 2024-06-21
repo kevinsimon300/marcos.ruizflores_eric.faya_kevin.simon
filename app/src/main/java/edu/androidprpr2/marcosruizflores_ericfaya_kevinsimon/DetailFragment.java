@@ -42,7 +42,6 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail
  * create an instance of this fragment.
  */
 public class DetailFragment extends Fragment {//Que es creei el on create,el fragment,i que es crei la vista,tot lo altre fora
-
     private ArrayList<Pokemon> pokedexes;
     private Pokemon pokedex;//El pokemon que hem cliquen
     private PokemonDetail pokemon;
@@ -69,6 +68,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
         this.pokedex = pokedex;
         this.pokedexes = pokedexes;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

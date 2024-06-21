@@ -6,8 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -34,9 +38,11 @@ public class PokedexFragment extends Fragment {
     private ArrayList<Pokemon> pokedexes;
     private boolean isLoading = false; // Declara isLoading y establece su valor inicial
     private int visibleThreshold = 5;
+    private EditText namePokemon;
+    public ImageButton searchButton;
     private PokedexDao pokedexDao; // Define una instancia de PokedexDao
     private int currentPage = 1; // D
-    private int countPage = 0;
+    public int countPage = 0;
     public PokedexFragment(ArrayList<Pokemon> pokedexes,PokedexDao pokedexDao) {
         this.pokedexes = pokedexes;
         this.pokedexDao = pokedexDao;
@@ -56,6 +62,35 @@ public class PokedexFragment extends Fragment {
         final PokedexAdapter adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
         pokedexesRecyclerView.setAdapter(adapter);
 
+        namePokemon = (EditText) view.findViewById(R.id.editTextSearch);
+        searchButton = (ImageButton) view.findViewById(R.id.btButtonSearch);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = namePokemon.getText().toString();
+                PokedexDao pokedexDao = new PokedexDao(getContext(), new PokedexDao.PokedexCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Pokemon> pokemonList) {
+                        if (!pokemonList.isEmpty()) {
+                            Pokemon pokemon = pokemonList.get(0);
+                            DetailFragment detailFragment = new DetailFragment(pokemon, pokedexes);
+                            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_layout, detailFragment);
+                            fragmentTransaction.commit();
+                        } else {
+                            Toast.makeText(getActivity(), "No se encontró el pokemon: " + name, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                    @Override
+                    public void onError(String errorMessage) {
+                        Toast.makeText(getActivity(), "Error al buscar el pokemon: " + errorMessage, Toast.LENGTH_SHORT).show();
+                    }
+                });
+                pokedexDao.getSearchedPokemon(name);
+            }
+        });
+
         pokedexesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -68,8 +103,9 @@ public class PokedexFragment extends Fragment {
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     isLoading = true;
                     countPage++;
+                    boolean cargar15 = true;
                     //int offset = pokedexes.size();
-                    pokedexDao.getPokemonList(countPage);
+                    pokedexDao.getPokemonList(countPage, cargar15, countPage);
                 }
             }
         });
@@ -90,17 +126,6 @@ public class PokedexFragment extends Fragment {
         });
 
         return view;
-    }
-
-
-    private void loadMoreItems() {
-        pokedexDao.getPokemonList(currentPage++);
-        Log.d("PokedexFragment", "More items: " + currentPage);
-
-        //PokedexDao dao = new PokedexDao();
-        //ArrayList<Pokedex> moreItems = dao.getPokemonList(currentPage);
-        // Update the adapter with the new list of Pokémon
-        // adapter.notifyDataSetChanged();
     }
 
     private void updateUi() {
@@ -222,6 +247,9 @@ public class PokedexFragment extends Fragment {
             holder.bind(pokedex);
         }
 
+        public int getCountPage() {
+            return countPage;
+        }
 
         @Override
         public int getItemCount() {

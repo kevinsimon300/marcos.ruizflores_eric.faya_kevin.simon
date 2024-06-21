@@ -46,12 +46,14 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         pokedexDao = new PokedexDao(this, this);
 
         initializeJsonFile();
+        boolean cargar15 = false;
+        pokedexDao.getPokemonList(0, cargar15, 0);
 
         BottomNavigationView bottomNavigationView = binding.bottomNavigationView;
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int id = item.getItemId();
             if (id == POKEDEX_ITEM_ID) {
-                pokedexDao.getPokemonList(page++);
+                pokedexDao.getPokemonList(0, cargar15, 0);
             } else if (id == ENTRENADOR_ITEM_ID) {
                 replaceFragment(new EntrenadorFragment());
             } else if (id == TENDA_ITEM_ID) {
