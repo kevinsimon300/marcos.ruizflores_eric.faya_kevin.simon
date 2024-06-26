@@ -3,54 +3,58 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 import java.util.List;
 
 public class Entrenador {
-    private String nameEntrenador;
-    private int diners;
-    private List<Item> items;
-    private List<PokemonDetail> lPokedex;
+    private int money;
+    private String name;
+    private int pokeballs;
+    private int superballs;
+    private int ultraballs;
+    private int masterballs;
 
-    public Entrenador(String nameEntrenador, int diners, List<Item> items, List<PokemonDetail> lPokedex) {
-        this.nameEntrenador = nameEntrenador;
-        this.diners = diners;
-        this.items = items;
-        this.lPokedex = lPokedex;
+    public int getMoney() {
+        return money;
     }
 
-    public String getNameEntrenador() {
-        return nameEntrenador;
+    public void setMoney(int money) {
+        this.money = money;
     }
 
-    public void setNameEntrenador(String nameEntrenador) {
-        this.nameEntrenador = nameEntrenador;
+    public String getName() {
+        return name;
     }
 
-    public int getDiners() {
-        return diners;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setDiners(int diners) {
-        if (diners >= 0) {
-            this.diners = diners;
-        } else {
-            throw new IllegalArgumentException("El dinero no puede ser negativo");
-        }
+    public int getPokeballs() {
+        return pokeballs;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public void setPokeballs(int pokeballs) {
+        this.pokeballs = pokeballs;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public int getSuperballs() {
+        return superballs;
     }
 
-    public List<PokemonDetail> getlPokedex() {
-        return lPokedex;
+    public void setSuperballs(int superballs) {
+        this.superballs = superballs;
     }
 
-    public void setlPokedex(List<PokemonDetail> lPokedex) {
-        this.lPokedex = lPokedex;
+    public int getUltraballs() {
+        return ultraballs;
     }
-    public void addItem(Item item) {
-        items.add(item);
+
+    public void setUltraballs(int ultraballs) {
+        this.ultraballs = ultraballs;
+    }
+
+    public int getMasterballs() {
+        return masterballs;
+    }
+
+    public void setMasterballs(int masterballs) {
+        this.masterballs = masterballs;
     }
 }

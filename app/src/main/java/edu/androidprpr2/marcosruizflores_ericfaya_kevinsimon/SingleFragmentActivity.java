@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
@@ -64,14 +65,25 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
     }
 
     private void initializeJsonFile() {
-        JSONObject datosEntrenador = new JSONObject();
+        // JSONObject datosEntrenador = new JSONObject();
+
+        Entrenador entrenador = new Entrenador();
         try {
-            datosEntrenador.put("Money",500000);
-            datosEntrenador.put("Name","Juanjo Eljambo");
-            datosEntrenador.put("Pokeballs",0);
-            datosEntrenador.put("Superballs",0);
-            datosEntrenador.put("Ultraballs",0);
-            datosEntrenador.put("Masterballs",0);
+            File fileData = new File(getFilesDir(), "Files/entrenador.json");
+            FileInputStream fis = new FileInputStream(fileData);
+            byte[] data = new byte[(int) fileData.length()];
+            fis.read(data);
+            fis.close();
+
+            String jsonString = new String(data, "UTF-8");
+            JSONObject datosEntrenador = new JSONObject(jsonString);
+
+            datosEntrenador.put("Money",datosEntrenador.getInt("Money"));
+            datosEntrenador.put("Name",datosEntrenador.getString("Name"));
+            datosEntrenador.put("Pokeballs",datosEntrenador.getInt("Pokeballs"));
+            datosEntrenador.put("Superballs",datosEntrenador.getInt("Superballs"));
+            datosEntrenador.put("Ultraballs",datosEntrenador.getInt("Ultraballs"));
+            datosEntrenador.put("Masterballs",datosEntrenador.getInt("Masterballs"));
 
             JSONArray pokemonCapturadosArray = new JSONArray(); // Hardcodejem dos pokemons per veure
 
@@ -117,7 +129,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit();
     }
-  
+
     @Override
     public void onSuccess(ArrayList<Pokemon> pokedexList) {
         Log.d("SingleFragmentActivity", "onSuccess method called!"); // Agregar este registro
