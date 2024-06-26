@@ -76,19 +76,12 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
             JSONArray pokemonCapturadosArray = new JSONArray(); // Hardcodejem dos pokemons per veure
 
             PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
-            PokemonCapturado pokemon2 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "superball");
 
             try {
                 pokemonCapturadosArray.put(new JSONObject()
                         .put("name", pokemon1.getName())
                         .put("frontImage", pokemon1.getFrontImage())
                         .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
-
-                pokemonCapturadosArray.put(new JSONObject()
-                        .put("name", pokemon1.getName())
-                        .put("frontImage", pokemon1.getFrontImage())
-                        .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }

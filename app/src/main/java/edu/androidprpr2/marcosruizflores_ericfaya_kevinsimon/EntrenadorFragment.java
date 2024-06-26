@@ -35,7 +35,7 @@ public class EntrenadorFragment extends Fragment {
     private TextView tvSuperball;
     private TextView tvUltraball;
     private TextView tvMaterball;
-    private Button btnDeletePokemon;
+    //private Button btnDeletePokemon;
     private Button btnChangeNameTrainer;
     private RecyclerView pokemonRecyclerView;
     private CapturatedPokemonAdapter pokemonAdapter;
@@ -76,7 +76,7 @@ public class EntrenadorFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         detailFragment = new DetailFragment(null, null);
-        btnDeletePokemon = view.findViewById(R.id.buttonDeletePokemon);
+        //btnDeletePokemon = view.findViewById(R.id.buttonDeletePokemon);
         btnChangeNameTrainer = view.findViewById(R.id.btChangeNameTrainer);
         tvMoney = view.findViewById(R.id.tvTrainerName);
         tvMoney.setText(String.valueOf(getFieldValueName("Name")));
@@ -108,7 +108,7 @@ public class EntrenadorFragment extends Fragment {
             Log.e(TAG, "Error parsing JSON array: " + e.getMessage());
         }
 
-        btnDeletePokemon.setOnClickListener(new View.OnClickListener() {
+        /*btnDeletePokemon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Lógica para eliminar el último Pokémon capturado
@@ -120,7 +120,7 @@ public class EntrenadorFragment extends Fragment {
                     pokemonAdapter.notifyDataSetChanged();
                 }
             }
-        });
+        });*/
 
         pokemonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         pokemonAdapter = new CapturatedPokemonAdapter(pokemonList, getContext());

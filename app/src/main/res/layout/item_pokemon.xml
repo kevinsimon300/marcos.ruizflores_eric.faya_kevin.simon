@@ -21,12 +21,19 @@
         <ImageView
             android:id="@+id/imageViewFront"
             android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:contentDescription="@string/pokemon_image" />
+            android:layout_height="100dp" />
         <ImageView
             android:id="@+id/imageViewBack"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:contentDescription="@string/pokemon_image" />
+        <Button
+            android:id="@+id/btnDeletePokemon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/delete_pokemon"
+            android:backgroundTint="@color/orange"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp" />
     </LinearLayout>
 </LinearLayout>

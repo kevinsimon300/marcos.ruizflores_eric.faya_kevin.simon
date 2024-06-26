@@ -199,7 +199,10 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/pokeball_pokemon_svgrepo_com");
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
-                    } else Toast.makeText(getContext(), "Pokeball failed", Toast.LENGTH_SHORT).show();
+                    } else{
+                        modifyJsonFieldValue("Pokeballs",-1);
+                        Toast.makeText(getContext(), "Pokeball failed", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getContext(), "You need to buy more Pokeballs", Toast.LENGTH_SHORT).show();
                 }
@@ -223,7 +226,10 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/superball");
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
-                    } else Toast.makeText(getContext(), "Superball failed", Toast.LENGTH_SHORT).show();
+                    } else{
+                        modifyJsonFieldValue("Superballs",-1);
+                        Toast.makeText(getContext(), "Superball failed", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getContext(), "You need to buy more Superballs", Toast.LENGTH_SHORT).show();
                 }
@@ -247,7 +253,10 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
                         PokemonCapturado pokemonCapturado = new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), "@drawable/wikiball");
                         addPokemonCapturado(pokemonCapturado);
                         //deletePokemonCapturado("Pikachu");
-                    } else Toast.makeText(getContext(), "Ultraball failed", Toast.LENGTH_SHORT).show();
+                    } else{
+                        modifyJsonFieldValue("Ultraballs",-1);
+                        Toast.makeText(getContext(), "Ultraball failed", Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(getContext(), "You need to buy more Ultraballs", Toast.LENGTH_SHORT).show();
                 }
