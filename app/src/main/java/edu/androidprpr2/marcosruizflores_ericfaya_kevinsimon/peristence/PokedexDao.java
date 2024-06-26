@@ -193,10 +193,47 @@ public class PokedexDao {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            Pokemon searchedPokemon = createPokemonFromResponse(response, name, "", 0);
-                            ArrayList<Pokemon> pokemonList = new ArrayList<>();
-                            pokemonList.add(searchedPokemon);
-                            callback.onSuccess(pokemonList);
+                            // Obtén el nombre del Pokémon directamente de la respuesta
+                            String pokemonName = response.getString("name");
+
+                            // Construye la URL para obtener la especie del Pokémon
+                            String url2 = "https://pokeapi.co/api/v2/pokemon-species/" + pokemonName;
+                            JsonObjectRequest requestDetail2 = new JsonObjectRequest(Request.Method.GET, url2, null,
+                                    new Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject detailResponse) {
+                                            try {
+                                                // Extrae la descripción del Pokémon
+                                                JSONArray flavorTextEntries = detailResponse.getJSONArray("flavor_text_entries");
+                                                String description = "";
+                                                for (int i = 0; i < flavorTextEntries.length(); i++) {
+                                                    JSONObject entry = flavorTextEntries.getJSONObject(i);
+                                                    if (entry.getJSONObject("language").getString("name").equals("en")) {
+                                                        description = entry.getString("flavor_text");
+                                                        break;
+                                                    }
+                                                }
+
+                                                // Crea el objeto Pokemon y llama al callback de éxito
+                                                Pokemon searchedPokemon = createPokemonFromResponse(response, pokemonName, description, 0);
+                                                ArrayList<Pokemon> pokemonList = new ArrayList<>();
+                                                pokemonList.add(searchedPokemon);
+                                                callback.onSuccess(pokemonList);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                callback.onError("Error procesando la descripción del Pokémon: " + e.getMessage());
+                                            }
+                                        }
+                                    },
+                                    new Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+                                            error.printStackTrace();
+                                            callback.onError("Error en la respuesta HTTP (especie): " + error.getMessage());
+                                        }
+                                    });
+
+                            queue.add(requestDetail2);
                         } catch (JSONException e) {
                             e.printStackTrace();
                             callback.onError("Error procesando los datos del Pokémon: " + e.getMessage());
@@ -213,4 +250,5 @@ public class PokedexDao {
 
         queue.add(jsonObjectRequest);
     }
+
 }

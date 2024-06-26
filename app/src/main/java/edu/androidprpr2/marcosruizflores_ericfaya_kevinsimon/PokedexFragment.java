@@ -84,7 +84,7 @@ public class PokedexFragment extends Fragment {
                     }
                     @Override
                     public void onError(String errorMessage) {
-                        Toast.makeText(getActivity(), "Error al buscar el pokemon: " + errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Error al buscar el pokemon", Toast.LENGTH_SHORT).show();
                     }
                 });
                 pokedexDao.getSearchedPokemon(name);
@@ -120,7 +120,7 @@ public class PokedexFragment extends Fragment {
 
             @Override
             public void onError(String errorMessage) {
-                Log.e("PokedexFragment", "Error: " + errorMessage);
+                Log.e("PokedexFragment", "No existe en la pokedex");
                 isLoading = false;
             }
         });
