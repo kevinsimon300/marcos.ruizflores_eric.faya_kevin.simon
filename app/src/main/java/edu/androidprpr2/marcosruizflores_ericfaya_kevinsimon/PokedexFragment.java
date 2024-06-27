@@ -1,6 +1,7 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -153,8 +155,9 @@ public class PokedexFragment extends Fragment {
         private final ImageView ivFront;
         private final ImageView ivPokeball;
         private final TextView tvPokemonName;
-        private Activity activity; //De on ve la activity
-        public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
+        //private Activity activity; //De on ve la activity
+        private Context context;
+        public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Context context)  {
 
             super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
 
@@ -164,7 +167,8 @@ public class PokedexFragment extends Fragment {
             tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
 
             itemView.setOnClickListener(this);
-            this.activity=activity;//La activity es la que li pasem per paremetres
+            //this.activity=activity;//La activity es la que li pasem per paremetres
+            this.context = context;
 
         }
 
@@ -179,11 +183,14 @@ public class PokedexFragment extends Fragment {
         }
 
         public void bind(Pokemon pokedex) {
-            this.pokedex = pokedex;//Instanciem el pokemon
-            tvPokemonName.setText(pokedex.getName()); //Li pasem el nom
+            this.pokedex = pokedex; // Instanciar el Pokemon
+            tvPokemonName.setText(pokedex.getName()); // Asignar el nombre
+            // Cargar imágenes frontales y traseras del Pokémon
             Picasso.get().load(pokedex.getImageUrl()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
-            Picasso.get().load(R.drawable.pokeball_pokemon_svgrepo_com).into(this.ivPokeball);
+            // Cargar imagen de Pokeball
+            ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com)); // Usar el contexto
+            // Log para verificar el tipo de Pokeball
             Log.d("Pokemon type", pokedex.getPokeballType());
             /*if (pokedex.getPokeballType().equals("@drawable/pokeball_pokemon_svgrepo_com")) {
                 Picasso.get().load(R.drawable.pokeball_pokemon_svgrepo_com);
@@ -236,8 +243,8 @@ public class PokedexFragment extends Fragment {
             //OLD
 
             //NEW
-            View view = LayoutInflater.from(activity).inflate(R.layout.list_item_pokemon, parent, false);
-            return new PokedexHolder(view);
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            return new PokedexHolder(layoutInflater, parent, parent.getContext());
 
         }
 
