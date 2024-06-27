@@ -65,63 +65,94 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
     }
 
     private void initializeJsonFile() {
-        // JSONObject datosEntrenador = new JSONObject();
-
-        Entrenador entrenador = new Entrenador();
         try {
-            File fileData = new File(getFilesDir(), "Files/entrenador.json");
-            FileInputStream fis = new FileInputStream(fileData);
-            byte[] data = new byte[(int) fileData.length()];
-            fis.read(data);
-            fis.close();
-
-            String jsonString = new String(data, "UTF-8");
-            JSONObject datosEntrenador = new JSONObject(jsonString);
-
-            datosEntrenador.put("Money",datosEntrenador.getInt("Money"));
-            datosEntrenador.put("Name",datosEntrenador.getString("Name"));
-            datosEntrenador.put("Pokeballs",datosEntrenador.getInt("Pokeballs"));
-            datosEntrenador.put("Superballs",datosEntrenador.getInt("Superballs"));
-            datosEntrenador.put("Ultraballs",datosEntrenador.getInt("Ultraballs"));
-            datosEntrenador.put("Masterballs",datosEntrenador.getInt("Masterballs"));
-
-            JSONArray pokemonCapturadosArray = new JSONArray(); // Hardcodejem dos pokemons per veure
-
-            PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
-
-            try {
-                pokemonCapturadosArray.put(new JSONObject()
-                        .put("name", pokemon1.getName())
-                        .put("frontImage", pokemon1.getFrontImage())
-                        .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);            // Agregem l'array de Pokemons capturats al JSON principal
-
             File dir = new File(getFilesDir(), "Files");
             if (!dir.exists()) {
                 dir.mkdir();
             }
 
-            File file = new File(dir, "entrenador.json");//Creem l'arxiu data.json en el directori Files
-            try (FileOutputStream fos = new FileOutputStream(file)) {
+            File file = new File(dir, "entrenador.json");
 
-                fos.write(datosEntrenador.toString(2).getBytes());
-                Log.d(TAG, "JSON guardado en " + file.getAbsolutePath());
+            JSONObject datosEntrenador;
 
-                //Log.d(TAG, "JSON guardado en " + getFilesDir() + "/" + file.getName());
+            if (!file.exists()) {
+                JSONObject defaultData = new JSONObject();
+                defaultData.put("Money", 500000);
+                defaultData.put("Name", "Jarrambo el mas jambo");
+                defaultData.put("Pokeballs", 0);
+                defaultData.put("Superballs", 0);
+                defaultData.put("Ultraballs", 0);
+                defaultData.put("Masterballs", 0);
+
+                JSONArray pokemonCapturadosArray = new JSONArray();
+                PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
+                pokemonCapturadosArray.put(new JSONObject()
+                        .put("name", pokemon1.getName())
+                        .put("frontImage", pokemon1.getFrontImage())
+                        .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
+
+                defaultData.put("PokemonCapturados", pokemonCapturadosArray);
+
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    fos.write(defaultData.toString(2).getBytes());
+                    Log.d(TAG, "JSON inicial creado en " + file.getAbsolutePath());
+                }
+            } else {
+                FileInputStream fis = new FileInputStream(file);
+                byte[] data = new byte[(int) file.length()];
+                fis.read(data);
+                fis.close();
+
+                String jsonString = new String(data, "UTF-8");
+                datosEntrenador = new JSONObject(jsonString);
+
+                if (!datosEntrenador.has("Money")) {
+                    datosEntrenador.put("Money", 700000);
+                }
+                if (!datosEntrenador.has("Name")) {
+                    datosEntrenador.put("Name", "Jarrambo el mas jambo");
+                }
+                if (!datosEntrenador.has("Pokeballs")) {
+                    datosEntrenador.put("Pokeballs", 0);
+                }
+                if (!datosEntrenador.has("Superballs")) {
+                    datosEntrenador.put("Superballs", 0);
+                }
+                if (!datosEntrenador.has("Ultraballs")) {
+                    datosEntrenador.put("Ultraballs", 0);
+                }
+                if (!datosEntrenador.has("Masterballs")) {
+                    datosEntrenador.put("Masterballs", 0);
+                }
+
+                JSONArray pokemonCapturadosArray;
+                if (datosEntrenador.has("PokemonCapturados")) {
+                    pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
+                } else {
+                    pokemonCapturadosArray = new JSONArray();
+                }
+
+                if (pokemonCapturadosArray.length() == 0) {
+                    PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
+                    pokemonCapturadosArray.put(new JSONObject()
+                            .put("name", pokemon1.getName())
+                            .put("frontImage", pokemon1.getFrontImage())
+                            .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
+                }
+
+                datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
+
+                try (FileOutputStream fos = new FileOutputStream(file)) {
+                    fos.write(datosEntrenador.toString(2).getBytes());
+                    Log.d(TAG, "JSON actualizado en " + file.getAbsolutePath());
+                }
             }
 
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
         }
-        File file = new File(getFilesDir(), "Files/entrenador.json");
-        Log.d(TAG, "Lecturan " + readFile(file)) ;
     }
+
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();

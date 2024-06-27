@@ -15,6 +15,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
@@ -58,10 +66,47 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
             @Override
             public void onClick(View v) {
                 //Toast.makeText(context, "Índice: " + holder.getAdapterPosition(), Toast.LENGTH_SHORT).show();
-                // Lógica para eliminar el último Pokémon capturado
                 if (pokemonList.size() > 1) {
                     Toast.makeText(context, "Pokémon eliminado", Toast.LENGTH_SHORT).show();
-                    pokemonList.remove(holder.getAdapterPosition());
+                    int adapterPosition = holder.getAdapterPosition();
+                    if (adapterPosition != RecyclerView.NO_POSITION) {
+                        PokemonCapturado pokemonToRemove = pokemonList.get(adapterPosition);
+                        pokemonList.remove(holder.getAdapterPosition());
+
+                        //TODO ELIMINAR DEL JSON
+                        try {
+                            File file = new File(context.getFilesDir(), "Files/entrenador.json");
+                            FileInputStream fis = new FileInputStream(file);
+                            byte[] data = new byte[(int) file.length()];
+                            fis.read(data);
+                            fis.close();
+
+                            String jsonString = new String(data, "UTF-8");
+                            JSONObject datosEntrenador = new JSONObject(jsonString);
+
+                            JSONArray pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
+
+                            for (int i = 0; i < pokemonCapturadosArray.length(); i++) {
+                                JSONObject pokemonJson = pokemonCapturadosArray.getJSONObject(i);
+                                if (pokemonJson.getString("name").equals(pokemonToRemove.getName())) {
+                                    pokemonCapturadosArray.remove(i);
+                                    break;
+                                }
+                            }
+
+                            datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
+
+                            try (FileOutputStream fos = new FileOutputStream(file)) {
+                                fos.write(datosEntrenador.toString(2).getBytes());
+                                Log.d(TAG, "JSON actualizado en " + file.getAbsolutePath());
+                            }
+
+                            notifyItemRemoved(adapterPosition);
+
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } else {
                     Toast.makeText(context, "No puedes eliminar el último Pokémon capturado", Toast.LENGTH_SHORT).show();
                 }
