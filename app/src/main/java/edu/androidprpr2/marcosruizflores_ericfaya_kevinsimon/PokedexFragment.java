@@ -211,6 +211,8 @@ public class PokedexFragment extends Fragment {
                 } else if (captured.equals("@drawable/master_ball_icon_icons_com_67545")) {
                     ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
                 }
+            } else {
+                ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.color.orangeRecycler));
             }
         }
 
