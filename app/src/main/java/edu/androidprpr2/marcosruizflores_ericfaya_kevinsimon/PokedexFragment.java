@@ -1,5 +1,7 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -24,6 +26,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -188,21 +198,63 @@ public class PokedexFragment extends Fragment {
             // Cargar imágenes frontales y traseras del Pokémon
             Picasso.get().load(pokedex.getImageUrl()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+            JSONArray pokemonCapturadosArray = readPokemonCapturadosArrayFromFile();
+            String captured = checkIfPokemonIsCaptured(pokemonCapturadosArray);
             // Cargar imagen de Pokeball
-            ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com)); // Usar el contexto
-            // Log para verificar el tipo de Pokeball
-            Log.d("Pokemon type", pokedex.getPokeballType());
-            /*if (pokedex.getPokeballType().equals("@drawable/pokeball_pokemon_svgrepo_com")) {
-                Picasso.get().load(R.drawable.pokeball_pokemon_svgrepo_com);
-            } else if (pokedex.getPokeballType().equals("@drawable/superball")) {
-                Picasso.get().load(R.drawable.superball);
-            } else if (pokedex.getPokeballType().equals("@drawable/wikiball")) {
-                Picasso.get().load(R.drawable.wikiball);
-            } else if (pokedex.getPokeballType().equals("@drawable/master_ball_icon_icons_com_67545")) {
-                Picasso.get().load(R.drawable.master_ball_icon_icons_com_67545);
-            }*/
+            if(!captured.equals("")) {
+                if (captured.equals("@drawable/pokeball_pokemon_svgrepo_com")) {
+                    ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com));
+                } else if (captured.equals("@drawable/superball")) {
+                    ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.superball));
+                } else if (captured.equals("@drawable/wikiball")) {
+                    ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wikiball));
+                } else if (captured.equals("@drawable/master_ball_icon_icons_com_67545")) {
+                    ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
+                }
+            }
         }
 
+        private JSONArray readPokemonCapturadosArrayFromFile() {
+            JSONArray pokemonCapturadosArray = new JSONArray();
+            try {
+                File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+                if (file.exists()) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = bufferedReader.readLine()) != null) {
+                        stringBuilder.append(line);
+                    }
+                    bufferedReader.close();
+                    JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+                    if (jsonObject.has("PokemonCapturados")) {
+                        pokemonCapturadosArray = jsonObject.getJSONArray("PokemonCapturados");
+                    }
+                } else {
+                    Log.e(TAG, "File not found: entrenador.json");
+                }
+            } catch (IOException | JSONException e) {
+                Log.e(TAG, "Error reading JSON file: " + e.getMessage());
+            }
+            return pokemonCapturadosArray;
+        }
+
+        private String checkIfPokemonIsCaptured(JSONArray pokemonList) {
+            String namePokeball = "";
+            try {
+                for (int i = 0; i < pokemonList.length(); i++) {
+                    JSONObject pokemon = pokemonList.getJSONObject(i);
+                    String name = pokemon.getString("name");
+                    if (name.equals(pokedex.getName())) {
+                        namePokeball = pokemon.getString("capturedPokeballImage");
+                        break;
+                    }
+                }
+            } catch (JSONException e) {
+                throw new RuntimeException("Error parsing JSON", e);
+            }
+            return namePokeball;
+        }
         @Override
         public void onClick(View view) {
             // coger entrenador del json
