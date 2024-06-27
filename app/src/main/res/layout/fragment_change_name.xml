@@ -18,7 +18,6 @@
                 android:id="@+id/tvTrainerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NombrePrueba"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
@@ -28,8 +27,6 @@
                 android:orientation="vertical"
                 android:gravity="center"
                 android:layout_marginTop="16dp">
-
-                <!-- Campo de texto para ingresar el nuevo nombre -->
                 <EditText
                     android:id="@+id/etNewName"
                     android:layout_width="match_parent"
@@ -38,15 +35,15 @@
                     android:layout_marginTop="16dp"
                     android:padding="8dp"
                     android:layout_gravity="center"/>
-
                 <Button
                     android:id="@+id/btnConfirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/confirm"
-                    android:layout_marginTop="16dp"
-                    android:layout_gravity="center"/>
-
+                    android:backgroundTint="@color/orange"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

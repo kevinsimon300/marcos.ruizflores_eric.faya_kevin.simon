@@ -19,27 +19,24 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="16dp">
             <TextView
                 android:id="@+id/tvTrainerName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="NombrePrueba"
                 android:textColor="@color/black"
                 android:textSize="30sp"
                 android:textStyle="bold" />
             <Button
                 android:id="@+id/btChangeNameTrainer"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/change_name"
-                android:background="@color/carrotOrange"
-                android:textColor="@color/white"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="10dp"
-                android:layout_marginStart="10dp"/>
+                android:backgroundTint="@color/orange"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -57,7 +54,6 @@
                     android:id="@+id/tvTrainerCash"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10 points"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:layout_marginStart="8dp"
@@ -88,7 +84,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/orange"
-                        android:text="x42"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:padding="8dp"
@@ -111,7 +106,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/orange"
-                        android:text="x42"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:padding="8dp"
@@ -134,7 +128,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/orange"
-                        android:text="x42"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:padding="8dp"
@@ -155,7 +148,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/orange"
-                        android:text="x42"
                         android:textColor="@color/white"
                         android:textSize="18sp"
                         android:padding="8dp"

@@ -25,7 +25,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class ChangeNameFragment extends Fragment {
-
+    private TextView tvNameEntrenador;
     private EditText etNameEntrenador;
     private Button btnChangeNameTrainer;
     private static final String TAG = "EntrenadorFragment";
@@ -46,13 +46,17 @@ public class ChangeNameFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_change_name, container, false);
+        String trainerName = getTrainerName();
 
-        EditText etNewName = view.findViewById(R.id.etNewName);
-        Button btnConfirm = view.findViewById(R.id.btnConfirm);
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
+        tvNameEntrenador = view.findViewById(R.id.tvTrainerName);
+        etNameEntrenador = view.findViewById(R.id.etNewName);
+        btnChangeNameTrainer = view.findViewById(R.id.btnConfirm);
+        tvNameEntrenador.setText(trainerName);
+
+        btnChangeNameTrainer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String newName = etNewName.getText().toString();
+                String newName = etNameEntrenador.getText().toString();
                 if (!newName.isEmpty()) {
                     updateEntrenadorName(newName);
                     FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
@@ -65,6 +69,30 @@ public class ChangeNameFragment extends Fragment {
             }
         });
         return view;
+    }
+
+    private String getTrainerName(){
+        File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            byte[] data = new byte[(int) file.length()];
+            fis.read(data);
+            fis.close();
+
+            String jsonString = new String(data, "UTF-8");
+            JSONObject datosEntrenador = new JSONObject(jsonString);
+
+            if (datosEntrenador.has("Name")) {
+                return datosEntrenador.getString("Name");
+            } else {
+                Log.e(TAG, "El campo Name no existe en el JSON");
+                return null;
+            }
+
+        } catch (IOException | JSONException e) {
+            Log.e(TAG, "Error al leer el archivo JSON", e);
+            return null;
+        }
     }
 
     private String getFieldValueName(String fieldName) {

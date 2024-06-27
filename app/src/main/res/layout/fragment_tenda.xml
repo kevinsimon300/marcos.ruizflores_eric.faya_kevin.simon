@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Shop"
+            android:text="@string/shop"
             android:textSize="30sp"
             android:textStyle="bold"
             android:gravity="center_horizontal"
@@ -35,7 +35,6 @@
                 android:id="@+id/tvMoney"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="200"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:layout_marginStart="8dp"
@@ -74,7 +73,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="200      "/>
+                            android:text="@string/dosCientos"/>
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -104,7 +103,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="500      "/>
+                            android:text="@string/quinientos"/>
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -141,7 +140,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="1.500      "/>
+                            android:text="@string/milQuienientos"/>
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -170,7 +169,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="100.000      "/>
+                            android:text="@string/cienMil"/>
                         <ImageView
                             android:layout_width="20dp"
                             android:layout_height="20dp"
@@ -196,7 +195,7 @@
                 android:id="@+id/tvMoneySpent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="0"
+                android:text="@string/cero"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:layout_marginTop="8dp"
