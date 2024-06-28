@@ -41,4 +41,5 @@
     <string name="milQuienientos">1.500    </string>
     <string name="cienMil">100.000    </string>
     <string name="cero">0</string>
+    <string name="cantidad">Cantidad: </string>
 </resources>
