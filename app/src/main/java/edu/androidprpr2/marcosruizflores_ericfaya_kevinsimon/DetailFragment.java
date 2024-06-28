@@ -315,7 +315,7 @@ public class DetailFragment extends Fragment {//Que es creei el on create,el fra
 
     private boolean[] checkIfPokemonIsCaptured(JSONArray pokemonList) {
         boolean[] captured = new boolean[2];
-        if (pokemonList.length() > 6) {
+        if (pokemonList.length() >= 6) {
             captured[0] = true;
         }
         try {

@@ -2,10 +2,8 @@
     <string name="app_name">PokeDexLS</string>
     <string name="pokedexButton">Pokedex</string>
     <string name="pokedexBuscador">Search a pokemon"</string>
-
     <string name="entrenadorButton">Entrenador</string>
     <string name="tendaButton">Tenda</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="titleMain">Sallemovies</string>
     <string name="description">Description</string>
     <string name="length">Duration</string>
