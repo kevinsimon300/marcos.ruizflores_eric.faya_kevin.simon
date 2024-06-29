@@ -1,5 +1,7 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,11 +20,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +32,6 @@ public class EntrenadorFragment extends Fragment {
     private TextView tvSuperball;
     private TextView tvUltraball;
     private TextView tvMaterball;
-    //private Button btnDeletePokemon;
     private Button btnChangeNameTrainer;
     private RecyclerView pokemonRecyclerView;
     private CapturatedPokemonAdapter pokemonAdapter;
@@ -43,19 +39,24 @@ public class EntrenadorFragment extends Fragment {
     private List<PokemonCapturado> pokemonList = new ArrayList<>();
 
     private static final String TAG = "EntrenadorFragment";
+    private static final String PREFERENCES_FILE = "edu.androidprpr2.preferences";
+    private static final String KEY_TRAINER_NAME = "trainer_name";
+    private static final String KEY_MONEY = "money";
+    private static final String KEY_POKEBALLS = "pokeballs";
+    private static final String KEY_SUPERBALLS = "superballs";
+    private static final String KEY_ULTRABALLS = "ultraballs";
+    private static final String KEY_MASTERBALLS = "masterballs";
+    private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
 
     public EntrenadorFragment() {
-
     }
 
     public static EntrenadorFragment newInstance() {
-        EntrenadorFragment fragment = new EntrenadorFragment();
-        return fragment;
+        return new EntrenadorFragment();
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_entrenador, container, false);
 
         Button btnChangeName = view.findViewById(R.id.btChangeNameTrainer);
@@ -76,27 +77,28 @@ public class EntrenadorFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         detailFragment = new DetailFragment(null, null);
-        //btnDeletePokemon = view.findViewById(R.id.buttonDeletePokemon);
         btnChangeNameTrainer = view.findViewById(R.id.btChangeNameTrainer);
-        tvMoney = view.findViewById(R.id.tvTrainerName);
-        tvMoney.setText(String.valueOf(getFieldValueName("Name")));
-        tvNameEntrenador = view.findViewById(R.id.tvTrainerCash);
-        tvNameEntrenador.setText(String.valueOf(getFieldValue("Money")));
+        tvMoney = view.findViewById(R.id.tvTrainerCash);
+        tvNameEntrenador = view.findViewById(R.id.tvTrainerName);
         tvPokeball = view.findViewById(R.id.tvPokeballs);
-        tvPokeball.setText(String.valueOf(getFieldValue("Pokeballs")));
         tvSuperball = view.findViewById(R.id.tvSuperballs);
-        tvSuperball.setText(String.valueOf(getFieldValue("Superballs")));
         tvUltraball = view.findViewById(R.id.tvUltraballs);
-        tvUltraball.setText(String.valueOf(getFieldValue("Ultraballs")));
         tvMaterball = view.findViewById(R.id.tvMasterballs);
-        tvMaterball.setText(String.valueOf(getFieldValue("Masterballs")));
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        tvNameEntrenador.setText(sharedPreferences.getString(KEY_TRAINER_NAME, "Default Name"));
+        tvMoney.setText(String.valueOf(sharedPreferences.getInt(KEY_MONEY, 0)));
+        tvPokeball.setText(String.valueOf(sharedPreferences.getInt(KEY_POKEBALLS, 0)));
+        tvSuperball.setText(String.valueOf(sharedPreferences.getInt(KEY_SUPERBALLS, 0)));
+        tvUltraball.setText(String.valueOf(sharedPreferences.getInt(KEY_ULTRABALLS, 0)));
+        tvMaterball.setText(String.valueOf(sharedPreferences.getInt(KEY_MASTERBALLS, 0)));
 
         pokemonRecyclerView = view.findViewById(R.id.pokemon_recycler_view);
-        JSONArray checks = readPokemonCapturadosArrayFromFile();
+        JSONArray capturedPokemons = getCapturedPokemons(sharedPreferences);
         pokemonList = new ArrayList<>();
         try {
-            for (int i = 0; i < checks.length(); i++) {
-                JSONObject pokemonObject = checks.getJSONObject(i);
+            for (int i = 0; i < capturedPokemons.length(); i++) {
+                JSONObject pokemonObject = capturedPokemons.getJSONObject(i);
                 PokemonCapturado pokemonCapturado = new PokemonCapturado(
                         pokemonObject.getString("name"),
                         pokemonObject.getString("frontImage"),
@@ -108,95 +110,19 @@ public class EntrenadorFragment extends Fragment {
             Log.e(TAG, "Error parsing JSON array: " + e.getMessage());
         }
 
-        /*btnDeletePokemon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Lógica para eliminar el último Pokémon capturado
-                if (!pokemonList.isEmpty()) {
-                    pokemonList.remove(pokemonList.size() - 1);
-                    // Lógica adicional para guardar el nuevo arreglo en el archivo JSON
-                    // detailFragment.deletePokemonCapturado(pokemonList.get(pokemonList.size()-1).getName());
-                    // actualiza el adaptador
-                    pokemonAdapter.notifyDataSetChanged();
-                }
-            }
-        });*/
-
         pokemonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         pokemonAdapter = new CapturatedPokemonAdapter(pokemonList, getContext());
         pokemonRecyclerView.setAdapter(pokemonAdapter);
     }
 
-    private String getFieldValueName(String fieldName) {
-        File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
+    private JSONArray getCapturedPokemons(SharedPreferences sharedPreferences) {
+        String capturedPokemonJson = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
+        JSONArray capturedPokemons;
         try {
-            FileInputStream fis = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
-
-            String jsonString = new String(data, "UTF-8");
-            JSONObject datosEntrenador = new JSONObject(jsonString);
-
-            if (datosEntrenador.has(fieldName)) {
-                return datosEntrenador.getString(fieldName);
-            } else {
-                Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
-                return null;
-            }
-
-        } catch (IOException | JSONException e) {
-            Log.e(TAG, "Error al leer el archivo JSON", e);
-            return null;
+            capturedPokemons = new JSONArray(capturedPokemonJson);
+        } catch (JSONException e) {
+            capturedPokemons = new JSONArray();
         }
-    }
-
-    private int getFieldValue(String fieldName) {
-        File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
-
-            String jsonString = new String(data, "UTF-8");
-            JSONObject datosEntrenador = new JSONObject(jsonString);
-
-            if (datosEntrenador.has(fieldName)) {
-                return datosEntrenador.getInt(fieldName);
-            } else {
-                Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
-                return -1;
-            }
-
-        } catch (IOException | JSONException e) {
-            Log.e(TAG, "Error al leer el archivo JSON", e);
-            return -1;
-        }
-    }
-
-    private JSONArray readPokemonCapturadosArrayFromFile() {
-        JSONArray pokemonCapturadosArray = new JSONArray();
-        try {
-            File file = new File(getContext().getFilesDir(), "Files/entrenador.json");
-            if (file.exists()) {
-                StringBuilder stringBuilder = new StringBuilder();
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                }
-                bufferedReader.close();
-                JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                if (jsonObject.has("PokemonCapturados")) {
-                    pokemonCapturadosArray = jsonObject.getJSONArray("PokemonCapturados");
-                }
-            } else {
-                Log.e(TAG, "File not found: entrenador.json");
-            }
-        } catch (IOException | JSONException e) {
-            Log.e(TAG, "Error reading JSON file: " + e.getMessage());
-        }
-        return pokemonCapturadosArray;
+        return capturedPokemons;
     }
 }

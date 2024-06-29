@@ -9,6 +9,17 @@ public class Entrenador {
     private int superballs;
     private int ultraballs;
     private int masterballs;
+    private List<PokemonCapturado> pokemonCapturados;
+
+    public Entrenador(int money, String name, int pokeballs, int superballs, int ultraballs, int masterballs, List<PokemonCapturado> pokemonCapturados) {
+        this.money = money;
+        this.name = name;
+        this.pokeballs = pokeballs;
+        this.superballs = superballs;
+        this.ultraballs = ultraballs;
+        this.masterballs = masterballs;
+        this.pokemonCapturados = pokemonCapturados;
+    }
 
     public int getMoney() {
         return money;
@@ -56,5 +67,13 @@ public class Entrenador {
 
     public void setMasterballs(int masterballs) {
         this.masterballs = masterballs;
+    }
+
+    public List<PokemonCapturado> getPokemonCapturados() {
+        return pokemonCapturados;
+    }
+
+    public void setPokemonCapturados(List<PokemonCapturado> pokemonCapturados) {
+        this.pokemonCapturados = pokemonCapturados;
     }
 }

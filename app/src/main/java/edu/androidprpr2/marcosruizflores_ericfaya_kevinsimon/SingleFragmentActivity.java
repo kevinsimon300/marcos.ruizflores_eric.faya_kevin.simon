@@ -19,19 +19,20 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.databinding.ActivitySinglefragmentactivityBinding;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Entrenador;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.SharedPreferencesDao;
 
 public class SingleFragmentActivity extends AppCompatActivity implements PokedexDao.PokedexCallback{
     private PokedexFragment pokedexFragment;
     private PokedexDao pokedexDao;
     private int page = 0;
     private static final String TAG = "SingleFragmentActivity";
-
     private static final int POKEDEX_ITEM_ID = R.id.poked_button;
     private static final int ENTRENADOR_ITEM_ID = R.id.entrenador_button;
     private static final int TENDA_ITEM_ID = R.id.tenda_button;
@@ -46,7 +47,7 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
 
         pokedexDao = new PokedexDao(this, this);
 
-        initializeJsonFile();
+        initializeTrainerData();
         boolean cargar15 = false;
         pokedexDao.getPokemonList(0, cargar15, 0);
 
@@ -64,95 +65,18 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
         });
     }
 
-    private void initializeJsonFile() {
-        try {
-            File dir = new File(getFilesDir(), "Files");
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
 
-            File file = new File(dir, "entrenador.json");
+    private void initializeTrainerData() {
+        Entrenador entrenador = SharedPreferencesDao.getTrainer(this);
+        if (entrenador.getName() == null) {
+            List<PokemonCapturado> pokemonCapturados = new ArrayList<>();
+            pokemonCapturados.add(new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545"));
 
-            JSONObject datosEntrenador;
-
-            if (!file.exists()) {
-                JSONObject defaultData = new JSONObject();
-                defaultData.put("Money", 500000);
-                defaultData.put("Name", "Jarrambo el mas jambo");
-                defaultData.put("Pokeballs", 0);
-                defaultData.put("Superballs", 0);
-                defaultData.put("Ultraballs", 0);
-                defaultData.put("Masterballs", 0);
-
-                JSONArray pokemonCapturadosArray = new JSONArray();
-                PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
-                pokemonCapturadosArray.put(new JSONObject()
-                        .put("name", pokemon1.getName())
-                        .put("frontImage", pokemon1.getFrontImage())
-                        .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
-
-                defaultData.put("PokemonCapturados", pokemonCapturadosArray);
-
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    fos.write(defaultData.toString(2).getBytes());
-                    Log.d(TAG, "JSON inicial creado en " + file.getAbsolutePath());
-                }
-            } else {
-                FileInputStream fis = new FileInputStream(file);
-                byte[] data = new byte[(int) file.length()];
-                fis.read(data);
-                fis.close();
-
-                String jsonString = new String(data, "UTF-8");
-                datosEntrenador = new JSONObject(jsonString);
-
-                if (!datosEntrenador.has("Money")) {
-                    datosEntrenador.put("Money", 700000);
-                }
-                if (!datosEntrenador.has("Name")) {
-                    datosEntrenador.put("Name", "Jarrambo el mas jambo");
-                }
-                if (!datosEntrenador.has("Pokeballs")) {
-                    datosEntrenador.put("Pokeballs", 0);
-                }
-                if (!datosEntrenador.has("Superballs")) {
-                    datosEntrenador.put("Superballs", 0);
-                }
-                if (!datosEntrenador.has("Ultraballs")) {
-                    datosEntrenador.put("Ultraballs", 0);
-                }
-                if (!datosEntrenador.has("Masterballs")) {
-                    datosEntrenador.put("Masterballs", 0);
-                }
-
-                JSONArray pokemonCapturadosArray;
-                if (datosEntrenador.has("PokemonCapturados")) {
-                    pokemonCapturadosArray = datosEntrenador.getJSONArray("PokemonCapturados");
-                } else {
-                    pokemonCapturadosArray = new JSONArray();
-                }
-
-                if (pokemonCapturadosArray.length() == 0) {
-                    PokemonCapturado pokemon1 = new PokemonCapturado("ditto", "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/132.png", "master_ball_icon_icons_com_67545");
-                    pokemonCapturadosArray.put(new JSONObject()
-                            .put("name", pokemon1.getName())
-                            .put("frontImage", pokemon1.getFrontImage())
-                            .put("capturedPokeballImage", pokemon1.getCapturedPokeballImage()));
-                }
-
-                datosEntrenador.put("PokemonCapturados", pokemonCapturadosArray);
-
-                try (FileOutputStream fos = new FileOutputStream(file)) {
-                    fos.write(datosEntrenador.toString(2).getBytes());
-                    Log.d(TAG, "JSON actualizado en " + file.getAbsolutePath());
-                }
-            }
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
+            entrenador = new Entrenador(500000, "Ash Ketchup", 0, 0, 0, 0, pokemonCapturados);
+            SharedPreferencesDao.saveTrainer(this, entrenador);
+            Log.d(TAG, "Datos iniciales del entrenador guardados en SharedPreferences");
         }
     }
-
 
     private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -172,51 +96,10 @@ public class SingleFragmentActivity extends AppCompatActivity implements Pokedex
     }
 
     @Override
-    public void onError(String errorMessage) {
-
-    }
+    public void onError(String errorMessage) {}
 
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
-    }
-
-    private int getFieldValue(String fieldName) {
-        File file = new File(getFilesDir(), "Files/entrenador.json");
-        try {
-            FileInputStream fis = new FileInputStream(file);// Leer l'arxiu JSON existent
-            byte[] data = new byte[(int) file.length()];
-            fis.read(data);
-            fis.close();
-
-            String jsonString = new String(data, "UTF-8");
-            JSONObject datosEntrenador = new JSONObject(jsonString);
-
-            if (datosEntrenador.has(fieldName)) {// Obtenir el valor del camp
-                return datosEntrenador.getInt(fieldName);
-            } else {
-                Log.e(TAG, "El campo " + fieldName + " no existe en el JSON");
-                return -1;  // O qualsevol valor que consideres apropiat per indicar un error
-            }
-
-        } catch (IOException | JSONException e) {
-            Log.e(TAG, "Error al leer el archivo JSON", e);
-            return -1;
-        }
-    }
-
-    public String readFile(File filename) {
-        StringBuilder stringBuilder = new StringBuilder();
-        //try (FileInputStream fis = openFileInput(filename)) {
-        try (FileInputStream fis = new FileInputStream(filename)) {
-
-            int ch;
-            while ((ch = fis.read()) != -1) {
-                stringBuilder.append((char) ch);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return stringBuilder.toString();
     }
 }
