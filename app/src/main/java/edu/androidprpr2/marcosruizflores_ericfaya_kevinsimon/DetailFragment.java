@@ -152,10 +152,71 @@ public class DetailFragment extends Fragment {
             Picasso.get().load(pokedex.getImageUrl()).into(imageViewFront);
         }
 
-        btnPokeball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "pokeballs", 600, pokedex, "pokeball_pokemon_svgrepo_com"));
-        btnSuperball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "superballs", 800, pokedex, "superball"));
-        btnUltraball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "ultraballs", 900, pokedex, "ultraball"));
-        btnMasterball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "masterballs", 1000, pokedex, "master_ball_icon_icons_com_67545"));
+        btnPokeball.setOnClickListener(v -> {
+            int quantityPokeballs = getFieldValue(KEY_POKEBALLS, sharedPreferences);
+            if (quantityPokeballs > 0 && capturedPokemons.size() < 6) {
+                int indexEvolution = getRandomIndexValue(pokedex.getIndexEvolution());
+                int accuracy = ((600 - indexEvolution) / 600) * 100;
+                int randomValue = new Random().nextInt(100) + 1;
+                if (accuracy < randomValue) {
+                    capturePokemon(sharedPreferences, capturedPokemons, "pokeball_pokemon_svgrepo_com", pokedex, indexEvolution);
+                    modifyFieldValue(sharedPreferences, KEY_POKEBALLS, -1);
+                } else {
+                    modifyFieldValue(sharedPreferences, KEY_POKEBALLS, -1);
+                    Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "You do not have pokeballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnSuperball.setOnClickListener(v -> {
+            int quantitySuperballs = getFieldValue(KEY_SUPERBALLS, sharedPreferences);
+            if (quantitySuperballs > 0 && capturedPokemons.size() < 6) {
+                int indexEvolution = getRandomIndexValue(pokedex.getIndexEvolution());
+                float accuracy_pokeball = (float) ((600 - indexEvolution) / (600 * 1.5));
+                accuracy_pokeball *= 100;
+                int randomValue = new Random().nextInt(100) + 1;
+                if (accuracy_pokeball < randomValue) {
+                    capturePokemon(sharedPreferences, capturedPokemons, "superball", pokedex, indexEvolution);
+                    modifyFieldValue(sharedPreferences, KEY_SUPERBALLS, -1);
+                } else {
+                    modifyFieldValue(sharedPreferences, KEY_SUPERBALLS, -1);
+                    Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "You do not have superballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnUltraball.setOnClickListener(v -> {
+            int quantityUltraballs = getFieldValue(KEY_ULTRABALLS, sharedPreferences);
+            if (quantityUltraballs > 0 && capturedPokemons.size() < 6) {
+                int indexEvolution = getRandomIndexValue(pokedex.getIndexEvolution());
+                int accuracy_pokeball =  (600 - indexEvolution) / (600 * 2);
+                accuracy_pokeball *= 100;
+                int randomValue = new Random().nextInt(100) + 1;
+                if (accuracy_pokeball < randomValue) {
+                    capturePokemon(sharedPreferences, capturedPokemons, "ultraball", pokedex, indexEvolution);
+                    modifyFieldValue(sharedPreferences, KEY_ULTRABALLS, -1);
+                } else {
+                    modifyFieldValue(sharedPreferences, KEY_ULTRABALLS, -1);
+                    Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "You do not have ultraballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnMasterball.setOnClickListener(v -> {
+            int quantityMasterballs = getFieldValue(KEY_MASTERBALLS, sharedPreferences);
+            if (quantityMasterballs > 0 && capturedPokemons.size() < 6) {
+                capturePokemon(sharedPreferences, capturedPokemons, "master_ball_icon_icons_com_67545", pokedex, getRandomIndexValue(pokedex.getIndexEvolution()));
+                modifyFieldValue(sharedPreferences, KEY_MASTERBALLS, -1);
+            } else {
+                Toast.makeText(getContext(), "You do not have masterballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         for (int i = 0; i < 6; i++) {
             TextView tvStats = new TextView(getContext());
@@ -194,29 +255,31 @@ public class DetailFragment extends Fragment {
         return itemView;
     }
 
-    private void handleCapture(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, int baseAccuracy, Pokemon pokedex, String pokeballImage) {
-        int quantityBalls = sharedPreferences.getInt(ballType, 0);
-        if (quantityBalls > 0 && capturedPokemons.size() < 6) {
-            int indexEvolution = pokedex.getIndexEvolution();
-            indexEvolution = getIndexValue(indexEvolution);
-            int accuracy = (baseAccuracy - indexEvolution) / 6;
-            int randomValue = new Random().nextInt(100) + 1;
-            if (randomValue < accuracy) {
-                capturePokemon(sharedPreferences, capturedPokemons, ballType, pokedex, pokeballImage);
-                Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
-            } else {
-                modifyFieldValue(sharedPreferences, ballType, -1);
-                Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(getContext(), "You do not have " + ballType + " or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
-        }
+    private int getFieldValue(String fieldName, SharedPreferences sharedPreferences) {
+        return sharedPreferences.getInt(fieldName, 0);
     }
 
-    private void capturePokemon(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, Pokemon pokedex, String pokeballImage) {
-        capturedPokemons.add(new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), pokeballImage));
+    private void modifyFieldValue(SharedPreferences sharedPreferences, String fieldName, int incrementValue) {
+        int currentValue = sharedPreferences.getInt(fieldName, 0);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(fieldName, currentValue + incrementValue);
+        editor.apply();
+    }
+
+    private int getRandomIndexValue(int index_value){
+        Random random = new Random();
+        if (index_value == 1) return random.nextInt(61) + 20;
+        if (index_value == 2) return random.nextInt(121) + 80;
+        if (index_value == 3) return random.nextInt(151) + 200;
+        if (index_value == 4) return random.nextInt(151) + 350;
+        return 0;
+    }
+
+    private void capturePokemon(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, Pokemon pokedex, int indexEvolution) {
+        capturedPokemons.add(new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), ballType));
         saveCapturedPokemons(sharedPreferences, capturedPokemons);
-        modifyFieldValue(sharedPreferences, ballType, -1);
+        modifyFieldValue(sharedPreferences, KEY_MONEY, 400 + 100 * indexEvolution);
+        Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
     }
 
     private void saveCapturedPokemons(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons) {
@@ -253,17 +316,6 @@ public class DetailFragment extends Fragment {
             e.printStackTrace();
         }
         return capturedPokemons;
-    }
-
-    private void modifyFieldValue(SharedPreferences sharedPreferences, String fieldName, int incrementValue) {
-        int currentValue = sharedPreferences.getInt(fieldName, 0);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(fieldName, currentValue + incrementValue);
-        editor.apply();
-    }
-
-    private int getIndexValue(int indexEvolution) {
-        return indexEvolution < 100 ? 100 : indexEvolution;
     }
 
     private boolean[] checkIfPokemonIsCaptured(List<PokemonCapturado> capturedPokemons) {
