@@ -17,18 +17,13 @@ import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Ability;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonDetail;
 
 public class DetailFragment extends Fragment {
     private ArrayList<Pokemon> pokedexes;
@@ -89,13 +84,7 @@ public class DetailFragment extends Fragment {
         tvDescription.setText(pokedex.getDescription());
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-        String capturedPokemonJson = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
-        JSONArray capturedPokemons;
-        try {
-            capturedPokemons = new JSONArray(capturedPokemonJson);
-        } catch (JSONException e) {
-            capturedPokemons = new JSONArray();
-        }
+        List<PokemonCapturado> capturedPokemons = getCapturedPokemons(sharedPreferences);
 
         boolean[] pokemonChecks = checkIfPokemonIsCaptured(capturedPokemons);
 
@@ -110,168 +99,147 @@ public class DetailFragment extends Fragment {
         Random random = new Random();
         int randomAbility = random.nextInt(4) + 1;
         String ability = "";
+        List<Ability> abilities = pokedex.getAbilities();
         if (randomAbility == 1) {
-            ArrayList<Ability> abilities = pokedex.getAbilities();
             for (Ability ab : abilities) {
                 if (ab.getIs_hidden()) {
                     ability = ab.getName();
-                    tvSkills.setText(ability);
+                    break;
                 }
             }
         } else {
-            ArrayList<Ability> abilities = pokedex.getAbilities();
             for (Ability ab : abilities) {
                 if (!ab.getIs_hidden()) {
                     ability = ab.getName();
-                    tvSkills.setText(ability);
+                    break;
                 }
             }
         }
+        tvSkills.setText(ability);
 
         int randomNumber = random.nextInt(500) + 1;
         if (randomNumber == 1) {
-            Picasso.get().load(pokedex.getBack_shiny()).into(ivPokedex);
-            Picasso.get().load(pokedex.getFront_shiny()).into(imageViewFront);
+            Picasso.get().load(pokedex.getBackShiny()).into(ivPokedex);
+            Picasso.get().load(pokedex.getFrontShiny()).into(imageViewFront);
         } else {
             Picasso.get().load(pokedex.getBackImage()).into(ivPokedex);
             Picasso.get().load(pokedex.getImageUrl()).into(imageViewFront);
         }
 
-        JSONArray finalCapturedPokemons = capturedPokemons;
-        btnPokeball.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantityPokeballs = sharedPreferences.getInt(KEY_POKEBALLS, 0);
-                if (quantityPokeballs > 0 && finalCapturedPokemons.length() < 6) {
-                    int indexEvolution = pokedex.getIndex_evolution();
-                    indexEvolution = getIndexValue(indexEvolution);
-                    int accuracyPokeball = (600 - indexEvolution) / 6;
-                    int randomPokeball = random.nextInt(100) + 1;
-                    if (randomPokeball < accuracyPokeball) {
-                        capturePokemon(finalCapturedPokemons, pokedex);
-                        quantityPokeballs--;
-                        saveQuantity(sharedPreferences, KEY_POKEBALLS, quantityPokeballs);
-                        Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
-                        quantityPokeballs--;
-                        saveQuantity(sharedPreferences, KEY_POKEBALLS, quantityPokeballs);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "You do not have pokeballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        btnPokeball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "pokeballs", 600, pokedex));
+        btnSuperball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "superballs", 800, pokedex));
+        btnUltraball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "ultraballs", 900, pokedex));
+        btnMasterball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "masterballs", 1000, pokedex));
 
-        JSONArray finalCapturedPokemons3 = capturedPokemons;
-        btnSuperball.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantitySuperballs = sharedPreferences.getInt(KEY_SUPERBALLS, 0);
-                if (quantitySuperballs > 0 && finalCapturedPokemons3.length() < 6) {
-                    int indexEvolution = pokedex.getIndex_evolution();
-                    indexEvolution = getIndexValue(indexEvolution);
-                    int accuracySuperball = (800 - indexEvolution) / 4;
-                    int randomSuperball = random.nextInt(100) + 1;
-                    if (randomSuperball < accuracySuperball) {
-                        capturePokemon(finalCapturedPokemons3, pokedex);
-                        quantitySuperballs--;
-                        saveQuantity(sharedPreferences, KEY_SUPERBALLS, quantitySuperballs);
-                        Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
-                        quantitySuperballs--;
-                        saveQuantity(sharedPreferences, KEY_SUPERBALLS, quantitySuperballs);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "You do not have superballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
-                }
+        for (int i = 0; i < 6; i++) {
+            TextView tvStats = new TextView(getContext());
+            switch (i) {
+                case 0:
+                    tvStats.setText("HP: " + pokedex.getStat0());
+                    tvStats.setBackgroundResource(R.drawable.stats_border0);
+                    break;
+                case 1:
+                    tvStats.setText("Attack: " + pokedex.getStat1());
+                    tvStats.setBackgroundResource(R.drawable.stats_border1);
+                    break;
+                case 2:
+                    tvStats.setText("Defense: " + pokedex.getStat2());
+                    tvStats.setBackgroundResource(R.drawable.stats_border2);
+                    break;
+                case 3:
+                    tvStats.setText("Special Attack: " + pokedex.getStat3());
+                    tvStats.setBackgroundResource(R.drawable.stats_border3);
+                    break;
+                case 4:
+                    tvStats.setText("Special Defense: " + pokedex.getStat4());
+                    tvStats.setBackgroundResource(R.drawable.stats_border4);
+                    break;
+                case 5:
+                    tvStats.setText("Speed: " + pokedex.getStat5());
+                    tvStats.setBackgroundResource(R.drawable.stats_border5);
+                    break;
             }
-        });
-
-        JSONArray finalCapturedPokemons2 = capturedPokemons;
-        btnUltraball.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantityUltraballs = sharedPreferences.getInt(KEY_ULTRABALLS, 0);
-                if (quantityUltraballs > 0 && finalCapturedPokemons2.length() < 6) {
-                    int indexEvolution = pokedex.getIndex_evolution();
-                    indexEvolution = getIndexValue(indexEvolution);
-                    int accuracyUltraball = (900 - indexEvolution) / 3;
-                    int randomUltraball = random.nextInt(100) + 1;
-                    if (randomUltraball < accuracyUltraball) {
-                        capturePokemon(finalCapturedPokemons2, pokedex);
-                        quantityUltraballs--;
-                        saveQuantity(sharedPreferences, KEY_ULTRABALLS, quantityUltraballs);
-                        Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
-                        quantityUltraballs--;
-                        saveQuantity(sharedPreferences, KEY_ULTRABALLS, quantityUltraballs);
-                    }
-                } else {
-                    Toast.makeText(getContext(), "You do not have ultraballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        JSONArray finalCapturedPokemons1 = capturedPokemons;
-        btnMasterball.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int quantityMasterballs = sharedPreferences.getInt(KEY_MASTERBALLS, 0);
-                if (quantityMasterballs > 0 && finalCapturedPokemons1.length() < 6) {
-                    capturePokemon(finalCapturedPokemons1, pokedex);
-                    quantityMasterballs--;
-                    saveQuantity(sharedPreferences, KEY_MASTERBALLS, quantityMasterballs);
-                    Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "You do not have masterballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+            tvStats.setPadding(8, 8, 8, 8);
+            tvStats.setTextColor(getResources().getColor(android.R.color.black));
+            tvStats.setTextSize(16);
+            llStats.addView(tvStats);
+        }
 
         return itemView;
     }
 
-    private boolean[] checkIfPokemonIsCaptured(JSONArray capturedPokemons) {
-        boolean[] checks = new boolean[2];
-        checks[0] = capturedPokemons.length() >= 6;
+    private void handleCapture(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, int baseAccuracy, Pokemon pokedex) {
+        int quantityBalls = sharedPreferences.getInt(ballType, 0);
+        if (quantityBalls > 0 && capturedPokemons.size() < 6) {
+            int indexEvolution = pokedex.getIndexEvolution();
+            indexEvolution = getIndexValue(indexEvolution);
+            int accuracy = (baseAccuracy - indexEvolution) / 6;
+            int randomValue = new Random().nextInt(100) + 1;
+            if (randomValue < accuracy) {
+                capturePokemon(sharedPreferences, capturedPokemons, ballType, pokedex);
+                Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
+            } else {
+                modifyFieldValue(sharedPreferences, ballType, -1);
+                Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "You do not have " + ballType + " or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        for (int i = 0; i < capturedPokemons.length(); i++) {
-            try {
-                JSONObject obj = capturedPokemons.getJSONObject(i);
-                if (obj.getString("id").equals(pokedex.getId())) {
-                    checks[1] = true;
-                    break;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
+    private void capturePokemon(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, Pokemon pokedex) {
+        String pokeballImage;
+        switch (ballType) {
+            case "pokeballs":
+                pokeballImage = "@drawable/pokeball_pokemon_svgrepo_com";
+                break;
+            case "superballs":
+                pokeballImage = "@drawable/superball";
+                break;
+            case "ultraballs":
+                pokeballImage = "@drawable/ultraball";
+                break;
+            case "masterballs":
+                pokeballImage = "@drawable/master_ball_icon_icons_com_67545";
+                break;
+            default:
+                pokeballImage = "";
+                break;
+        }
+        capturedPokemons.add(new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), pokeballImage));
+        saveCapturedPokemons(sharedPreferences, capturedPokemons);
+        modifyFieldValue(sharedPreferences, ballType, -1);
+    }
+
+    private void saveCapturedPokemons(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("pokemon_count", capturedPokemons.size());
+        for (int i = 0; i < capturedPokemons.size(); i++) {
+            editor.putString("pokemon_name_" + i, capturedPokemons.get(i).getName());
+            editor.putString("pokemon_front_image_" + i, capturedPokemons.get(i).getFrontImage());
+            editor.putString("pokemon_caught_ball_" + i, capturedPokemons.get(i).getCapturedPokeballImage());
+        }
+        editor.apply();
+    }
+
+    private List<PokemonCapturado> getCapturedPokemons(SharedPreferences sharedPreferences) {
+        int size = sharedPreferences.getInt("pokemon_count", 0);
+        List<PokemonCapturado> pokemons = new ArrayList<>(size);
+        for (int i = 0; i < size; i++) {
+            String name = sharedPreferences.getString("pokemon_name_" + i, null);
+            String frontImage = sharedPreferences.getString("pokemon_front_image_" + i, null);
+            String pokeballType = sharedPreferences.getString("pokemon_caught_ball_" + i, null);
+            if (name != null && frontImage != null && pokeballType != null) {
+                pokemons.add(new PokemonCapturado(name, frontImage, pokeballType));
             }
         }
-        return checks;
+        return pokemons;
     }
 
-    private void capturePokemon(JSONArray capturedPokemons, Pokemon pokedex) {
-        try {
-            JSONObject newPokemon = new JSONObject();
-            newPokemon.put("id", pokedex.getId());
-            newPokemon.put("name", pokedex.getName());
-            newPokemon.put("imageUrl", pokedex.getImageUrl());
-            capturedPokemons.put(newPokemon);
-
-            SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString(KEY_CAPTURED_POKEMON, capturedPokemons.toString());
-            editor.apply();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveQuantity(SharedPreferences sharedPreferences, String key, int quantity) {
+    private void modifyFieldValue(SharedPreferences sharedPreferences, String fieldName, int incrementValue) {
+        int currentValue = sharedPreferences.getInt(fieldName, 0);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, quantity);
+        editor.putInt(fieldName, currentValue + incrementValue);
         editor.apply();
     }
 
@@ -279,10 +247,16 @@ public class DetailFragment extends Fragment {
         return indexEvolution < 100 ? 100 : indexEvolution;
     }
 
-    private void replaceFragment(Fragment fragment) {
-        requireActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.frame_layout, fragment)
-                .addToBackStack(null)
-                .commit();
+    private boolean[] checkIfPokemonIsCaptured(List<PokemonCapturado> capturedPokemons) {
+        boolean[] checks = new boolean[2];
+        checks[0] = capturedPokemons.size() == 6;
+        checks[1] = false;
+        for (PokemonCapturado pokemon : capturedPokemons) {
+            if (pokemon.getName().equals(pokedex.getName())) {
+                checks[1] = true;
+                break;
+            }
+        }
+        return checks;
     }
 }

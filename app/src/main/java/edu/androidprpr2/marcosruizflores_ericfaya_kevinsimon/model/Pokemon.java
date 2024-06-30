@@ -1,13 +1,11 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 
-import android.content.Context;
-import android.content.Intent;
-
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.DetailFragment;
 
 public class Pokemon {
     private String name;
@@ -25,13 +23,12 @@ public class Pokemon {
     private List<String> types;
     private String description;
     private ArrayList<Ability> abilities;
-    private String back_shiny;
-    private String front_shiny;
-    private int index_evolution;
+    private String backShiny;
+    private String frontShiny;
+    private int indexEvolution;
     private String pokeballType;
 
-
-    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities, String back_shiny, String front_shiny, int index_evolution, String pokeballType) {
+    public Pokemon(String name, int id, String imageUrl, String backImage, List<String> types, String weight, String height, String description, String stat0, String stat1, String stat2, String stat3, String stat4, String stat5, ArrayList<Ability> abilities, String backShiny, String frontShiny, int indexEvolution, String pokeballType) {
         this.name = name;
         this.id = id;
         this.imageUrl = imageUrl;
@@ -47,34 +44,122 @@ public class Pokemon {
         this.stat4 = stat4;
         this.stat5 = stat5;
         this.abilities = abilities;
-        this.back_shiny = back_shiny;
-        this.front_shiny = front_shiny;
-        this.index_evolution = index_evolution;
+        this.backShiny = backShiny;
+        this.frontShiny = frontShiny;
+        this.indexEvolution = indexEvolution;
         this.pokeballType = pokeballType;
     }
 
-    public int getIndex_evolution() {
-        return index_evolution;
+    public String getName() {
+        return name;
     }
 
-    public void setIndex_evolution(int index_evolution) {
-        this.index_evolution = index_evolution;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getBack_shiny() {
-        return back_shiny;
+    public int getId() {
+        return id;
     }
 
-    public void setBack_shiny(String back_shiny) {
-        this.back_shiny = back_shiny;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public String getFront_shiny() {
-        return front_shiny;
+    public String getWeight() {
+        return weight;
     }
 
-    public void setFront_shiny(String front_shiny) {
-        this.front_shiny = front_shiny;
+    public void setWeight(String weight) {
+        this.weight = weight;
+    }
+
+    public String getHeight() {
+        return height;
+    }
+
+    public void setHeight(String height) {
+        this.height = height;
+    }
+
+    public String getStat0() {
+        return stat0;
+    }
+
+    public void setStat0(String stat0) {
+        this.stat0 = stat0;
+    }
+
+    public String getStat1() {
+        return stat1;
+    }
+
+    public void setStat1(String stat1) {
+        this.stat1 = stat1;
+    }
+
+    public String getStat2() {
+        return stat2;
+    }
+
+    public void setStat2(String stat2) {
+        this.stat2 = stat2;
+    }
+
+    public String getStat3() {
+        return stat3;
+    }
+
+    public void setStat3(String stat3) {
+        this.stat3 = stat3;
+    }
+
+    public String getStat4() {
+        return stat4;
+    }
+
+    public void setStat4(String stat4) {
+        this.stat4 = stat4;
+    }
+
+    public String getStat5() {
+        return stat5;
+    }
+
+    public void setStat5(String stat5) {
+        this.stat5 = stat5;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getBackImage() {
+        return backImage;
+    }
+
+    public void setBackImage(String backImage) {
+        this.backImage = backImage;
+    }
+
+    public List<String> getTypes() {
+        return types;
+    }
+
+    public void setTypes(List<String> types) {
+        this.types = types;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public ArrayList<Ability> getAbilities() {
@@ -85,58 +170,28 @@ public class Pokemon {
         this.abilities = abilities;
     }
 
-    public String getBackImage() {
-        return backImage;
+    public String getBackShiny() {
+        return backShiny;
     }
 
-    public String getName() {
-        return name;
+    public void setBackShiny(String backShiny) {
+        this.backShiny = backShiny;
     }
 
-    public int getId() {
-        return id;
+    public String getFrontShiny() {
+        return frontShiny;
     }
 
-    public String getWeight() {
-        return weight;
-    }
-    public String getHeight() {
-        return height;
-    }
-    public String getImageUrl() {
-        return imageUrl;
+    public void setFrontShiny(String frontShiny) {
+        this.frontShiny = frontShiny;
     }
 
-    public List<String> getTypes() {
-        return types;
+    public int getIndexEvolution() {
+        return indexEvolution;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public String getStat0() {
-        return stat0;
-    }
-
-    public String getStat1() {
-        return stat1;
-    }
-
-    public String getStat2() {
-        return stat2;
-    }
-
-    public String getStat3() {
-        return stat3;
-    }
-
-    public String getStat4() {
-        return stat4;
-    }
-
-    public String getStat5() {
-        return stat5;
+    public void setIndexEvolution(int indexEvolution) {
+        this.indexEvolution = indexEvolution;
     }
 
     public String getPokeballType() {
@@ -147,31 +202,74 @@ public class Pokemon {
         this.pokeballType = pokeballType;
     }
 
-    public Intent getIntent(Context context) {
-        Intent intent = new Intent(context, DetailFragment.class);
-        intent.putExtra("name", name);
-        intent.putExtra("id", id);
-        intent.putExtra("imageUrl", imageUrl);
-        intent.putStringArrayListExtra("types", new ArrayList<>(types));
-        intent.putExtra("description", description);
-        intent.putExtra("weight", weight);
-        intent.putExtra("height", height);
-
-        intent.putExtra("Stat0", stat0);
-        intent.putExtra("Stat1", stat1);
-        intent.putExtra("Stat2", stat2);
-        intent.putExtra("Stat3", stat3);
-        intent.putExtra("Stat4", stat4);
-        intent.putExtra("Stat5", stat5);
-        return intent;
+    @Override
+    public String toString() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", name);
+            jsonObject.put("id", id);
+            jsonObject.put("imageUrl", imageUrl);
+            jsonObject.put("backImage", backImage);
+            jsonObject.put("types", new JSONArray(types));
+            jsonObject.put("weight", weight);
+            jsonObject.put("height", height);
+            jsonObject.put("description", description);
+            jsonObject.put("stat0", stat0);
+            jsonObject.put("stat1", stat1);
+            jsonObject.put("stat2", stat2);
+            jsonObject.put("stat3", stat3);
+            jsonObject.put("stat4", stat4);
+            jsonObject.put("stat5", stat5);
+            JSONArray abilitiesArray = new JSONArray();
+            for (Ability ability : abilities) {
+                abilitiesArray.put(new JSONObject(ability.toString()));
+            }
+            jsonObject.put("abilities", abilitiesArray);
+            jsonObject.put("backShiny", backShiny);
+            jsonObject.put("frontShiny", frontShiny);
+            jsonObject.put("indexEvolution", indexEvolution);
+            jsonObject.put("pokeballType", pokeballType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject.toString();
     }
 
+    public static Pokemon fromString(String str) {
+        try {
+            JSONObject jsonObject = new JSONObject(str);
+            String name = jsonObject.getString("name");
+            int id = jsonObject.getInt("id");
+            String imageUrl = jsonObject.getString("imageUrl");
+            String backImage = jsonObject.getString("backImage");
+            List<String> types = new ArrayList<>();
+            JSONArray typesArray = jsonObject.getJSONArray("types");
+            for (int i = 0; i < typesArray.length(); i++) {
+                types.add(typesArray.getString(i));
+            }
+            String weight = jsonObject.getString("weight");
+            String height = jsonObject.getString("height");
+            String description = jsonObject.getString("description");
+            String stat0 = jsonObject.getString("stat0");
+            String stat1 = jsonObject.getString("stat1");
+            String stat2 = jsonObject.getString("stat2");
+            String stat3 = jsonObject.getString("stat3");
+            String stat4 = jsonObject.getString("stat4");
+            String stat5 = jsonObject.getString("stat5");
+            ArrayList<Ability> abilities = new ArrayList<>();
+            JSONArray abilitiesArray = jsonObject.getJSONArray("abilities");
+            for (int i = 0; i < abilitiesArray.length(); i++) {
+                abilities.add(Ability.fromString(abilitiesArray.getJSONObject(i).toString()));
+            }
+            String backShiny = jsonObject.getString("backShiny");
+            String frontShiny = jsonObject.getString("frontShiny");
+            int indexEvolution = jsonObject.getInt("indexEvolution");
+            String pokeballType = jsonObject.getString("pokeballType");
 
-    public Intent getPokedex (Context context) {
-        Intent intent = new Intent(context, PokemonDetail.class);
-        intent.putExtra("name", name);
-        intent.putExtra("imageUrl", imageUrl);
-        intent.putExtra("backImage", backImage);
-        return intent;
+            return new Pokemon(name, id, imageUrl, backImage, types, weight, height, description, stat0, stat1, stat2, stat3, stat4, stat5, abilities, backShiny, frontShiny, indexEvolution, pokeballType);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

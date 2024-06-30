@@ -1,7 +1,5 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -26,10 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,7 +43,8 @@ public class PokedexFragment extends Fragment {
     public int countPage = 0;
 
     private static final String PREFERENCES_FILE = "trainer_prefs";
-    private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
+    private static final String KEY_POKEMON_COUNT = "pokemon_count";
+    private static final String KEY_POKEMON_PREFIX = "pokemon_";
 
     public PokedexFragment(ArrayList<Pokemon> pokedexes, PokedexDao pokedexDao) {
         this.pokedexes = pokedexes;
@@ -135,17 +130,6 @@ public class PokedexFragment extends Fragment {
         return view;
     }
 
-    private JSONArray getCapturedPokemons(SharedPreferences sharedPreferences) {
-        String capturedPokemonJson = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
-        JSONArray capturedPokemons;
-        try {
-            capturedPokemons = new JSONArray(capturedPokemonJson);
-        } catch (JSONException e) {
-            capturedPokemons = new JSONArray();
-        }
-        return capturedPokemons;
-    }
-
     public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Pokemon pokedex;
         private final ImageView ivBack;
@@ -172,21 +156,21 @@ public class PokedexFragment extends Fragment {
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
 
             SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-            JSONArray capturedPokemons = getCapturedPokemons(sharedPreferences);
+            List<Pokemon> capturedPokemons = getCapturedPokemons(sharedPreferences);
             String captured = checkIfPokemonIsCaptured(capturedPokemons);
 
             if (!captured.equals("")) {
                 switch (captured) {
-                    case "@drawable/pokeball_pokemon_svgrepo_com":
+                    case "pokeball_pokemon_svgrepo_com":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com));
                         break;
-                    case "@drawable/superball":
+                    case "superball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.superball));
                         break;
-                    case "@drawable/wikiball":
+                    case "wikiball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wikiball));
                         break;
-                    case "@drawable/master_ball_icon_icons_com_67545":
+                    case "master_ball_icon_icons_com_67545":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
                         break;
                 }
@@ -195,19 +179,13 @@ public class PokedexFragment extends Fragment {
             }
         }
 
-        private String checkIfPokemonIsCaptured(JSONArray pokemonList) {
+        private String checkIfPokemonIsCaptured(List<Pokemon> pokemonList) {
             String namePokeball = "";
-            try {
-                for (int i = 0; i < pokemonList.length(); i++) {
-                    JSONObject pokemon = pokemonList.getJSONObject(i);
-                    String name = pokemon.getString("name");
-                    if (name.equals(pokedex.getName())) {
-                        namePokeball = pokemon.getString("capturedPokeballImage");
-                        break;
-                    }
+            for (Pokemon pokemon : pokemonList) {
+                if (pokemon.getName().equals(pokedex.getName())) {
+                    namePokeball = pokemon.getPokeballType();
+                    break;
                 }
-            } catch (JSONException e) {
-                throw new RuntimeException("Error parsing JSON", e);
             }
             return namePokeball;
         }
@@ -225,8 +203,8 @@ public class PokedexFragment extends Fragment {
     public class PokedexAdapter extends RecyclerView.Adapter<PokedexHolder> {
         private List<Pokemon> lPokedexes;
         private Activity activity;
-        private boolean isLoading = false;
-        private int visibleThreshold = 5;
+        private boolean isLoading;
+        private int visibleThreshold;
         private int currentPage = 1;
         private int pageSize = 15;
 
@@ -258,5 +236,19 @@ public class PokedexFragment extends Fragment {
         public int getItemCount() {
             return lPokedexes.size();
         }
+    }
+
+    private List<Pokemon> getCapturedPokemons(SharedPreferences sharedPreferences) {
+        int size = sharedPreferences.getInt(KEY_POKEMON_COUNT, 0);
+        List<Pokemon> pokemons = new ArrayList<>(size);
+
+        for (int i = 0; i < size; i++) {
+            String pokemonString = sharedPreferences.getString(KEY_POKEMON_PREFIX + i, null);
+            if (pokemonString != null) {
+                pokemons.add(Pokemon.fromString(pokemonString));
+            }
+        }
+
+        return pokemons;
     }
 }
