@@ -66,7 +66,10 @@ public class PokedexFragment extends Fragment {
         pokedexesRecyclerView = view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        List<PokemonCapturado> capturedPokemons = getCapturedPokemons(sharedPreferences);
+
+        adapter = new PokedexAdapter(pokedexes, capturedPokemons, getActivity(), isLoading, visibleThreshold);
         pokedexesRecyclerView.setAdapter(adapter);
 
         namePokemon = view.findViewById(R.id.editTextSearch);
@@ -80,7 +83,7 @@ public class PokedexFragment extends Fragment {
                     public void onSuccess(ArrayList<Pokemon> pokemonList) {
                         if (!pokemonList.isEmpty()) {
                             Pokemon pokemon = pokemonList.get(0);
-                            DetailFragment detailFragment = new DetailFragment(pokemon, pokedexes);
+                            DetailFragment detailFragment = DetailFragment.newInstance(pokemon, pokedexes);
                             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.frame_layout, detailFragment);
@@ -153,28 +156,26 @@ public class PokedexFragment extends Fragment {
             this.context = context;
         }
 
-        public void bind(Pokemon pokedex) {
+        public void bind(Pokemon pokedex, List<PokemonCapturado> capturedPokemons) {
             this.pokedex = pokedex;
             tvPokemonName.setText(pokedex.getName());
             Picasso.get().load(pokedex.getImageUrl()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
 
-            SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-            List<PokemonCapturado> capturedPokemons = getCapturedPokemons(sharedPreferences);
             String captured = checkIfPokemonIsCaptured(capturedPokemons);
 
             if (!captured.equals("")) {
                 switch (captured) {
-                    case "@drawable/pokeball_pokemon_svgrepo_com":
+                    case "pokeball_pokemon_svgrepo_com":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com));
                         break;
-                    case "@drawable/superball":
+                    case "superball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.superball));
                         break;
-                    case "@drawable/ultraball":
+                    case "ultraball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wikiball));
                         break;
-                    case "@drawable/master_ball_icon_icons_com_67545":
+                    case "master_ball_icon_icons_com_67545":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
                         break;
                 }
@@ -184,19 +185,17 @@ public class PokedexFragment extends Fragment {
         }
 
         private String checkIfPokemonIsCaptured(List<PokemonCapturado> pokemonList) {
-            String namePokeball = "";
             for (PokemonCapturado pokemon : pokemonList) {
                 if (pokemon.getName().equals(pokedex.getName())) {
-                    namePokeball = pokemon.getCapturedPokeballImage();
-                    break;
+                    return pokemon.getCapturedPokeballImage();
                 }
             }
-            return namePokeball;
+            return "";
         }
 
         @Override
         public void onClick(View view) {
-            DetailFragment detailFragment = new DetailFragment(pokedex, pokedexes);
+            DetailFragment detailFragment = DetailFragment.newInstance(pokedex, pokedexes);
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.frame_layout, detailFragment);
@@ -206,14 +205,14 @@ public class PokedexFragment extends Fragment {
 
     public class PokedexAdapter extends RecyclerView.Adapter<PokedexHolder> {
         private List<Pokemon> lPokedexes;
+        private List<PokemonCapturado> capturedPokemons;
         private Activity activity;
         private boolean isLoading;
         private int visibleThreshold;
-        private int currentPage = 1;
-        private int pageSize = 15;
 
-        public PokedexAdapter(List<Pokemon> lPokedexes, Activity activity, boolean isLoading, int visibleThreshold) {
+        public PokedexAdapter(List<Pokemon> lPokedexes, List<PokemonCapturado> capturedPokemons, Activity activity, boolean isLoading, int visibleThreshold) {
             this.lPokedexes = lPokedexes;
+            this.capturedPokemons = capturedPokemons;
             this.activity = activity;
             this.isLoading = isLoading;
             this.visibleThreshold = visibleThreshold;
@@ -229,11 +228,7 @@ public class PokedexFragment extends Fragment {
         @Override
         public void onBindViewHolder(PokedexHolder holder, int position) {
             Pokemon pokedex = lPokedexes.get(position);
-            holder.bind(pokedex);
-        }
-
-        public int getCountPage() {
-            return countPage;
+            holder.bind(pokedex, capturedPokemons);
         }
 
         @Override
