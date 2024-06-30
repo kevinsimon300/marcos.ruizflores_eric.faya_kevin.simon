@@ -17,6 +17,10 @@ import androidx.fragment.app.Fragment;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,6 +30,9 @@ import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 
 public class DetailFragment extends Fragment {
+    private static final String ARG_POKEMON = "pokemon";
+    private static final String ARG_POKEDEXES = "pokedexes";
+
     private ArrayList<Pokemon> pokedexes;
     private Pokemon pokedex;
     private TextView tvType;
@@ -51,14 +58,33 @@ public class DetailFragment extends Fragment {
     private static final String KEY_MASTERBALLS = "masterballs";
     private static final String KEY_MONEY = "money";
 
+    public DetailFragment() {
+        // Constructor vacío requerido
+    }
+
     public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
         this.pokedex = pokedex;
         this.pokedexes = pokedexes;
     }
 
+    public void setArguments(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
+        this.pokedex = pokedex;
+        this.pokedexes = pokedexes;
+    }
+
+    public static DetailFragment newInstance(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
+        DetailFragment fragment = new DetailFragment();
+        fragment.setArguments(pokedex, pokedexes);
+        return fragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            pokedex = (Pokemon) getArguments().getSerializable(ARG_POKEMON);
+            pokedexes = (ArrayList<Pokemon>) getArguments().getSerializable(ARG_POKEDEXES);
+        }
     }
 
     @Override
@@ -126,10 +152,10 @@ public class DetailFragment extends Fragment {
             Picasso.get().load(pokedex.getImageUrl()).into(imageViewFront);
         }
 
-        btnPokeball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "pokeballs", 600, pokedex));
-        btnSuperball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "superballs", 800, pokedex));
-        btnUltraball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "ultraballs", 900, pokedex));
-        btnMasterball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "masterballs", 1000, pokedex));
+        btnPokeball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "pokeballs", 600, pokedex, "pokeball_pokemon_svgrepo_com"));
+        btnSuperball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "superballs", 800, pokedex, "superball"));
+        btnUltraball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "ultraballs", 900, pokedex, "ultraball"));
+        btnMasterball.setOnClickListener(v -> handleCapture(sharedPreferences, capturedPokemons, "masterballs", 1000, pokedex, "master_ball_icon_icons_com_67545"));
 
         for (int i = 0; i < 6; i++) {
             TextView tvStats = new TextView(getContext());
@@ -168,7 +194,7 @@ public class DetailFragment extends Fragment {
         return itemView;
     }
 
-    private void handleCapture(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, int baseAccuracy, Pokemon pokedex) {
+    private void handleCapture(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, int baseAccuracy, Pokemon pokedex, String pokeballImage) {
         int quantityBalls = sharedPreferences.getInt(ballType, 0);
         if (quantityBalls > 0 && capturedPokemons.size() < 6) {
             int indexEvolution = pokedex.getIndexEvolution();
@@ -176,7 +202,7 @@ public class DetailFragment extends Fragment {
             int accuracy = (baseAccuracy - indexEvolution) / 6;
             int randomValue = new Random().nextInt(100) + 1;
             if (randomValue < accuracy) {
-                capturePokemon(sharedPreferences, capturedPokemons, ballType, pokedex);
+                capturePokemon(sharedPreferences, capturedPokemons, ballType, pokedex, pokeballImage);
                 Toast.makeText(getContext(), "You captured the Pokemon", Toast.LENGTH_SHORT).show();
             } else {
                 modifyFieldValue(sharedPreferences, ballType, -1);
@@ -187,25 +213,7 @@ public class DetailFragment extends Fragment {
         }
     }
 
-    private void capturePokemon(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, Pokemon pokedex) {
-        String pokeballImage;
-        switch (ballType) {
-            case "pokeballs":
-                pokeballImage = "@drawable/pokeball_pokemon_svgrepo_com";
-                break;
-            case "superballs":
-                pokeballImage = "@drawable/superball";
-                break;
-            case "ultraballs":
-                pokeballImage = "@drawable/ultraball";
-                break;
-            case "masterballs":
-                pokeballImage = "@drawable/master_ball_icon_icons_com_67545";
-                break;
-            default:
-                pokeballImage = "";
-                break;
-        }
+    private void capturePokemon(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons, String ballType, Pokemon pokedex, String pokeballImage) {
         capturedPokemons.add(new PokemonCapturado(pokedex.getName(), pokedex.getImageUrl(), pokeballImage));
         saveCapturedPokemons(sharedPreferences, capturedPokemons);
         modifyFieldValue(sharedPreferences, ballType, -1);
@@ -213,27 +221,38 @@ public class DetailFragment extends Fragment {
 
     private void saveCapturedPokemons(SharedPreferences sharedPreferences, List<PokemonCapturado> capturedPokemons) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("pokemon_count", capturedPokemons.size());
-        for (int i = 0; i < capturedPokemons.size(); i++) {
-            editor.putString("pokemon_name_" + i, capturedPokemons.get(i).getName());
-            editor.putString("pokemon_front_image_" + i, capturedPokemons.get(i).getFrontImage());
-            editor.putString("pokemon_caught_ball_" + i, capturedPokemons.get(i).getCapturedPokeballImage());
+        JSONArray jsonArray = new JSONArray();
+        for (PokemonCapturado pokemon : capturedPokemons) {
+            try {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("name", pokemon.getName());
+                jsonObject.put("frontImage", pokemon.getFrontImage());
+                jsonObject.put("capturedPokeballImage", pokemon.getCapturedPokeballImage());
+                jsonArray.put(jsonObject);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+        editor.putString(KEY_CAPTURED_POKEMON, jsonArray.toString());
         editor.apply();
     }
 
     private List<PokemonCapturado> getCapturedPokemons(SharedPreferences sharedPreferences) {
-        int size = sharedPreferences.getInt("pokemon_count", 0);
-        List<PokemonCapturado> pokemons = new ArrayList<>(size);
-        for (int i = 0; i < size; i++) {
-            String name = sharedPreferences.getString("pokemon_name_" + i, null);
-            String frontImage = sharedPreferences.getString("pokemon_front_image_" + i, null);
-            String pokeballType = sharedPreferences.getString("pokemon_caught_ball_" + i, null);
-            if (name != null && frontImage != null && pokeballType != null) {
-                pokemons.add(new PokemonCapturado(name, frontImage, pokeballType));
+        List<PokemonCapturado> capturedPokemons = new ArrayList<>();
+        String jsonString = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                String frontImage = jsonObject.getString("frontImage");
+                String pokeballType = jsonObject.getString("capturedPokeballImage");
+                capturedPokemons.add(new PokemonCapturado(name, frontImage, pokeballType));
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        return pokemons;
+        return capturedPokemons;
     }
 
     private void modifyFieldValue(SharedPreferences sharedPreferences, String fieldName, int incrementValue) {

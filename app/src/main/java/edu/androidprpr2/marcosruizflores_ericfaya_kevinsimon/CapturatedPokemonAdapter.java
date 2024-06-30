@@ -25,7 +25,7 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
 
     private List<PokemonCapturado> pokemonList;
     private Context context;
-    private static final String TAG = "CapturatedPokemonAdapter";
+    private static final String TAG = "CapturedPokemonAdapter";
 
     public CapturatedPokemonAdapter(List<PokemonCapturado> pokemonList, Context context) {
         this.pokemonList = pokemonList;
@@ -46,8 +46,6 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
         holder.textViewName.setText(pokemon.getName());
 
         Picasso.get().load(pokemon.getFrontImage()).into(holder.imageViewFront);
-        Log.d(TAG, "Nombre del recurso drawable: " + pokemon.getCapturedPokeballImage());
-        Picasso.get().load(pokemon.getCapturedPokeballImage()).into(holder.imageViewBack);
 
         String resourceName = pokemon.getCapturedPokeballImage();
         int resourceId = holder.itemView.getResources().getIdentifier(resourceName, "drawable", holder.itemView.getContext().getPackageName());
@@ -58,9 +56,7 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
                 Toast.makeText(context, "Pokémon eliminado", Toast.LENGTH_SHORT).show();
                 int adapterPosition = holder.getAdapterPosition();
                 if (adapterPosition != RecyclerView.NO_POSITION) {
-                    PokemonCapturado pokemonToRemove = pokemonList.get(adapterPosition);
                     pokemonList.remove(adapterPosition);
-
                     PokemonCapturado.savePokemonList(context, new ArrayList<>(pokemonList));
                     notifyItemRemoved(adapterPosition);
                 }
@@ -73,6 +69,11 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
     @Override
     public int getItemCount() {
         return pokemonList.size();
+    }
+
+    public void updatePokemonList(List<PokemonCapturado> newPokemonList) {
+        this.pokemonList = newPokemonList;
+        notifyDataSetChanged();
     }
 
     public static class PokemonViewHolder extends RecyclerView.ViewHolder {

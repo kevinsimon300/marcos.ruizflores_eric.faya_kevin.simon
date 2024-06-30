@@ -24,10 +24,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
 public class PokedexFragment extends Fragment {
@@ -43,8 +48,7 @@ public class PokedexFragment extends Fragment {
     public int countPage = 0;
 
     private static final String PREFERENCES_FILE = "trainer_prefs";
-    private static final String KEY_POKEMON_COUNT = "pokemon_count";
-    private static final String KEY_POKEMON_PREFIX = "pokemon_";
+    private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
 
     public PokedexFragment(ArrayList<Pokemon> pokedexes, PokedexDao pokedexDao) {
         this.pokedexes = pokedexes;
@@ -156,21 +160,21 @@ public class PokedexFragment extends Fragment {
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
 
             SharedPreferences sharedPreferences = context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
-            List<Pokemon> capturedPokemons = getCapturedPokemons(sharedPreferences);
+            List<PokemonCapturado> capturedPokemons = getCapturedPokemons(sharedPreferences);
             String captured = checkIfPokemonIsCaptured(capturedPokemons);
 
             if (!captured.equals("")) {
                 switch (captured) {
-                    case "pokeball_pokemon_svgrepo_com":
+                    case "@drawable/pokeball_pokemon_svgrepo_com":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com));
                         break;
-                    case "superball":
+                    case "@drawable/superball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.superball));
                         break;
-                    case "wikiball":
+                    case "@drawable/ultraball":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wikiball));
                         break;
-                    case "master_ball_icon_icons_com_67545":
+                    case "@drawable/master_ball_icon_icons_com_67545":
                         ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
                         break;
                 }
@@ -179,11 +183,11 @@ public class PokedexFragment extends Fragment {
             }
         }
 
-        private String checkIfPokemonIsCaptured(List<Pokemon> pokemonList) {
+        private String checkIfPokemonIsCaptured(List<PokemonCapturado> pokemonList) {
             String namePokeball = "";
-            for (Pokemon pokemon : pokemonList) {
+            for (PokemonCapturado pokemon : pokemonList) {
                 if (pokemon.getName().equals(pokedex.getName())) {
-                    namePokeball = pokemon.getPokeballType();
+                    namePokeball = pokemon.getCapturedPokeballImage();
                     break;
                 }
             }
@@ -238,17 +242,21 @@ public class PokedexFragment extends Fragment {
         }
     }
 
-    private List<Pokemon> getCapturedPokemons(SharedPreferences sharedPreferences) {
-        int size = sharedPreferences.getInt(KEY_POKEMON_COUNT, 0);
-        List<Pokemon> pokemons = new ArrayList<>(size);
-
-        for (int i = 0; i < size; i++) {
-            String pokemonString = sharedPreferences.getString(KEY_POKEMON_PREFIX + i, null);
-            if (pokemonString != null) {
-                pokemons.add(Pokemon.fromString(pokemonString));
+    private List<PokemonCapturado> getCapturedPokemons(SharedPreferences sharedPreferences) {
+        List<PokemonCapturado> capturedPokemons = new ArrayList<>();
+        String jsonString = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                String frontImage = jsonObject.getString("frontImage");
+                String pokeballType = jsonObject.getString("capturedPokeballImage");
+                capturedPokemons.add(new PokemonCapturado(name, frontImage, pokeballType));
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-
-        return pokemons;
+        return capturedPokemons;
     }
 }

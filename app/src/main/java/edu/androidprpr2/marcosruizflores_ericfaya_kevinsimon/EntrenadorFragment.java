@@ -15,6 +15,10 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,11 +30,10 @@ public class EntrenadorFragment extends Fragment {
     private TextView tvPokeball;
     private TextView tvSuperball;
     private TextView tvUltraball;
-    private TextView tvMaterball;
+    private TextView tvMasterball;
     private Button btnChangeNameTrainer;
     private RecyclerView pokemonRecyclerView;
     private CapturatedPokemonAdapter pokemonAdapter;
-    private DetailFragment detailFragment;
     private List<PokemonCapturado> pokemonList = new ArrayList<>();
 
     private static final String TAG = "EntrenadorFragment";
@@ -41,6 +44,7 @@ public class EntrenadorFragment extends Fragment {
     private static final String KEY_SUPERBALLS = "superballs";
     private static final String KEY_ULTRABALLS = "ultraballs";
     private static final String KEY_MASTERBALLS = "masterballs";
+    private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
 
     public EntrenadorFragment() {
     }
@@ -70,14 +74,13 @@ public class EntrenadorFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        detailFragment = new DetailFragment(null, null);
         btnChangeNameTrainer = view.findViewById(R.id.btChangeNameTrainer);
         tvMoney = view.findViewById(R.id.tvTrainerCash);
         tvNameEntrenador = view.findViewById(R.id.tvTrainerName);
         tvPokeball = view.findViewById(R.id.tvPokeballs);
         tvSuperball = view.findViewById(R.id.tvSuperballs);
         tvUltraball = view.findViewById(R.id.tvUltraballs);
-        tvMaterball = view.findViewById(R.id.tvMasterballs);
+        tvMasterball = view.findViewById(R.id.tvMasterballs);
 
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
         tvNameEntrenador.setText(sharedPreferences.getString(KEY_TRAINER_NAME, "Default Name"));
@@ -85,13 +88,37 @@ public class EntrenadorFragment extends Fragment {
         tvPokeball.setText(String.valueOf(sharedPreferences.getInt(KEY_POKEBALLS, 0)));
         tvSuperball.setText(String.valueOf(sharedPreferences.getInt(KEY_SUPERBALLS, 0)));
         tvUltraball.setText(String.valueOf(sharedPreferences.getInt(KEY_ULTRABALLS, 0)));
-        tvMaterball.setText(String.valueOf(sharedPreferences.getInt(KEY_MASTERBALLS, 0)));
+        tvMasterball.setText(String.valueOf(sharedPreferences.getInt(KEY_MASTERBALLS, 0)));
 
         pokemonRecyclerView = view.findViewById(R.id.pokemon_recycler_view);
-        pokemonList = PokemonCapturado.getPokemonList(getContext());
+        pokemonList = getCapturedPokemons(sharedPreferences);
 
         pokemonRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         pokemonAdapter = new CapturatedPokemonAdapter(pokemonList, getContext());
         pokemonRecyclerView.setAdapter(pokemonAdapter);
+    }
+
+    private List<PokemonCapturado> getCapturedPokemons(SharedPreferences sharedPreferences) {
+        List<PokemonCapturado> capturedPokemons = new ArrayList<>();
+        String jsonString = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                String frontImage = jsonObject.getString("frontImage");
+                String capturedPokeballImage = jsonObject.getString("capturedPokeballImage");
+                capturedPokemons.add(new PokemonCapturado(name, frontImage, capturedPokeballImage));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return capturedPokemons;
+    }
+
+    public void updatePokemonList() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        List<PokemonCapturado> updatedPokemonList = getCapturedPokemons(sharedPreferences);
+        pokemonAdapter.updatePokemonList(updatedPokemonList);
     }
 }
