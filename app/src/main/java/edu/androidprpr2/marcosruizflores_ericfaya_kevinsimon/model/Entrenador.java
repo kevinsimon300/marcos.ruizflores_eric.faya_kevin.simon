@@ -3,54 +3,77 @@ package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model;
 import java.util.List;
 
 public class Entrenador {
-    private String nameEntrenador;
-    private int diners;
-    private List<Item> items;
-    private List<PokemonDetail> lPokedex;
+    private int money;
+    private String name;
+    private int pokeballs;
+    private int superballs;
+    private int ultraballs;
+    private int masterballs;
+    private List<PokemonCapturado> pokemonCapturados;
 
-    public Entrenador(String nameEntrenador, int diners, List<Item> items, List<PokemonDetail> lPokedex) {
-        this.nameEntrenador = nameEntrenador;
-        this.diners = diners;
-        this.items = items;
-        this.lPokedex = lPokedex;
+    public Entrenador(int money, String name, int pokeballs, int superballs, int ultraballs, int masterballs, List<PokemonCapturado> pokemonCapturados) {
+        this.money = money;
+        this.name = name;
+        this.pokeballs = pokeballs;
+        this.superballs = superballs;
+        this.ultraballs = ultraballs;
+        this.masterballs = masterballs;
+        this.pokemonCapturados = pokemonCapturados;
     }
 
-    public String getNameEntrenador() {
-        return nameEntrenador;
+    public int getMoney() {
+        return money;
     }
 
-    public void setNameEntrenador(String nameEntrenador) {
-        this.nameEntrenador = nameEntrenador;
+    public void setMoney(int money) {
+        this.money = money;
     }
 
-    public int getDiners() {
-        return diners;
+    public String getName() {
+        return name;
     }
 
-    public void setDiners(int diners) {
-        if (diners >= 0) {
-            this.diners = diners;
-        } else {
-            throw new IllegalArgumentException("El dinero no puede ser negativo");
-        }
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public List<Item> getItems() {
-        return items;
+    public int getPokeballs() {
+        return pokeballs;
     }
 
-    public void setItems(List<Item> items) {
-        this.items = items;
+    public void setPokeballs(int pokeballs) {
+        this.pokeballs = pokeballs;
     }
 
-    public List<PokemonDetail> getlPokedex() {
-        return lPokedex;
+    public int getSuperballs() {
+        return superballs;
     }
 
-    public void setlPokedex(List<PokemonDetail> lPokedex) {
-        this.lPokedex = lPokedex;
+    public void setSuperballs(int superballs) {
+        this.superballs = superballs;
     }
-    public void addItem(Item item) {
-        items.add(item);
+
+    public int getUltraballs() {
+        return ultraballs;
+    }
+
+    public void setUltraballs(int ultraballs) {
+        this.ultraballs = ultraballs;
+    }
+
+    public int getMasterballs() {
+        return masterballs;
+    }
+
+    public void setMasterballs(int masterballs) {
+        this.masterballs = masterballs;
+    }
+
+    public List<PokemonCapturado> getPokemonCapturados() {
+        return pokemonCapturados;
+    }
+
+    public void setPokemonCapturados(List<PokemonCapturado> pokemonCapturados) {
+        this.pokemonCapturados = pokemonCapturados;
     }
 }

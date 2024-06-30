@@ -1,15 +1,21 @@
 package edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -18,27 +24,33 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokedex;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.Pokemon;
+import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.peristence.PokedexDao;
 
-/**
- * A simple {@link Fragment} subclass.
- * create an instance of this fragment.
- */
 public class PokedexFragment extends Fragment {
-    private RecyclerView pokedexesRecyclerView;//A la clase del fragment tenim recycler view
-    private  PokedexAdapter adapter;//A la clase del fragment tenim adapter
+    private RecyclerView pokedexesRecyclerView;
+    private PokedexAdapter adapter;
     private ArrayList<Pokemon> pokedexes;
-    private boolean isLoading = false; // Declara isLoading y establece su valor inicial
+    private boolean isLoading = false;
     private int visibleThreshold = 5;
-    private PokedexDao pokedexDao; // Define una instancia de PokedexDao
-    private int currentPage = 1; // D
-    private int countPage = 0;
-    public PokedexFragment(ArrayList<Pokemon> pokedexes,PokedexDao pokedexDao) {
+    private EditText namePokemon;
+    public ImageButton searchButton;
+    private PokedexDao pokedexDao;
+    private int currentPage = 1;
+    public int countPage = 0;
+
+    private static final String PREFERENCES_FILE = "trainer_prefs";
+    private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
+
+    public PokedexFragment(ArrayList<Pokemon> pokedexes, PokedexDao pokedexDao) {
         this.pokedexes = pokedexes;
         this.pokedexDao = pokedexDao;
     }
@@ -54,8 +66,41 @@ public class PokedexFragment extends Fragment {
         pokedexesRecyclerView = view.findViewById(R.id.pokedex_recycler_view);
         pokedexesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        final PokedexAdapter adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE);
+        List<PokemonCapturado> capturedPokemons = getCapturedPokemons(sharedPreferences);
+
+        adapter = new PokedexAdapter(pokedexes, capturedPokemons, getActivity(), isLoading, visibleThreshold);
         pokedexesRecyclerView.setAdapter(adapter);
+
+        namePokemon = view.findViewById(R.id.editTextSearch);
+        searchButton = view.findViewById(R.id.btButtonSearch);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String name = namePokemon.getText().toString();
+                PokedexDao pokedexDao = new PokedexDao(getContext(), new PokedexDao.PokedexCallback() {
+                    @Override
+                    public void onSuccess(ArrayList<Pokemon> pokemonList) {
+                        if (!pokemonList.isEmpty()) {
+                            Pokemon pokemon = pokemonList.get(0);
+                            DetailFragment detailFragment = DetailFragment.newInstance(pokemon, pokedexes);
+                            FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            fragmentTransaction.replace(R.id.frame_layout, detailFragment);
+                            fragmentTransaction.commit();
+                        } else {
+                            Toast.makeText(getActivity(), "No se encontró el pokemon: " + name, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+                        Toast.makeText(getActivity(), "Error al buscar el pokemon", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                pokedexDao.getSearchedPokemon(name);
+            }
+        });
 
         pokedexesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -65,12 +110,11 @@ public class PokedexFragment extends Fragment {
                 int totalItemCount = layoutManager.getItemCount();
                 int lastVisibleItem = layoutManager.findLastVisibleItemPosition();
 
-
                 if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
                     isLoading = true;
                     countPage++;
-                    //int offset = pokedexes.size();
-                    pokedexDao.getPokemonList(countPage);
+                    boolean cargar15 = true;
+                    pokedexDao.getPokemonList(countPage, cargar15, countPage);
                 }
             }
         });
@@ -85,7 +129,7 @@ public class PokedexFragment extends Fragment {
 
             @Override
             public void onError(String errorMessage) {
-                Log.e("PokedexFragment", "Error: " + errorMessage);
+                Log.e("PokedexFragment", "No existe en la pokedex");
                 isLoading = false;
             }
         });
@@ -93,98 +137,82 @@ public class PokedexFragment extends Fragment {
         return view;
     }
 
-
-    private void loadMoreItems() {
-        pokedexDao.getPokemonList(currentPage++);
-        Log.d("PokedexFragment", "More items: " + currentPage);
-
-        //PokedexDao dao = new PokedexDao();
-        //ArrayList<Pokedex> moreItems = dao.getPokemonList(currentPage);
-        // Update the adapter with the new list of Pokémon
-        // adapter.notifyDataSetChanged();
-    }
-
-    private void updateUi() {
-        if (pokedexes != null) {
-            Log.d("PokedexFragment", "Tamaño de pokedexes: " + pokedexes.size());
-
-            for (int i = 0; i < pokedexes.size(); i++) {
-                Pokemon pokedex = pokedexes.get(i);
-                Log.d("PokedexFragment", "Pokedex[" + i + "]: " + pokedex.getName());
-            }
-
-            adapter = new PokedexAdapter(pokedexes, getActivity(), isLoading, visibleThreshold);
-        } else {
-            Log.e("PokedexFragment", "La lista de pokedexes es nula");
-            adapter = new PokedexAdapter(new ArrayList<>(), getActivity(), isLoading, visibleThreshold);
-        }
-
-        pokedexesRecyclerView.setAdapter(adapter);
-    }
-
-
-    public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class PokedexHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private Pokemon pokedex;
         private final ImageView ivBack;
         private final ImageView ivFront;
+        private final ImageView ivPokeball;
         private final TextView tvPokemonName;
-        private Activity activity; //De on ve la activity
-        public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Activity activity)  {
+        private Context context;
 
-            super(layoutInflater.inflate(R.layout.list_item_pokemon,parent,false));//Agafem el layout inflater,afegim el item que hem creat,estem dient al viewholder quin item es
-
-            ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
-            ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
-            tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
-
-            itemView.setOnClickListener(this);
-            this.activity=activity;//La activity es la que li pasem per paremetres
-
-        }
-
-        public PokedexHolder(View itemView) {//new
-            super(itemView);
-            ivBack = (ImageView) itemView.findViewById(R.id.ivPokemonBack);
-            ivFront = (ImageView) itemView.findViewById(R.id.ivPokemonFront);
-            tvPokemonName = (TextView) itemView.findViewById(R.id.tvNamePokemon); //El item view es internament el view holder,no es un objecte creat per nosaltres
+        public PokedexHolder(LayoutInflater layoutInflater, ViewGroup parent, Context context) {
+            super(layoutInflater.inflate(R.layout.list_item_pokemon, parent, false));
+            ivBack = itemView.findViewById(R.id.ivPokemonBack);
+            ivFront = itemView.findViewById(R.id.ivPokemonFront);
+            ivPokeball = itemView.findViewById(R.id.ivPokeball);
+            tvPokemonName = itemView.findViewById(R.id.tvNamePokemon);
 
             itemView.setOnClickListener(this);
+            this.context = context;
         }
 
-        public void bind(Pokemon pokedex) {
-            this.pokedex = pokedex;//Instanciem el pokemon
-            tvPokemonName.setText(pokedex.getName()); //Li pasem el nom
+        public void bind(Pokemon pokedex, List<PokemonCapturado> capturedPokemons) {
+            this.pokedex = pokedex;
+            tvPokemonName.setText(pokedex.getName());
             Picasso.get().load(pokedex.getImageUrl()).into(this.ivFront);
             Picasso.get().load(pokedex.getBackImage()).into(this.ivBack);
+
+            String captured = checkIfPokemonIsCaptured(capturedPokemons);
+
+            if (!captured.equals("")) {
+                switch (captured) {
+                    case "pokeball_pokemon_svgrepo_com":
+                        ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.pokeball_pokemon_svgrepo_com));
+                        break;
+                    case "superball":
+                        ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.superball));
+                        break;
+                    case "ultraball":
+                        ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.wikiball));
+                        break;
+                    case "master_ball_icon_icons_com_67545":
+                        ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.drawable.master_ball_icon_icons_com_67545));
+                        break;
+                }
+            } else {
+                ivPokeball.setImageDrawable(ContextCompat.getDrawable(context, R.color.orangeRecycler));
+            }
+        }
+
+        private String checkIfPokemonIsCaptured(List<PokemonCapturado> pokemonList) {
+            for (PokemonCapturado pokemon : pokemonList) {
+                if (pokemon.getName().equals(pokedex.getName())) {
+                    return pokemon.getCapturedPokeballImage();
+                }
+            }
+            return "";
         }
 
         @Override
         public void onClick(View view) {
-            // coger entrenador del json
-            //int  entrenador_pokeballs = getJSONObject(); // leer del json
-            DetailFragment detailFragment = new DetailFragment(pokedex,pokedexes);
+            DetailFragment detailFragment = DetailFragment.newInstance(pokedex, pokedexes);
             FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frame_layout,detailFragment);
-
-            // fragmentTransaction.replace(R.id.fragment_container,detailFragment); //TODO ESTO HACE FALTA METERLO O NO?
-
-            //fragmentTransaction.addToBackStack(null);//La pila,cuan tenim varios fragemnts hem de fer aixo,per tornar enrere el fragment
+            fragmentTransaction.replace(R.id.frame_layout, detailFragment);
             fragmentTransaction.commit();
-
         }
     }
-    public class PokedexAdapter extends RecyclerView.Adapter<PokedexHolder>{
-        private List<Pokemon> lPokedexes;//Te la llista de la informacio que pasem
-        private Activity activity; //La activity
-        private boolean isLoading = false; // Declara isLoading y establece su valor inicial
-        private int visibleThreshold = 5; // Declara visibleThreshold y establece su valor
-        private int currentPage = 1;
-        private int pageSize = 15;
 
+    public class PokedexAdapter extends RecyclerView.Adapter<PokedexHolder> {
+        private List<Pokemon> lPokedexes;
+        private List<PokemonCapturado> capturedPokemons;
+        private Activity activity;
+        private boolean isLoading;
+        private int visibleThreshold;
 
-        public PokedexAdapter(List<Pokemon> lPokedexes, Activity activity, boolean isLoading, int visibleThreshold) {
+        public PokedexAdapter(List<Pokemon> lPokedexes, List<PokemonCapturado> capturedPokemons, Activity activity, boolean isLoading, int visibleThreshold) {
             this.lPokedexes = lPokedexes;
+            this.capturedPokemons = capturedPokemons;
             this.activity = activity;
             this.isLoading = isLoading;
             this.visibleThreshold = visibleThreshold;
@@ -192,33 +220,38 @@ public class PokedexFragment extends Fragment {
 
         @NonNull
         @Override
-        public PokedexHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            // LayoutInflater layoutInflater = LayoutInflater.from(activity);
-            //  return new PokedexHolder(layoutInflater,parent,activity);
-            //OLD
-
-            //NEW
-            View view = LayoutInflater.from(activity).inflate(R.layout.list_item_pokemon, parent, false);
-            return new PokedexHolder(view);
-
+        public PokedexHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+            return new PokedexHolder(layoutInflater, parent, parent.getContext());
         }
 
         @Override
-        public void onBindViewHolder(@NonNull PokedexHolder holder, int position) {
-            Pokemon pokedex = lPokedexes.get(position);//Creem un pokemon que l'agafem de la llista
-            holder.bind(pokedex);
+        public void onBindViewHolder(PokedexHolder holder, int position) {
+            Pokemon pokedex = lPokedexes.get(position);
+            holder.bind(pokedex, capturedPokemons);
         }
-
 
         @Override
         public int getItemCount() {
             return lPokedexes.size();
         }
-        private void loadMoreItems() {
-          /*   PokedexDao dao = new PokedexDao();
-            ArrayList<Pokedex> moreItems = dao.getPokemonListContination(currentPage);
-            // Update the adapter with the new list of Pokémon
-            notifyDataSetChanged();*/
+    }
+
+    private List<PokemonCapturado> getCapturedPokemons(SharedPreferences sharedPreferences) {
+        List<PokemonCapturado> capturedPokemons = new ArrayList<>();
+        String jsonString = sharedPreferences.getString(KEY_CAPTURED_POKEMON, "[]");
+        try {
+            JSONArray jsonArray = new JSONArray(jsonString);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String name = jsonObject.getString("name");
+                String frontImage = jsonObject.getString("frontImage");
+                String pokeballType = jsonObject.getString("capturedPokeballImage");
+                capturedPokemons.add(new PokemonCapturado(name, frontImage, pokeballType));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        return capturedPokemons;
     }
 }
