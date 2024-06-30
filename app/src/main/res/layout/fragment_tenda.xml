@@ -191,15 +191,30 @@
                 android:layout_height="40dp"
                 android:src="@drawable/shopping_cart_icon_icons_com_72552"
                 android:layout_marginBottom="4dp" />
-            <TextView
-                android:id="@+id/tvMoneySpent"
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/cero"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:layout_marginTop="8dp"
-                android:layout_gravity="center" />
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cantidad"
+                    android:textColor="@color/black"
+                    android:paddingRight="10dp"
+                    android:textSize="20sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center" />
+                <TextView
+                    android:id="@+id/tvMoneySpent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cero"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:layout_marginTop="8dp"
+                    android:layout_gravity="center" />
+            </LinearLayout>
             <Button
                 android:id="@+id/buyGeneralShop"
                 android:layout_width="wrap_content"

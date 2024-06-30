@@ -25,10 +25,6 @@ public class ChangeNameFragment extends Fragment {
     public ChangeNameFragment() {
     }
 
-    public static ChangeNameFragment newInstance() {
-        return new ChangeNameFragment();
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

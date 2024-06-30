@@ -59,7 +59,6 @@ public class DetailFragment extends Fragment {
     private static final String KEY_MONEY = "money";
 
     public DetailFragment() {
-        // Constructor vacío requerido
     }
 
     public DetailFragment(Pokemon pokedex, ArrayList<Pokemon> pokedexes) {
@@ -166,7 +165,7 @@ public class DetailFragment extends Fragment {
                     Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "You do not have pokeballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You do not have pokeballs", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -185,7 +184,7 @@ public class DetailFragment extends Fragment {
                     Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "You do not have superballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You do not have superballs", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -204,7 +203,7 @@ public class DetailFragment extends Fragment {
                     Toast.makeText(getContext(), "You missed", Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(getContext(), "You do not have ultraballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You do not have ultraballs", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -214,7 +213,7 @@ public class DetailFragment extends Fragment {
                 capturePokemon(sharedPreferences, capturedPokemons, "master_ball_icon_icons_com_67545", pokedex, getRandomIndexValue(pokedex.getIndexEvolution()));
                 modifyFieldValue(sharedPreferences, KEY_MASTERBALLS, -1);
             } else {
-                Toast.makeText(getContext(), "You do not have masterballs or you already have 6 pokemons", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "You do not have masterballs", Toast.LENGTH_SHORT).show();
             }
         });
 
