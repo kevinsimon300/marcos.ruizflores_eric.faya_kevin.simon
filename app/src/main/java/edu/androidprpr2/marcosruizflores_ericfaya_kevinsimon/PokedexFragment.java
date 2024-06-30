@@ -48,7 +48,7 @@ public class PokedexFragment extends Fragment {
     private int currentPage = 1;
     public int countPage = 0;
 
-    private static final String PREFERENCES_FILE = "edu.androidprpr2.preferences";
+    private static final String PREFERENCES_FILE = "trainer_prefs";
     private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
 
     public PokedexFragment(ArrayList<Pokemon> pokedexes, PokedexDao pokedexDao) {

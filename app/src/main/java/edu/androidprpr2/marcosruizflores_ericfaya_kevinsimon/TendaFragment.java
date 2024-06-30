@@ -34,12 +34,12 @@ public class TendaFragment extends Fragment {
     private int moneySpent;
 
     private static final String TAG = "TendaFragment";
-    private static final String PREFERENCES_FILE = "edu.androidprpr2.preferences";
-    private static final String KEY_MONEY = "Money";
-    private static final String KEY_POKEBALLS = "Pokeballs";
-    private static final String KEY_SUPERBALLS = "Superballs";
-    private static final String KEY_ULTRABALLS = "Ultraballs";
-    private static final String KEY_MASTERBALLS = "Masterballs";
+    private static final String PREFERENCES_FILE = "trainer_prefs";
+    private static final String KEY_MONEY = "money";
+    private static final String KEY_POKEBALLS = "pokeballs";
+    private static final String KEY_SUPERBALLS = "superballs";
+    private static final String KEY_ULTRABALLS = "ultraballs";
+    private static final String KEY_MASTERBALLS = "masterballs";
 
     public TendaFragment() {
         // Required empty public constructor

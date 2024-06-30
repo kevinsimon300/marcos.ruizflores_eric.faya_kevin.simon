@@ -48,7 +48,7 @@ public class DetailFragment extends Fragment {
     private LinearLayout llBalls;
 
     private static final String TAG = "DetailFragment";
-    private static final String PREFERENCES_FILE = "edu.androidprpr2.preferences";
+    private static final String PREFERENCES_FILE = "trainer_prefs";
     private static final String KEY_CAPTURED_POKEMON = "captured_pokemon";
     private static final String KEY_POKEBALLS = "pokeballs";
     private static final String KEY_SUPERBALLS = "superballs";

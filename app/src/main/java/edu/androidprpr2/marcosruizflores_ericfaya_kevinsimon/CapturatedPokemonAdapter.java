@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.androidprpr2.marcosruizflores_ericfaya_kevinsimon.model.PokemonCapturado;
@@ -60,7 +61,7 @@ public class CapturatedPokemonAdapter extends RecyclerView.Adapter<CapturatedPok
                     PokemonCapturado pokemonToRemove = pokemonList.get(adapterPosition);
                     pokemonList.remove(adapterPosition);
 
-                    SharedPreferencesDao.removeCapturedPokemon(context, pokemonToRemove);
+                    PokemonCapturado.savePokemonList(context, new ArrayList<>(pokemonList));
                     notifyItemRemoved(adapterPosition);
                 }
             } else {

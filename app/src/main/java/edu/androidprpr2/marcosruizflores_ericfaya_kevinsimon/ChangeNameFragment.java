@@ -19,7 +19,7 @@ public class ChangeNameFragment extends Fragment {
     private EditText etNameEntrenador;
     private Button btnChangeNameTrainer;
     private static final String TAG = "ChangeNameFragment";
-    private static final String PREFERENCES_FILE = "edu.androidprpr2.preferences";
+    private static final String PREFERENCES_FILE = "trainer_prefs";
     private static final String KEY_TRAINER_NAME = "trainer_name";
 
     public ChangeNameFragment() {
